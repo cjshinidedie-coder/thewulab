@@ -10,78 +10,6 @@ export default function Home() {
     shopRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const bestSellers = [
-    {
-      id: 1,
-      name: 'Cosmic Turquoise Bracelet',
-      element: '🌊 Water Element',
-      price: '$226.00',
-      image: '/products/product-1.png'
-    },
-    {
-      id: 2,
-      name: 'Imperial Jasper Bracelet',
-      element: '✨ Metal Element',
-      price: '$183.00',
-      image: '/products/product-2.png'
-    },
-    {
-      id: 3,
-      name: 'Santa Maria Aquamarine',
-      element: '🌊 Water Element',
-      price: '$2,524.00',
-      image: '/products/product-3.png'
-    },
-    {
-      id: 4,
-      name: 'Labradorite Bracelet',
-      element: '🌿 Wood Element',
-      price: '$310.00',
-      image: '/products/product-4.png'
-    }
-  ];
-
-  const elements = [
-    { name: '🌿 Wood', image: '/green-forest.png', link: '#' },
-    { name: '🔥 Fire', image: '/fire-flame.jpg', link: '#' },
-    { name: '🌍 Earth', image: '/earth-desert.png', link: '#' },
-    { name: '✨ Metal', image: '/metal-gold.png', link: '#' },
-    { name: '🌊 Water', image: '/water-stream.png', link: '#' }
-  ];
-
-  const reviews = [
-    {
-      stars: '★★★★★',
-      text: 'This bracelet perfectly matches my missing water element! I felt the energy shift within days. Highly recommend!',
-      author: 'Sarah M.'
-    },
-    {
-      stars: '★★★★★',
-      text: 'The BaZi calculator is incredibly accurate. The personalized recommendations helped me choose the perfect piece for my energy needs.',
-      author: 'David Chen'
-    },
-    {
-      stars: '★★★★★',
-      text: 'Beautiful craftsmanship and the energy is real! I\'ve noticed positive changes in my life since wearing this. Worth every penny!',
-      author: 'Emma L.'
-    },
-    {
-      stars: '★★★★★',
-      text: 'I bought this as a gift for my sister based on her BaZi chart. She absolutely loves it and says it brings her good luck!',
-      author: 'Michael W.'
-    },
-    {
-      stars: '★★★★★',
-      text: 'The attention to detail is amazing. Each piece feels special and the energy alignment with my birth chart is spot on!',
-      author: 'Jessica R.'
-    },
-    {
-      stars: '★★★★★',
-      text: 'Finally found jewelry that actually works with my energy! The BaZi analysis was so detailed and helpful. Best purchase ever!',
-      author: 'Lisa T.'
-    }
-  ];
-
   return (
     <div>
       <style jsx>{`
@@ -101,6 +29,13 @@ export default function Home() {
           color: #333333;
           line-height: 1.6;
           font-weight: 300;
+        }
+
+        section {
+          padding-top: 2.5rem !important;
+          padding-bottom: 2.5rem !important;
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
         }
 
         /* ===== HERO SECTION ===== */
@@ -186,7 +121,8 @@ export default function Home() {
 
         /* ===== DISCOVER BANNER SECTION ===== */
         .discover-banner-section {
-          padding: 60px 40px;
+          padding: 30px 40px;
+          margin: 0;
           background-color: #FFFFFF;
         }
 
@@ -264,9 +200,9 @@ export default function Home() {
           color: #FFFFFF;
         }
 
-        /* ===== SECTION TITLE ===== */
+        /* ===== SECTION ===== */
         .section {
-          padding: 60px 40px;
+          padding: 30px 40px;
           max-width: 1400px;
           margin: 0 auto;
         }
@@ -277,12 +213,12 @@ export default function Home() {
           font-weight: 700;
           color: #333333;
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 25px;
           letter-spacing: 0.05em;
         }
 
-        /* ===== BEST SELLERS CAROUSEL ===== */
-        .best-sellers-grid {
+        /* ===== PRODUCTS GRID ===== */
+        .products-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 50px;
@@ -346,7 +282,8 @@ export default function Home() {
 
         /* ===== FEATURED BANNER SECTION ===== */
         .featured-banner-section {
-          padding: 60px 40px;
+          padding: 30px 40px;
+          margin: 0;
           background-color: #FFFFFF;
         }
 
@@ -398,7 +335,9 @@ export default function Home() {
           letter-spacing: 0.5px;
           width: fit-content;
           text-decoration: none;
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .banner-btn:hover {
@@ -453,7 +392,8 @@ export default function Home() {
         /* ===== REVIEWS SECTION ===== */
         .reviews-section {
           background-color: #FAFAFA;
-          padding: 60px 40px;
+          padding: 30px 40px;
+          margin: 0;
         }
 
         .reviews-container {
@@ -467,7 +407,7 @@ export default function Home() {
           font-weight: 700;
           color: #333333;
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 30px;
           letter-spacing: 0.05em;
         }
 
@@ -653,12 +593,26 @@ export default function Home() {
           color: #999999;
         }
 
+        .footer-bottom a {
+          color: #999;
+          text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+          color: #C41E3A;
+        }
+
         @media (max-width: 768px) {
           .hero h1 {
             font-size: 42px;
           }
 
           .element-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+          }
+
+          .products-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
           }
@@ -707,17 +661,78 @@ export default function Home() {
       {/* BEST SELLERS SECTION */}
       <section className="section">
         <h2 className="section-title">Best Sellers</h2>
-        <div className="best-sellers-grid">
-          {bestSellers.map((product) => (
-            <div key={product.id} className="product-card">
-              <div className="product-image-wrapper">
-                <img src={product.image} alt={product.name} className="product-image" />
-              </div>
-              <div className="product-name">{product.name}</div>
-              <div className="product-element">{product.element}</div>
-              <div className="product-price">{product.price}</div>
+        <div className="products-grid">
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-1.png" alt="Cosmic Turquoise Bracelet" className="product-image" />
             </div>
-          ))}
+            <div className="product-name">Cosmic Turquoise Bracelet</div>
+            <div className="product-element">🌊 Water Element</div>
+            <div className="product-price">$226.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-2.png" alt="Imperial Jasper Bracelet" className="product-image" />
+            </div>
+            <div className="product-name">Imperial Jasper Bracelet</div>
+            <div className="product-element">✨ Metal Element</div>
+            <div className="product-price">$183.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-3.png" alt="Santa Maria Aquamarine" className="product-image" />
+            </div>
+            <div className="product-name">Santa Maria Aquamarine</div>
+            <div className="product-element">🌊 Water Element</div>
+            <div className="product-price">$2,524.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-4.png" alt="Labradorite Bracelet" className="product-image" />
+            </div>
+            <div className="product-name">Labradorite Bracelet</div>
+            <div className="product-element">🌿 Wood Element</div>
+            <div className="product-price">$310.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-5.png" alt="Blue Aventurine Bracelet" className="product-image" />
+            </div>
+            <div className="product-name">Blue Aventurine Bracelet</div>
+            <div className="product-element">🌊 Water Element</div>
+            <div className="product-price">$310.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-6.png" alt="Tiger Eye - Hematite Pair" className="product-image" />
+            </div>
+            <div className="product-name">Tiger Eye - Hematite Pair</div>
+            <div className="product-element">🔥 Fire Element</div>
+            <div className="product-price">$60.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-7.png" alt="Lava Bracelet" className="product-image" />
+            </div>
+            <div className="product-name">Lava Bracelet</div>
+            <div className="product-element">🔥 Fire Element</div>
+            <div className="product-price">$310.00</div>
+          </div>
+
+          <div className="product-card">
+            <div className="product-image-wrapper">
+              <img src="/products/product-8.png" alt="Dragon Blood Jasper" className="product-image" />
+            </div>
+            <div className="product-name">Dragon Blood Jasper</div>
+            <div className="product-element">🌍 Earth Element</div>
+            <div className="product-price">$297.00</div>
+          </div>
         </div>
       </section>
 
@@ -736,12 +751,30 @@ export default function Home() {
       <section className="section">
         <h2 className="section-title">Shop by Element</h2>
         <div className="element-grid">
-          {elements.map((element, index) => (
-            <a key={index} href={element.link} className="element-card">
-              <div className="element-circle" style={{ backgroundImage: `url('${element.image}')` }}></div>
-              <div className="element-name">{element.name}</div>
-            </a>
-          ))}
+          <a href="#" className="element-card">
+            <div className="element-circle" style={{ backgroundImage: "url('/green-forest.png')" }}></div>
+            <div className="element-name">🌿 Wood</div>
+          </a>
+
+          <a href="#" className="element-card">
+            <div className="element-circle" style={{ backgroundImage: "url('/fire-flame.jpg')" }}></div>
+            <div className="element-name">🔥 Fire</div>
+          </a>
+
+          <a href="#" className="element-card">
+            <div className="element-circle" style={{ backgroundImage: "url('/earth-desert.png')" }}></div>
+            <div className="element-name">🌍 Earth</div>
+          </a>
+
+          <a href="#" className="element-card">
+            <div className="element-circle" style={{ backgroundImage: "url('/metal-gold.png')" }}></div>
+            <div className="element-name">✨ Metal</div>
+          </a>
+
+          <a href="#" className="element-card">
+            <div className="element-circle" style={{ backgroundImage: "url('/water-stream.png')" }}></div>
+            <div className="element-name">🌊 Water</div>
+          </a>
         </div>
       </section>
 
@@ -750,21 +783,49 @@ export default function Home() {
         <div className="reviews-container">
           <h2 className="reviews-title">Customer Reviews</h2>
           <div className="reviews-grid">
-            {reviews.map((review, index) => (
-              <div key={index} className="review-card">
-                <div className="review-stars">{review.stars}</div>
-                <div className="review-text">{review.text}</div>
-                <div className="review-author">{review.author}</div>
-              </div>
-            ))}
+            <div className="review-card">
+              <div className="review-stars">★★★★★</div>
+              <div className="review-text">This bracelet perfectly matches my missing water element! I felt the energy shift within days. Highly recommend!</div>
+              <div className="review-author">Sarah M.</div>
+            </div>
+
+            <div className="review-card">
+              <div className="review-stars">★★★★★</div>
+              <div className="review-text">The BaZi calculator is incredibly accurate. The personalized recommendations helped me choose the perfect piece for my energy needs.</div>
+              <div className="review-author">David Chen</div>
+            </div>
+
+            <div className="review-card">
+              <div className="review-stars">★★★★★</div>
+              <div className="review-text">Beautiful craftsmanship and the energy is real! I've noticed positive changes in my life since wearing this. Worth every penny!</div>
+              <div className="review-author">Emma L.</div>
+            </div>
+
+            <div className="review-card">
+              <div className="review-stars">★★★★★</div>
+              <div className="review-text">I bought this as a gift for my sister based on her BaZi chart. She absolutely loves it and says it brings her good luck!</div>
+              <div className="review-author">Michael W.</div>
+            </div>
+
+            <div className="review-card">
+              <div className="review-stars">★★★★★</div>
+              <div className="review-text">The attention to detail is amazing. Each piece feels special and the energy alignment with my birth chart is spot on!</div>
+              <div className="review-author">Jessica R.</div>
+            </div>
+
+            <div className="review-card">
+              <div className="review-stars">★★★★★</div>
+              <div className="review-text">Finally found jewelry that actually works with my energy! The BaZi analysis was so detailed and helpful. Best purchase ever!</div>
+              <div className="review-author">Lisa T.</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SHOP SECTION */}
-      <div ref={shopRef} className="section">
+      {/* SHOP SECTION - Cart Component */}
+      <section className="section" ref={shopRef}>
         <Cart />
-      </div>
+      </section>
 
       {/* FOOTER */}
       <footer>
@@ -822,7 +883,7 @@ export default function Home() {
           </div>
 
           <div className="footer-bottom">
-            <p>© 2024 the wu lab. All rights reserved. | <a href="#" style={{ color: '#999', textDecoration: 'none' }}>Privacy Policy</a> | <a href="#" style={{ color: '#999', textDecoration: 'none' }}>Terms of Service</a></p>
+            <p>© 2024 the wu lab. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
           </div>
         </div>
       </footer>
