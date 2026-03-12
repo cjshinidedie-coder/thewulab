@@ -4,12 +4,10 @@ import type { Metadata } from 'next';
                                                                                 
   export const metadata: Metadata = {
     title: 'the wu lab - Handcrafted Energy Jewelry',
-    description: 'Discover handcrafted energy jewelry and BaZi analysis at the
-  wu lab',
+    description: 'Discover handcrafted energy jewelry and BaZi analysis at the wu lab',
     openGraph: {
       title: 'the wu lab - Handcrafted Energy Jewelry',
-      description: 'Discover handcrafted energy jewelry and BaZi analysis at the
-   wu lab',
+      description: 'Discover handcrafted energy jewelry and BaZi analysis at the wu lab',
       type: 'website',
     },
   };
