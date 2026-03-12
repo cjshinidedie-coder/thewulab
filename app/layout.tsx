@@ -1,28 +1,42 @@
-import type { Metadata } from "next"
-import "./globals.css"
+import type { Metadata } from 'next';                                         
+  import Navbar from './components/Navbar';
+  import './globals.css';                                                       
+                                                                                
+  export const metadata: Metadata = {
+    title: 'the wu lab - Handcrafted Energy Jewelry',
+    description: 'Discover handcrafted energy jewelry and BaZi analysis at the
+  wu lab',
+    openGraph: {
+      title: 'the wu lab - Handcrafted Energy Jewelry',
+      description: 'Discover handcrafted energy jewelry and BaZi analysis at the
+   wu lab',
+      type: 'website',
+    },
+  };
 
-export const metadata: Metadata = {
-  title: "the wu lab - Handcrafted Energy Jewelry",
-  description: "Discover handcrafted energy jewelry and BaZi analysis",
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="en">
-      <body className="bg-gray-50">
-        <nav className="bg-white shadow">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <h1 className="text-2xl font-bold">the wu lab</h1>
-          </div>
-        </nav>
-        <main className="max-w-7xl mx-auto">
+  export default function RootLayout({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
+    return (
+      <html lang="en">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="description" content="Discover handcrafted energy jewelry
+  and BaZi analysis at the wu lab" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght
+  @400;600;700&family=Montserrat:wght@300;400;600;700&family=Noto+Serif+SC:wght@
+  400;600;700&family=Noto+Sans+SC:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+        <body>
+          <Navbar />
           {children}
-        </main>
-      </body>
-    </html>
-  )
-}
+        </body>
+      </html>
+    );
+  }
