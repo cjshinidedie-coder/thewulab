@@ -1,6 +1,6 @@
-'use client';
-
-  import { useState } from 'react';
+'use client';  
+                                                                                
+  import { useState } from 'react';                                             
   import Link from 'next/link';
   import { useParams } from 'next/navigation';
 
@@ -18,11 +18,11 @@
         price: 226.00,
         originalPrice: 226.00,
         image: '/product-1.png',
-        description: 'Immerse yourself in the calming energy of this exquisite
+        description: `Immerse yourself in the calming energy of this exquisite
   Cosmic Turquoise Bracelet. Handcrafted with precision, this piece embodies the
    essence of the Water element, promoting tranquility, communication, and
   emotional balance. Perfect for those seeking to harmonize their energy and
-  embrace their true potential.',
+  embrace their true potential.`,
         features: [
           'Authentic turquoise stones',
           'Handcrafted with care',
@@ -38,10 +38,10 @@
         price: 183.00,
         originalPrice: 183.00,
         image: '/product-2.png',
-        description: 'Elevate your presence with the Imperial Jasper Bracelet, a
+        description: `Elevate your presence with the Imperial Jasper Bracelet, a
    stunning representation of the Metal element. This luxurious piece combines
   elegance with powerful energy, promoting clarity, strength, and prosperity.
-  Wear it to attract abundance and manifest your desires.',
+  Wear it to attract abundance and manifest your desires.`,
         features: [
           'Premium imperial jasper',
           'Metal element energy',
@@ -57,10 +57,10 @@
         price: 2524.00,
         originalPrice: 2524.00,
         image: '/product-3.png',
-        description: 'The crown jewel of our collection, the Santa Maria
+        description: `The crown jewel of our collection, the Santa Maria
   Aquamarine is a rare and precious gemstone that embodies the highest
   vibrations of the Water element. This exceptional piece promotes deep
-  spiritual connection, clarity of purpose, and profound inner peace.',
+  spiritual connection, clarity of purpose, and profound inner peace.`,
         features: [
           'Rare Santa Maria aquamarine',
           'Premium quality',
@@ -76,10 +76,10 @@
         price: 310.00,
         originalPrice: 310.00,
         image: '/product-4.png',
-        description: 'Discover the transformative power of Labradorite, a stone
+        description: `Discover the transformative power of Labradorite, a stone
   of change and new beginnings. This Wood element bracelet supports growth,
   creativity, and personal transformation. Perfect for those embarking on new
-  journeys and seeking to unlock their potential.',
+  journeys and seeking to unlock their potential.`,
         features: [
           'Genuine labradorite',
           'Wood element energy',
@@ -95,10 +95,10 @@
         price: 310.00,
         originalPrice: 310.00,
         image: '/product-5.png',
-        description: 'Embrace serenity with the Blue Aventurine Bracelet, a
+        description: `Embrace serenity with the Blue Aventurine Bracelet, a
   gentle yet powerful Water element piece. This calming stone promotes inner
   peace, emotional healing, and harmonious relationships. Ideal for those
-  seeking balance and tranquility in their lives.',
+  seeking balance and tranquility in their lives.`,
         features: [
           'Natural blue aventurine',
           'Calming energy',
@@ -114,10 +114,10 @@
         price: 60.00,
         originalPrice: 60.00,
         image: '/product-6.png',
-        description: 'Harness the power of dual Fire element stones with this
+        description: `Harness the power of dual Fire element stones with this
   Tiger Eye and Hematite pairing. This dynamic combination promotes courage,
   grounding, and protective energy. Perfect for those seeking strength and
-  stability in their daily lives.',
+  stability in their daily lives.`,
         features: [
           'Tiger eye & hematite',
           'Fire element power',
@@ -133,10 +133,10 @@
         price: 310.00,
         originalPrice: 310.00,
         image: '/product-7.png',
-        description: 'Channel the raw power of the Fire element with our Lava
+        description: `Channel the raw power of the Fire element with our Lava
   Bracelet. This bold and energetic piece promotes passion, vitality, and
   transformation. Wear it to ignite your inner fire and manifest your deepest
-  desires.',
+  desires.`,
         features: [
           'Authentic lava stone',
           'Fire element alignment',
@@ -152,10 +152,10 @@
         price: 297.00,
         originalPrice: 297.00,
         image: '/product-8.png',
-        description: 'Ground yourself with the powerful Dragon Blood Jasper, an
+        description: `Ground yourself with the powerful Dragon Blood Jasper, an
   Earth element stone of strength and vitality. This rare gemstone promotes
   courage, endurance, and deep connection to the earth. Perfect for those
-  seeking stability and inner strength.',
+  seeking stability and inner strength.`,
         features: [
           'Dragon blood jasper',
           'Earth element energy',
@@ -442,6 +442,62 @@
             color: #A01830;
           }
 
+          .related-products {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #E8E8E8;
+          }
+
+          .related-title {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+          }
+
+          .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+          }
+
+          .related-card {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+          }
+
+          .related-card:hover {
+            transform: translateY(-5px);
+          }
+
+          .related-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 12px;
+          }
+
+          .related-name {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+          }
+
+          .related-element {
+            font-size: 13px;
+            color: #C41E3A;
+            margin-bottom: 8px;
+          }
+
+          .related-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333333;
+          }
+
           @media (max-width: 768px) {
             .product-grid {
               grid-template-columns: 1fr;
@@ -462,6 +518,10 @@
 
             .btn-favorite {
               width: 100%;
+            }
+
+            .related-grid {
+              grid-template-columns: repeat(2, 1fr);
             }
           }
         `}</style>
@@ -557,15 +617,9 @@
           </div>
 
           {/* Related Products Section */}
-          <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px 
-  solid #E8E8E8' }}>
-            <h2 style={{ fontFamily: "'Playfair Display', 'Noto Serif SC',
-  serif", fontSize: '32px', fontWeight: '700', marginBottom: '30px', textAlign: 
-  'center' }}>
-              You May Also Like
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 
-  'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
+          <div className="related-products">
+            <h2 className="related-title">You May Also Like</h2>
+            <div className="related-grid">
               {Object.values(products)
                 .filter((p: any) => p.id !== productId)
                 .slice(0, 4)
@@ -573,20 +627,14 @@
                   <Link key={relatedProduct.id} 
   href={`/product/${relatedProduct.id}`} style={{ textDecoration: 'none', color:
    'inherit' }}>
-                    <div style={{ cursor: 'pointer', transition: 'transform 0.3s
-   ease' }} onMouseEnter={(e) => e.currentTarget.style.transform =
-  'translateY(-5px)'} onMouseLeave={(e) => e.currentTarget.style.transform =
-  'translateY(0)'}>
+                    <div className="related-card">
                       <img src={relatedProduct.image} alt={relatedProduct.name} 
-  style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 
-  '8px', marginBottom: '12px' }} />
-                      <p style={{ fontFamily: "'Playfair Display', 'Noto Serif 
-  SC', serif", fontSize: '16px', fontWeight: '600', marginBottom: '6px'
-  }}>{relatedProduct.name}</p>
-                      <p style={{ fontSize: '13px', color: '#C41E3A',
-  marginBottom: '8px' }}>{relatedProduct.element}</p>
-                      <p style={{ fontSize: '16px', fontWeight: '700', color: 
-  '#333333' }}>${relatedProduct.price.toFixed(2)}</p>
+  className="related-image" />
+                      <p className="related-name">{relatedProduct.name}</p>
+                      <p 
+  className="related-element">{relatedProduct.element}</p>
+                      <p 
+  className="related-price">${relatedProduct.price.toFixed(2)}</p>
                     </div>
                   </Link>
                 ))}
