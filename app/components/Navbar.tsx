@@ -5,7 +5,7 @@
 
   export default function Navbar() {
     const [cartCount] = useState(0);
-    const [searchOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
     const [language, setLanguage] = useState('en');
 
     const translations = {
