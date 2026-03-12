@@ -1,13 +1,16 @@
-import type { Metadata } from 'next';                                         
+  import type { Metadata } from 'next';
   import Navbar from './components/Navbar';
-  import './globals.css';                                                       
-                                                                                
+  import { AppProvider } from './context/AppContext';
+  import './globals.css';
+
   export const metadata: Metadata = {
     title: 'the wu lab - Handcrafted Energy Jewelry',
-    description: 'Discover handcrafted energy jewelry and BaZi analysis at the wu lab',
+    description: 'Discover handcrafted energy jewelry and BaZi analysis at the
+  wu lab',
     openGraph: {
       title: 'the wu lab - Handcrafted Energy Jewelry',
-      description: 'Discover handcrafted energy jewelry and BaZi analysis at the wu lab',
+      description: 'Discover handcrafted energy jewelry and BaZi analysis at the
+   wu lab',
       type: 'website',
     },
   };
@@ -32,8 +35,10 @@ import type { Metadata } from 'next';
           />
         </head>
         <body>
-          <Navbar />
-          {children}
+          <AppProvider>
+            <Navbar />
+            {children}
+          </AppProvider>
         </body>
       </html>
     );
