@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
 import CartDrawer from './CartDrawer';
@@ -9,9 +9,24 @@ import FavoritesDrawer from './FavoritesDrawer';
 export default function Navbar() {
   const { language, setLanguage, cartCount, favorites } = useApp();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [favoritesDrawerOpen, setFavoritesDrawerOpen] = useState(false);
+  const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 商品数据库
+  const products = [
+    { id: '1', name: 'Cosmic Turquoise Bracelet', price: 226.00, image: '/product-1.png' },
+    { id: '2', name: 'Imperial Jasper Bracelet', price: 183.00, image: '/product-2.png' },
+    { id: '3', name: 'Santa Maria Aquamarine', price: 2524.00, image: '/product-3.png' },
+    { id: '4', name: 'Labradorite Bracelet', price: 310.00, image: '/product-4.png' },
+    { id: '5', name: 'Blue Aventurine Bracelet', price: 310.00, image: '/product-5.png' },
+    { id: '6', name: 'Tiger Eye - Hematite Pair', price: 60.00, image: '/product-6.png' },
+    { id: '7', name: 'Lava Bracelet', price: 310.00, image: '/product-7.png' },
+    { id: '8', name: 'Dragon Blood Jasper', price: 297.00, image: '/product-8.png' }
+  ];
 
   const translations = {
     en: {
@@ -30,6 +45,7 @@ export default function Navbar() {
       handJewelry: 'Hand Jewelry',
       earrings: 'Earrings',
       necklaces: 'Necklaces',
+      noResults: 'No products found',
     },
     zh: {
       shop: '购物',
@@ -47,10 +63,56 @@ export default function Navbar() {
       handJewelry: '手饰',
       earrings: '耳饰',
       necklaces: '项链',
+      noResults: '未找到商品',
     },
   };
 
   const t = translations[language];
+
+  // 处理搜索输入
+  const handleSearchInput = (value: string) => {
+    setSearchQuery(value);
+
+    if (value.trim() === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    const query = value.toLowerCase();
+    const results = products.filter(product =>
+      product.name.toLowerCase().includes(query)
+    );
+    setSearchResults(results);
+  };
+
+  // 处理 Mega Menu 悬停（带延迟关闭）
+  const handleMegaMenuLeave = () => {
+    megaMenuTimeoutRef.current = setTimeout(() => {
+      setMegaMenuOpen(false);
+    }, 150);
+  };
+
+  const handleMegaMenuEnter = () => {
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current);
+    }
+    setMegaMenuOpen(true);
+  };
+
+  // 处理搜索结果点击
+  const handleSearchResultClick = () => {
+    setSearchOpen(false);
+    setSearchQuery('');
+    setSearchResults([]);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (megaMenuTimeoutRef.current) {
+        clearTimeout(megaMenuTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -127,6 +189,7 @@ export default function Navbar() {
 
         .mega-menu-wrapper {
           position: relative;
+          padding-bottom: 12px;
         }
 
         .mega-menu-trigger {
@@ -158,7 +221,7 @@ export default function Navbar() {
           border-radius: 8px;
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
           padding: 30px 40px;
-          margin-top: 12px;
+          margin-top: 0px;
           z-index: 200;
           min-width: 600px;
           display: none;
@@ -231,7 +294,7 @@ export default function Navbar() {
           position: absolute;
           top: 100%;
           right: 0;
-          width: 320px;
+          width: 380px;
           background: #FFFFFF;
           border: 1px solid #E8E8E8;
           border-radius: 4px;
@@ -254,10 +317,67 @@ export default function Navbar() {
           font-size: 14px;
           font-family: 'Montserrat', sans-serif;
           outline: none;
+          margin-bottom: 8px;
         }
 
         .search-dropdown input:focus {
           border-color: #C41E3A;
+        }
+
+        .search-results {
+          max-height: 400px;
+          overflow-y: auto;
+        }
+
+        .search-result-item {
+          display: flex;
+          gap: 12px;
+          padding: 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .search-result-item:hover {
+          background-color: #F5F5F5;
+        }
+
+        .search-result-image {
+          width: 60px;
+          height: 60px;
+          object-fit: cover;
+          border-radius: 4px;
+          flex-shrink: 0;
+        }
+
+        .search-result-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 4px;
+        }
+
+        .search-result-name {
+          font-size: 13px;
+          font-weight: 600;
+          color: #333333;
+          line-height: 1.3;
+        }
+
+        .search-result-price {
+          font-size: 12px;
+          color: #C41E3A;
+          font-weight: 600;
+        }
+
+        .search-no-results {
+          padding: 20px 12px;
+          text-align: center;
+          color: #999999;
+          font-size: 13px;
         }
 
         .lang-switcher {
@@ -340,7 +460,7 @@ export default function Navbar() {
           }
 
           .search-dropdown {
-            width: 250px;
+            width: 300px;
           }
 
           .mega-menu-dropdown {
@@ -363,18 +483,17 @@ export default function Navbar() {
           </Link>
 
           <nav>
-            <div className="mega-menu-wrapper">
+            <div className="mega-menu-wrapper"
+              onMouseEnter={handleMegaMenuEnter}
+              onMouseLeave={handleMegaMenuLeave}
+            >
               <button
                 className="mega-menu-trigger"
-                onMouseEnter={() => setMegaMenuOpen(true)}
-                onMouseLeave={() => setMegaMenuOpen(false)}
               >
                 {t.shop}
               </button>
               <div
                 className={`mega-menu-dropdown ${megaMenuOpen ? 'active' : ''}`}
-                onMouseEnter={() => setMegaMenuOpen(true)}
-                onMouseLeave={() => setMegaMenuOpen(false)}
               >
                 <div className="mega-menu-column">
                   <h3>{t.shopByElement}</h3>
@@ -417,7 +536,31 @@ export default function Navbar() {
                     type="text"
                     placeholder={t.search}
                     autoFocus
+                    value={searchQuery}
+                    onChange={(e) => handleSearchInput(e.target.value)}
                   />
+                  {searchQuery.trim() !== '' && (
+                    <div className="search-results">
+                      {searchResults.length > 0 ? (
+                        searchResults.map((product) => (
+                          <Link
+                            key={product.id}
+                            href={`/product/${product.id}`}
+                            className="search-result-item"
+                            onClick={handleSearchResultClick}
+                          >
+                            <img src={product.image} alt={product.name} className="search-result-image" />
+                            <div className="search-result-info">
+                              <div className="search-result-name">{product.name}</div>
+                              <div className="search-result-price">${product.price.toFixed(2)}</div>
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="search-no-results">{t.noResults}</div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
