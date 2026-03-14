@@ -1001,7 +1001,7 @@ export default function Home() {
             <p className="discover-text">
               {t.discoverText}
             </p>
-            <button className="btn-secondary">{t.calculateNow}</button>
+            <Link href="/bazi" className="btn-secondary">{t.calculateNow}</Link>
           </div>
         </div>
       </section>
