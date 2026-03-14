@@ -237,8 +237,9 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           margin: 0 auto;
           padding: 0 40px 60px;
           display: grid;
-          grid-template-columns: 55% 45%;
+          grid-template-columns: 1fr 1fr;
           gap: 60px;
+          align-items: start;
         }
 
         /* LEFT SIDE - IMAGE GALLERY */
@@ -246,6 +247,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           display: flex;
           flex-direction: column;
           gap: 20px;
+          width: 100%;
         }
 
         .main-image-wrapper {
@@ -260,12 +262,14 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           width: 100%;
           height: 100%;
           object-fit: cover;
+          display: block;
         }
 
         .detail-images-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 16px;
+          width: 100%;
         }
 
         .detail-image-wrapper {
@@ -275,6 +279,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           overflow: hidden;
           cursor: pointer;
           transition: transform 0.3s ease;
+          width: 100%;
         }
 
         .detail-image-wrapper:hover {
@@ -285,6 +290,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           width: 100%;
           height: 100%;
           object-fit: cover;
+          display: block;
         }
 
         /* RIGHT SIDE - PRODUCT INFO */
@@ -294,6 +300,8 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           gap: 30px;
           position: sticky;
           top: 20px;
+          padding: 20px;
+          width: 100%;
         }
 
         .product-header {
@@ -625,10 +633,12 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           .product-container {
             grid-template-columns: 1fr;
             gap: 40px;
+            padding: 0 20px 40px;
           }
 
           .product-info {
             position: static;
+            padding: 20px;
           }
 
           .product-title {
@@ -646,8 +656,13 @@ Root yourself in strength and embrace your power with this magnificent piece.`
 
         @media (max-width: 768px) {
           .product-container {
+            grid-template-columns: 1fr;
             padding: 0 20px 40px;
             gap: 30px;
+          }
+
+          .product-info {
+            padding: 16px;
           }
 
           .product-title {
