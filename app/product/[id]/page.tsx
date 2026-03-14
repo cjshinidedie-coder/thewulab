@@ -2,13 +2,20 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 
 export default function ProductDetail() {
   const params = useParams();
+  const router = useRouter();
   const productId = params.id as string;
   const { language, addToCart, toggleFavorite, favorites } = useApp();
   const isFavorited = favorites.includes(productId);
+
+  const handleBuyNow = () => {
+    addToCart();
+    router.push('/checkout');
+  };
 
   // 多语言翻译
   const translations = {
@@ -740,7 +747,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
             <p className="product-description">{product.description}</p>
 
             <div className="action-buttons">
-              <button className="btn-buy-now">{t.buyNow}</button>
+              <button className="btn-buy-now" onClick={handleBuyNow}>{t.buyNow}</button>
               <button className="btn-add-cart" onClick={addToCart}>{t.addToCart}</button>
               <button
                 className={`btn-favorite ${isFavorited ? 'active' : ''}`}

@@ -317,7 +317,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <span>{t.total}</span>
               <span>$226.00</span>
             </div>
-            <button className="checkout-btn">{t.checkout}</button>
+            <Link href="/checkout" className="checkout-btn" onClick={onClose}>{t.checkout}</Link>
           </div>
         )}
       </div>

@@ -8,6 +8,7 @@
     cartCount: number;
     setCartCount: (count: number) => void;
     addToCart: () => void;
+    clearCart: () => void;
     favorites: string[];
     toggleFavorite: (productId: string) => void;
   }
@@ -21,6 +22,10 @@
 
     const addToCart = () => {
       setCartCount(prev => prev + 1);
+    };
+
+    const clearCart = () => {
+      setCartCount(0);
     };
 
     const toggleFavorite = (productId: string) => {
@@ -39,6 +44,7 @@
           cartCount,
           setCartCount,
           addToCart,
+          clearCart,
           favorites,
           toggleFavorite,
         }}
