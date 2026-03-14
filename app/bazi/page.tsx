@@ -133,9 +133,6 @@ export default function BaziCalculator() {
     }
 
     // 简化的五行计算（基于年月日时的数字）
-    const totalNum = year + month + day + hour;
-    const elements = ['water', 'fire', 'wood', 'metal', 'earth'];
-
     // 计算每个元素的强度
     const elementStrengths = {
       water: (year % 5 === 0 ? 2 : 1) + (month % 5 === 0 ? 1 : 0),
