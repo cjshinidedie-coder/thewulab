@@ -1,83 +1,176 @@
-'use client';                                                                 
+'use client';
 
-  import { useRef, useState } from 'react';
-  import Link from 'next/link';
-  import { Cart } from '@/components/Cart';
+import { useRef } from 'react';
+import Link from 'next/link';
+import { Cart } from '@/components/Cart';
+import { useApp } from '@/app/context/AppContext';
 
-  export default function Home() {
-    const shopRef = useRef<HTMLDivElement>(null);
-    const [favorites, setFavorites] = useState<string[]>([]);
+export default function Home() {
+  const shopRef = useRef<HTMLDivElement>(null);
+  const { language, addToCart, toggleFavorite, favorites } = useApp();
 
-    const scrollToShop = () => {
-      shopRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+  const scrollToShop = () => {
+    shopRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    const toggleFavorite = (productId: string) => {
-      setFavorites(prev =>
-        prev.includes(productId)
-          ? prev.filter(id => id !== productId)
-          : [...prev, productId]
-      );
-    };
+  // 多语言文案
+  const translations = {
+    en: {
+      heroTitle: 'Awaken Your True Potential',
+      heroSubtitle: 'Handcrafted artisan jewelry aligned with the Five Elements',
+      shopNow: 'Shop Now',
+      discoverTitle: 'Discover Your Missing Element',
+      discoverText: 'Get your personalized BaZi energy report and find the perfect cosmic jewelry to harmonize your five elements. Our ancient wisdom combined with modern craftsmanship will guide you to your true cosmic blueprint.',
+      calculateNow: 'Calculate Now',
+      bestSellers: 'Best Sellers',
+      addToCart: 'Add to Cart',
+      buyNow: 'Buy Now',
+      newArrivals: 'New Arrivals',
+      viewProducts: 'View Products',
+      shopByElement: 'Shop by Element',
+      wood: '🌿 Wood',
+      fire: '🔥 Fire',
+      earth: '🌍 Earth',
+      metal: '✨ Metal',
+      water: '🌊 Water',
+      customerReviews: 'Customer Reviews',
+      handmadeWithLove: 'Handmade with Love',
+      bringsGoodFortune: 'Brings Good Fortune',
+      securePayment: 'Secure Payment',
+      perfectGiftChoice: 'Perfect Gift Choice',
+      shop: 'Shop',
+      allBracelets: 'All Bracelets',
+      newArrivalsLink: 'New Arrivals',
+      bestSellersLink: 'Best Sellers',
+      sale: 'Sale',
+      customerCare: 'Customer Care',
+      contactUs: 'Contact Us',
+      shippingInfo: 'Shipping Info',
+      returnsExchanges: 'Returns & Exchanges',
+      faq: 'FAQ',
+      about: 'About',
+      ourStory: 'Our Story',
+      craftsmanship: 'Craftsmanship',
+      energyWork: 'Energy Work',
+      blog: 'Blog',
+      joinOurJourney: 'Join Our Journey',
+      subscribeText: 'Subscribe to receive exclusive offers and cosmic insights',
+      enterEmail: 'Enter your email',
+      subscribe: 'Subscribe',
+      followUs: 'Follow Us',
+      copyright: '© 2024 the wu lab. All rights reserved.',
+      privacyPolicy: 'Privacy Policy',
+      termsOfService: 'Terms of Service',
+    },
+    zh: {
+      heroTitle: '唤醒你的真实潜能',
+      heroSubtitle: '与五行元素相协调的手工艺术珠宝',
+      shopNow: '立即购物',
+      discoverTitle: '发现你缺失的元素',
+      discoverText: '获取个性化的八字能量报告，找到完美的宇宙珠宝来协调你的五行元素。我们的古老智慧与现代工艺相结合，将引导你找到真正的宇宙蓝图。',
+      calculateNow: '立即计算',
+      bestSellers: '热销商品',
+      addToCart: '加入购物车',
+      buyNow: '立即购买',
+      newArrivals: '新品上市',
+      viewProducts: '查看商品',
+      shopByElement: '按元素购物',
+      wood: '🌿 木',
+      fire: '🔥 火',
+      earth: '🌍 土',
+      metal: '✨ 金',
+      water: '🌊 水',
+      customerReviews: '客户评价',
+      handmadeWithLove: '用爱手工制作',
+      bringsGoodFortune: '带来好运',
+      securePayment: '安全支付',
+      perfectGiftChoice: '完美礼物选择',
+      shop: '购物',
+      allBracelets: '所有手链',
+      newArrivalsLink: '新品上市',
+      bestSellersLink: '热销商品',
+      sale: '促销',
+      customerCare: '客户服务',
+      contactUs: '联系我们',
+      shippingInfo: '运费信息',
+      returnsExchanges: '退货和换货',
+      faq: '常见问题',
+      about: '关于',
+      ourStory: '我们的故事',
+      craftsmanship: '工艺',
+      energyWork: '能量工作',
+      blog: '博客',
+      joinOurJourney: '加入我们的旅程',
+      subscribeText: '订阅以获取独家优惠和宇宙见解',
+      enterEmail: '输入您的邮箱',
+      subscribe: '订阅',
+      followUs: '关注我们',
+      copyright: '© 2024 the wu lab. 版权所有。',
+      privacyPolicy: '隐私政策',
+      termsOfService: '服务条款',
+    }
+  };
 
-    const products = [
-      {
-        id: '1',
-        name: 'Cosmic Turquoise Bracelet',
-        element: '🌊 Water Element',
-        price: '$226.00',
-        image: '/product-1.png'
-      },
-      {
-        id: '2',
-        name: 'Imperial Jasper Bracelet',
-        element: '✨ Metal Element',
-        price: '$183.00',
-        image: '/product-2.png'
-      },
-      {
-        id: '3',
-        name: 'Santa Maria Aquamarine',
-        element: '🌊 Water Element',
-        price: '$2,524.00',
-        image: '/product-3.png'
-      },
-      {
-        id: '4',
-        name: 'Labradorite Bracelet',
-        element: '🌿 Wood Element',
-        price: '$310.00',
-        image: '/product-4.png'
-      },
-      {
-        id: '5',
-        name: 'Blue Aventurine Bracelet',
-        element: '🌊 Water Element',
-        price: '$310.00',
-        image: '/product-5.png'
-      },
-      {
-        id: '6',
-        name: 'Tiger Eye - Hematite Pair',
-        element: '🔥 Fire Element',
-        price: '$60.00',
-        image: '/product-6.png'
-      },
-      {
-        id: '7',
-        name: 'Lava Bracelet',
-        element: '🔥 Fire Element',
-        price: '$310.00',
-        image: '/product-7.png'
-      },
-      {
-        id: '8',
-        name: 'Dragon Blood Jasper',
-        element: '🌍 Earth Element',
-        price: '$297.00',
-        image: '/product-8.png'
-      }
-    ];
+  const t = translations[language];
+
+  const products = [
+    {
+      id: '1',
+      name: 'Cosmic Turquoise Bracelet',
+      element: '🌊 Water Element',
+      price: '$226.00',
+      image: '/product-1.png'
+    },
+    {
+      id: '2',
+      name: 'Imperial Jasper Bracelet',
+      element: '✨ Metal Element',
+      price: '$183.00',
+      image: '/product-2.png'
+    },
+    {
+      id: '3',
+      name: 'Santa Maria Aquamarine',
+      element: '🌊 Water Element',
+      price: '$2,524.00',
+      image: '/product-3.png'
+    },
+    {
+      id: '4',
+      name: 'Labradorite Bracelet',
+      element: '🌿 Wood Element',
+      price: '$310.00',
+      image: '/product-4.png'
+    },
+    {
+      id: '5',
+      name: 'Blue Aventurine Bracelet',
+      element: '🌊 Water Element',
+      price: '$310.00',
+      image: '/product-5.png'
+    },
+    {
+      id: '6',
+      name: 'Tiger Eye - Hematite Pair',
+      element: '🔥 Fire Element',
+      price: '$60.00',
+      image: '/product-6.png'
+    },
+    {
+      id: '7',
+      name: 'Lava Bracelet',
+      element: '🔥 Fire Element',
+      price: '$310.00',
+      image: '/product-7.png'
+    },
+    {
+      id: '8',
+      name: 'Dragon Blood Jasper',
+      element: '🌍 Earth Element',
+      price: '$297.00',
+      image: '/product-8.png'
+    }
+  ];
 
     return (
       <div>
@@ -893,11 +986,10 @@
           </video>
           <div className="hero-overlay"></div>
           <div className="hero-content">
-            <h1>Awaken Your True Potential</h1>
-            <p className="hero-subtitle">Handcrafted artisan jewelry aligned
-  with the Five Elements</p>
+            <h1>{t.heroTitle}</h1>
+            <p className="hero-subtitle">{t.heroSubtitle}</p>
             <button onClick={scrollToShop} className="btn-primary">
-              Shop Now
+              {t.shopNow}
             </button>
           </div>
         </section>
@@ -908,20 +1000,18 @@
             <img src="/missing-element.png" alt="Discover Your Missing Element"
   className="discover-banner-bg" />
             <div className="discover-overlay">
-              <h2 className="discover-title">Discover Your Missing Element</h2>
+              <h2 className="discover-title">{t.discoverTitle}</h2>
               <p className="discover-text">
-                Get your personalized BaZi energy report and find the perfect
-  cosmic jewelry to harmonize your five elements. Our ancient wisdom combined
-  with modern craftsmanship will guide you to your true cosmic blueprint.
+                {t.discoverText}
               </p>
-              <button className="btn-secondary">Calculate Now</button>
+              <button className="btn-secondary">{t.calculateNow}</button>
             </div>
           </div>
         </section>
 
         {/* BEST SELLERS SECTION - WITH SWIPER HORIZONTAL SCROLL */}
         <section className="section">
-          <h2 className="section-title">Best Sellers</h2>
+          <h2 className="section-title">{t.bestSellers}</h2>
           <div className="swiper mySwiper">
             <div className="swiper-wrapper">
               {products.map((product) => (
@@ -945,9 +1035,9 @@
                     <div className="product-price">{product.price}</div>
                     <div className="product-buttons">
                       <Link href={`/product/${product.id}`} className="buy-now">
-                        Buy Now
+                        {t.buyNow}
                       </Link>
-                      <button className="add-to-cart">Add to Cart</button>
+                      <button className="add-to-cart" onClick={addToCart}>{t.addToCart}</button>
                     </div>
                   </div>
                 </div>
@@ -962,52 +1052,52 @@
             <img src="/new-arrivals.png" alt="New Arrivals"
   className="banner-image" />
             <div className="banner-content">
-              <div className="banner-label">New Arrivals</div>
-              <a href="#" className="banner-btn">View Products</a>
+              <div className="banner-label">{t.newArrivals}</div>
+              <Link href="/product/1" className="banner-btn">{t.viewProducts}</Link>
             </div>
           </div>
         </section>
 
         {/* SHOP BY ELEMENT SECTION */}
         <section className="section">
-          <h2 className="section-title">Shop by Element</h2>
+          <h2 className="section-title">{t.shopByElement}</h2>
           <div className="element-grid">
-            <a href="#" className="element-card">
+            <Link href="/product/4" className="element-card">
               <div className="element-circle" style={{ backgroundImage:
   "url('/wood.png')" }}></div>
-              <div className="element-name">🌿 Wood</div>
-            </a>
+              <div className="element-name">{t.wood}</div>
+            </Link>
 
-            <a href="#" className="element-card">
+            <Link href="/product/6" className="element-card">
               <div className="element-circle" style={{ backgroundImage:
   "url('/fire.png')" }}></div>
-              <div className="element-name">🔥 Fire</div>
-            </a>
+              <div className="element-name">{t.fire}</div>
+            </Link>
 
-            <a href="#" className="element-card">
+            <Link href="/product/8" className="element-card">
               <div className="element-circle" style={{ backgroundImage:
   "url('/earth.png')" }}></div>
-              <div className="element-name">🌍 Earth</div>
-            </a>
+              <div className="element-name">{t.earth}</div>
+            </Link>
 
-            <a href="#" className="element-card">
+            <Link href="/product/2" className="element-card">
               <div className="element-circle" style={{ backgroundImage:
   "url('/metal.png')" }}></div>
-              <div className="element-name">✨ Metal</div>                      
-            </a> 
-                                                                                
-            <a href="#" className="element-card">                               
-              <div className="element-circle" style={{ backgroundImage: 
+              <div className="element-name">{t.metal}</div>
+            </Link>
+
+            <Link href="/product/1" className="element-card">
+              <div className="element-circle" style={{ backgroundImage:
   "url('/water.png')" }}></div>
-              <div className="element-name">🌊 Water</div>
-            </a>
+              <div className="element-name">{t.water}</div>
+            </Link>
           </div>
         </section>
 
         {/* REVIEWS SECTION */}
         <section className="reviews-section">
           <div className="reviews-container">
-            <h2 className="reviews-title">Customer Reviews</h2>
+            <h2 className="reviews-title">{t.customerReviews}</h2>
             <div className="reviews-grid">
               <div className="review-card">
                 <div className="review-stars">★★★★★</div>
@@ -1064,27 +1154,27 @@
         <section className="trust-section">
           <div className="trust-container">
             <div className="trust-item">
-              <img src="/trust-hands.png" alt="Handmade with Love" 
+              <img src="/trust-hands.png" alt="Handmade with Love"
   className="trust-image" />
-              <div className="trust-title">Handmade with Love</div>
+              <div className="trust-title">{t.handmadeWithLove}</div>
             </div>
 
             <div className="trust-item">
-              <img src="/trust-lucky.png" alt="Brings Good Fortune" 
+              <img src="/trust-lucky.png" alt="Brings Good Fortune"
   className="trust-image" />
-              <div className="trust-title">Brings Good Fortune</div>
+              <div className="trust-title">{t.bringsGoodFortune}</div>
             </div>
 
             <div className="trust-item">
-              <img src="/trust-secure.png" alt="Secure Payment" 
+              <img src="/trust-secure.png" alt="Secure Payment"
   className="trust-image" />
-              <div className="trust-title">Secure Payment</div>
+              <div className="trust-title">{t.securePayment}</div>
             </div>
 
             <div className="trust-item">
-              <img src="/trust-gift.png" alt="Perfect Gift Choice" 
+              <img src="/trust-gift.png" alt="Perfect Gift Choice"
   className="trust-image" />
-              <div className="trust-title">Perfect Gift Choice</div>
+              <div className="trust-title">{t.perfectGiftChoice}</div>
             </div>
           </div>
         </section>
@@ -1099,48 +1189,47 @@
           <div className="footer-content">
             <div className="footer-top">
               <div className="footer-section">
-                <h3>Shop</h3>
+                <h3>{t.shop}</h3>
                 <ul>
-                  <li><a href="#">All Bracelets</a></li>
-                  <li><a href="#">New Arrivals</a></li>
-                  <li><a href="#">Best Sellers</a></li>
-                  <li><a href="#">Sale</a></li>
+                  <li><a href="#">{t.allBracelets}</a></li>
+                  <li><a href="#">{t.newArrivalsLink}</a></li>
+                  <li><a href="#">{t.bestSellersLink}</a></li>
+                  <li><a href="#">{t.sale}</a></li>
                 </ul>
               </div>
 
               <div className="footer-section">
-                <h3>Customer Care</h3>
+                <h3>{t.customerCare}</h3>
                 <ul>
-                  <li><a href="#">Contact Us</a></li>
-                  <li><a href="#">Shipping Info</a></li>
-                  <li><a href="#">Returns & Exchanges</a></li>
-                  <li><a href="#">FAQ</a></li>
+                  <li><a href="#">{t.contactUs}</a></li>
+                  <li><a href="#">{t.shippingInfo}</a></li>
+                  <li><a href="#">{t.returnsExchanges}</a></li>
+                  <li><a href="#">{t.faq}</a></li>
                 </ul>
               </div>
 
               <div className="footer-section">
-                <h3>About</h3>
+                <h3>{t.about}</h3>
                 <ul>
-                  <li><a href="#">Our Story</a></li>
-                  <li><a href="#">Craftsmanship</a></li>
-                  <li><a href="#">Energy Work</a></li>
-                  <li><a href="#">Blog</a></li>
+                  <li><a href="#">{t.ourStory}</a></li>
+                  <li><a href="#">{t.craftsmanship}</a></li>
+                  <li><a href="#">{t.energyWork}</a></li>
+                  <li><a href="#">{t.blog}</a></li>
                 </ul>
               </div>
 
               <div className="footer-section">
                 <div className="newsletter-box">
-                  <h3>Join Our Journey</h3>
-                  <p>Subscribe to receive exclusive offers and cosmic
-  insights</p>
+                  <h3>{t.joinOurJourney}</h3>
+                  <p>{t.subscribeText}</p>
                   <div className="newsletter-input">
-                    <input type="email" placeholder="Enter your email" />
-                    <button>Subscribe</button>
+                    <input type="email" placeholder={t.enterEmail} />
+                    <button>{t.subscribe}</button>
                   </div>
                 </div>
                 <div>
-                  <p style={{ fontSize: '12px', color: '#999', marginBottom: 
-  '8px' }}>Follow Us</p>
+                  <p style={{ fontSize: '12px', color: '#999', marginBottom:
+  '8px' }}>{t.followUs}</p>
                   <div className="social-icons">
                     <a href="#">📷</a>
                     <a href="#">f</a>
@@ -1152,8 +1241,7 @@
             </div>
 
             <div className="footer-bottom">
-              <p>© 2024 the wu lab. All rights reserved. | <a href="#">Privacy
-  Policy</a> | <a href="#">Terms of Service</a></p>
+              <p>{t.copyright} | <a href="#">{t.privacyPolicy}</a> | <a href="#">{t.termsOfService}</a></p>
             </div>
           </div>
         </footer>
