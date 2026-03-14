@@ -8,7 +8,6 @@ import { useApp } from '@/app/context/AppContext';
 export default function ProductDetail() {
   const params = useParams();
   const productId = params.id as string;
-  const [quantity, setQuantity] = useState(1);
   const { language, addToCart, toggleFavorite, favorites } = useApp();
   const isFavorited = favorites.includes(productId);
 
