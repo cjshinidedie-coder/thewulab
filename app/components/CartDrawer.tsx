@@ -9,7 +9,7 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { language, cartCount } = useApp();
+  const { language, cartCount, cartItems, removeFromCart } = useApp();
 
   const translations = {
     en: {
@@ -290,15 +290,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
           ) : (
             <div className="cart-items">
-              <div className="cart-item">
-                <img src="/product-1.png" alt="Product" className="item-image" />
-                <div className="item-info">
-                  <div className="item-name">Cosmic Turquoise Bracelet</div>
-                  <div className="item-price">$226.00</div>
-                  <div className="item-quantity">Qty: 1</div>
+              {cartItems.map((item) => (
+                <div key={item.id} className="cart-item">
+                  <img src={item.image} alt={item.name} className="item-image" />
+                  <div className="item-info">
+                    <div className="item-name">{item.name}</div>
+                    <div className="item-price">${item.price.toFixed(2)}</div>
+                    <div className="item-quantity">Qty: {item.quantity}</div>
+                  </div>
+                  <button className="remove-btn" onClick={() => removeFromCart(item.id)}>✕</button>
                 </div>
-                <button className="remove-btn">✕</button>
-              </div>
+              ))}
             </div>
           )}
         </div>
@@ -307,7 +309,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="cart-footer">
             <div className="cart-summary">
               <span>{cartCount} {t.items}</span>
-              <span>$226.00</span>
+              <span>${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)).toFixed(2)}</span>
             </div>
             <div className="cart-summary">
               <span>{t.shipping}</span>
@@ -315,7 +317,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
             <div className="cart-total">
               <span>{t.total}</span>
-              <span>$226.00</span>
+              <span>${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)).toFixed(2)}</span>
             </div>
             <Link href="/checkout" className="checkout-btn" onClick={onClose}>{t.checkout}</Link>
           </div>

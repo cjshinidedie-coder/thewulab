@@ -13,7 +13,7 @@ export default function ProductDetail() {
   const isFavorited = favorites.includes(productId);
 
   const handleBuyNow = () => {
-    addToCart();
+    addToCart({ id: product.id, name: product.name, price: product.price, image: product.image });
     router.push('/checkout');
   };
 
@@ -748,7 +748,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
 
             <div className="action-buttons">
               <button className="btn-buy-now" onClick={handleBuyNow}>{t.buyNow}</button>
-              <button className="btn-add-cart" onClick={addToCart}>{t.addToCart}</button>
+              <button className="btn-add-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}>{t.addToCart}</button>
               <button
                 className={`btn-favorite ${isFavorited ? 'active' : ''}`}
                 onClick={() => toggleFavorite(productId)}

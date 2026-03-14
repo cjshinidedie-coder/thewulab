@@ -789,7 +789,7 @@ export default function BaziCalculator() {
                   <div className="product-element">{product.element}</div>
                   <div className="product-price">${product.price.toFixed(2)}</div>
                   <div className="product-buttons">
-                    <button className="add-to-cart" onClick={addToCart}>{t.addToCart}</button>
+                    <button className="add-to-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}>{t.addToCart}</button>
                   </div>
                 </div>
               ))}
