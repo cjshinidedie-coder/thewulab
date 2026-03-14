@@ -165,6 +165,7 @@ export default function Navbar() {
           align-items: center;
           flex: 1;
           justify-content: center;
+          height: 20px;
         }
 
         .nav-item {
@@ -181,6 +182,9 @@ export default function Navbar() {
           transition: color 0.3s ease;
           font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
           cursor: pointer;
+          line-height: 1;
+          display: flex;
+          align-items: center;
         }
 
         .nav-link:hover {
@@ -189,7 +193,8 @@ export default function Navbar() {
 
         .mega-menu-wrapper {
           position: relative;
-          padding-bottom: 12px;
+          display: flex;
+          align-items: center;
         }
 
         .mega-menu-trigger {
@@ -205,6 +210,9 @@ export default function Navbar() {
           border: none;
           background: none;
           padding: 0;
+          line-height: 1;
+          display: flex;
+          align-items: center;
         }
 
         .mega-menu-trigger:hover {
@@ -213,7 +221,7 @@ export default function Navbar() {
 
         .mega-menu-dropdown {
           position: absolute;
-          top: 100%;
+          top: calc(100% + 8px);
           left: 50%;
           transform: translateX(-50%);
           background-color: #FFFFFF;
@@ -221,16 +229,17 @@ export default function Navbar() {
           border-radius: 8px;
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
           padding: 30px 40px;
-          margin-top: 0px;
           z-index: 200;
           min-width: 600px;
           display: none;
+          pointer-events: none;
         }
 
         .mega-menu-dropdown.active {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 40px;
+          pointer-events: auto;
         }
 
         .mega-menu-column h3 {
@@ -517,7 +526,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            <a href="#bazi" className="nav-link">{t.bazi}</a>
+            <Link href="/bazi" className="nav-link">{t.bazi}</Link>
             <a href="#meaning" className="nav-link">{t.meaning}</a>
           </nav>
 
