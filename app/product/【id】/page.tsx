@@ -1,13 +1,46 @@
-'use client';  
-                                                                                
-  import { useState } from 'react';                                             
-  import Link from 'next/link';
-  import { useParams } from 'next/navigation';
+'use client';
 
-  export default function ProductDetail() {
-    const params = useParams();
-    const productId = params.id as string;
-    const [quantity, setQuantity] = useState(1);
+import { useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useApp } from '@/app/context/AppContext';
+
+export default function ProductDetail() {
+  const params = useParams();
+  const productId = params.id as string;
+  const [quantity, setQuantity] = useState(1);
+  const { language, addToCart, toggleFavorite, favorites } = useApp();
+  const isFavorited = favorites.includes(productId);
+
+  // 多语言翻译
+  const translations = {
+    en: {
+      backToHome: '← Back to Home',
+      keyFeatures: 'Key Features',
+      quantity: 'Quantity:',
+      addToCart: 'Add to Cart',
+      favorite: 'Add to Favorites',
+      energyAlignment: '✨ Energy Alignment',
+      energyDescription: 'This {element} piece is carefully crafted to harmonize with your energy. Wear it close to your heart to experience its transformative power and align with your true potential.',
+      freeShipping: 'Free shipping on orders over $100',
+      reviews: '(128 reviews)',
+      youMayAlsoLike: 'You May Also Like',
+    },
+    zh: {
+      backToHome: '← 返回首页',
+      keyFeatures: '主要特性',
+      quantity: '数量:',
+      addToCart: '加入购物车',
+      favorite: '加入收藏',
+      energyAlignment: '✨ 能量对齐',
+      energyDescription: '这件{element}饰品经过精心制作，与您的能量相协调。将其贴近心脏佩戴，体验其变革力量，与您真实的潜能相一致。',
+      freeShipping: '订单满 $100 免运费',
+      reviews: '(128 条评价)',
+      youMayAlsoLike: '您可能也喜欢',
+    }
+  };
+
+  const t = translations[language];
 
     // 商品数据库
     const products: Record<string, any> = {
@@ -428,6 +461,12 @@
             color: #C41E3A;
           }
 
+          .btn-favorite.active {
+            border-color: #C41E3A;
+            color: #C41E3A;
+            background-color: #FFE8E8;
+          }
+
           .back-link {
             display: inline-block;
             margin-bottom: 20px;
@@ -527,12 +566,12 @@
         `}</style>
 
         <div className="product-detail-container">
-          <Link href="/" className="back-link">← Back to Home</Link>
+          <Link href="/" className="back-link">{t.backToHome}</Link>
 
           <div className="product-grid">
             {/* Product Image */}
             <div className="product-image-section">
-              <img src={product.image} alt={product.name} 
+              <img src={product.image} alt={product.name}
   className="product-main-image" />
             </div>
 
@@ -544,26 +583,25 @@
 
               <div className="product-rating">
                 <span className="stars">★★★★★</span>
-                <span className="rating-text">(128 reviews)</span>
+                <span className="rating-text">{t.reviews}</span>
               </div>
 
               <div className="product-price-section">
                 <div className="price-display">
-                  <span 
+                  <span
   className="current-price">${product.price.toFixed(2)}</span>
                   {product.originalPrice > product.price && (
-                    <span 
+                    <span
   className="original-price">${product.originalPrice.toFixed(2)}</span>
                   )}
                 </div>
-                <p style={{ fontSize: '13px', color: '#666666' }}>Free shipping
-  on orders over $100</p>
+                <p style={{ fontSize: '13px', color: '#666666' }}>{t.freeShipping}</p>
               </div>
 
               <p className="product-description">{product.description}</p>
 
               <div className="product-features">
-                <h3 className="features-title">Key Features</h3>
+                <h3 className="features-title">{t.keyFeatures}</h3>
                 <ul className="features-list">
                   {product.features.map((feature: string, index: number) => (
                     <li key={index}>{feature}</li>
@@ -572,7 +610,7 @@
               </div>
 
               <div className="quantity-section">
-                <label className="quantity-label">Quantity:</label>
+                <label className="quantity-label">{t.quantity}</label>
                 <div className="quantity-control">
                   <button
                     className="quantity-btn"
@@ -598,19 +636,23 @@
               </div>
 
               <div className="action-buttons">
-                <button className="btn-add-cart">Add to Cart</button>
-                <button className="btn-favorite">♡</button>
+                <button className="btn-add-cart" onClick={addToCart}>{t.addToCart}</button>
+                <button
+                  className={`btn-favorite ${isFavorited ? 'active' : ''}`}
+                  onClick={() => toggleFavorite(productId)}
+                  title={t.favorite}
+                >
+                  {isFavorited ? '♥' : '♡'}
+                </button>
               </div>
 
               <div style={{ padding: '20px', backgroundColor: '#FFE8E8',
   borderRadius: '8px', marginTop: '20px' }}>
-                <p style={{ fontSize: '13px', color: '#C41E3A', fontWeight: 
-  '600', marginBottom: '8px' }}>✨ Energy Alignment</p>
-                <p style={{ fontSize: '13px', color: '#666666', lineHeight: 
+                <p style={{ fontSize: '13px', color: '#C41E3A', fontWeight:
+  '600', marginBottom: '8px' }}>{t.energyAlignment}</p>
+                <p style={{ fontSize: '13px', color: '#666666', lineHeight:
   '1.6' }}>
-                  This {product.element} piece is carefully crafted to harmonize
-   with your energy. Wear it close to your heart to experience its
-  transformative power and align with your true potential.
+                  {t.energyDescription.replace('{element}', product.element)}
                 </p>
               </div>
             </div>
@@ -618,22 +660,22 @@
 
           {/* Related Products Section */}
           <div className="related-products">
-            <h2 className="related-title">You May Also Like</h2>
+            <h2 className="related-title">{t.youMayAlsoLike}</h2>
             <div className="related-grid">
               {Object.values(products)
                 .filter((p: any) => p.id !== productId)
                 .slice(0, 4)
                 .map((relatedProduct: any) => (
-                  <Link key={relatedProduct.id} 
+                  <Link key={relatedProduct.id}
   href={`/product/${relatedProduct.id}`} style={{ textDecoration: 'none', color:
    'inherit' }}>
                     <div className="related-card">
-                      <img src={relatedProduct.image} alt={relatedProduct.name} 
+                      <img src={relatedProduct.image} alt={relatedProduct.name}
   className="related-image" />
                       <p className="related-name">{relatedProduct.name}</p>
-                      <p 
+                      <p
   className="related-element">{relatedProduct.element}</p>
-                      <p 
+                      <p
   className="related-price">${relatedProduct.price.toFixed(2)}</p>
                     </div>
                   </Link>

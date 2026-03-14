@@ -3,11 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
+import CartDrawer from './CartDrawer';
+import FavoritesDrawer from './FavoritesDrawer';
 
 export default function Navbar() {
-  const { language, setLanguage, cartCount } = useApp();
+  const { language, setLanguage, cartCount, favorites } = useApp();
   const [searchOpen, setSearchOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
+  const [favoritesDrawerOpen, setFavoritesDrawerOpen] = useState(false);
 
   const translations = {
     en: {
@@ -434,17 +438,29 @@ export default function Navbar() {
               </button>
             </div>
 
-            <button className="icon-btn" title="Shopping Cart">
+            <button
+              className="icon-btn"
+              title="Shopping Cart"
+              onClick={() => setCartDrawerOpen(true)}
+            >
               🛒
               {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
             </button>
 
-            <button className="icon-btn" title="Favorites">
+            <button
+              className="icon-btn"
+              title="Favorites"
+              onClick={() => setFavoritesDrawerOpen(true)}
+            >
               ♡
+              {favorites.length > 0 && <span className="cart-count">{favorites.length}</span>}
             </button>
           </div>
         </div>
       </header>
+
+      <CartDrawer isOpen={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />
+      <FavoritesDrawer isOpen={favoritesDrawerOpen} onClose={() => setFavoritesDrawerOpen(false)} />
     </>
   );
 }
