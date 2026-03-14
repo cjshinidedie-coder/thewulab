@@ -499,7 +499,7 @@ export default function Checkout() {
                     placeholder="1234 5678 9012 3456"
                     value={formData.cardNumber}
                     onChange={handleInputChange}
-                    maxLength="19"
+                    maxLength={19}
                   />
                 </div>
               </div>
@@ -513,7 +513,7 @@ export default function Checkout() {
                     placeholder="MM/YY"
                     value={formData.expiryDate}
                     onChange={handleInputChange}
-                    maxLength="5"
+                    maxLength={5}
                   />
                 </div>
                 <div className="form-group">
@@ -525,7 +525,7 @@ export default function Checkout() {
                     placeholder="123"
                     value={formData.cvc}
                     onChange={handleInputChange}
-                    maxLength="3"
+                    maxLength={3}
                   />
                 </div>
               </div>
