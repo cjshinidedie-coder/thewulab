@@ -43,9 +43,8 @@
         const item = prev.find(item => item.id === productId);
         if (item) {
           setCartCount(prevCount => Math.max(0, prevCount - item.quantity));
-          return prev.filter(item => item.id !== productId);
         }
-        return prev;
+        return prev.filter(item => item.id !== productId);
       });
     };
 
