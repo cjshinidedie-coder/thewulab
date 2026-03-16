@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import { useCart } from '../context/AppContext';
+import { useApp } from '../context/AppContext';
 
 export default function CheckoutPage() {
-  const { cart, getCartTotal } = useCart();
+  const { cart, getCartTotal } = useApp();
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
