@@ -1032,7 +1032,7 @@ export default function Home() {
                     <Link href={`/product/${product.id}`} className="buy-now">
                       {t.buyNow}
                     </Link>
-                    <button className="add-to-cart" onClick={addToCart}>{t.addToCart}</button>
+                    <button className="add-to-cart" onClick={() => addToCart(product)}>{t.addToCart}</button>
                   </div>
                 </div>
               </div>
