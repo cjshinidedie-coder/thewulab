@@ -3,15 +3,15 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function CheckoutPage() {
-  const { cart, getCartTotal } = useApp();
+  const { state } = useApp();
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Checkout</h1>
       <div style={{ border: '1px solid #ccc', padding: '15px', marginBottom: '20px' }}>
         <h3>Order Summary</h3>
-        <p>Total Items: {cart.length}</p>
-        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>Total: ${getCartTotal()}</p>
+        <p>Total Items: {state.cart.length}</p>
+        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>Total: $999</p>
       </div>
       
       <div style={{ background: '#f9f9f9', padding: '20px', borderRadius: '8px' }}>
