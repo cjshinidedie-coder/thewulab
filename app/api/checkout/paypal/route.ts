@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-import { calculateTotalPrice } from '@/lib/products';
 
 const PAYPAL_API_BASE = 'https://api-m.sandbox.paypal.com'; // 测试环境
 
@@ -37,7 +36,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const totalPrice = calculateTotalPrice(items);
+    const totalPrice = items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
 
     // 获取 PayPal Access Token
     const accessToken = await getPayPalAccessToken();
