@@ -8,7 +8,7 @@ export default function Home() {
   const shopRef = useRef<HTMLDivElement>(null);
   const { language, addToCart, toggleFavorite, favorites } = useApp();
 
-  //const scrollToShop = () => {
+  const scrollToShop = () => {
     shopRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -986,9 +986,9 @@ export default function Home() {
         <div className="hero-content">
           <h1>{t.heroTitle}</h1>
           <p className="hero-subtitle">{t.heroSubtitle}</p>
-          <Link href="/shop" className="btn-primary">
+          <button onClick={scrollToShop} className="btn-primary">
             {t.shopNow}
-          </Link>
+          </button>
         </div>
       </section>
 
@@ -1032,7 +1032,7 @@ export default function Home() {
                     <Link href={`/product/${product.id}`} className="buy-now">
                       {t.buyNow}
                     </Link>
-                    <button className="add-to-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: parseFloat(product.price.replace('$', '')), image: product.image })}>{t.addToCart}</button>
+                    <button className="add-to-cart" onClick={addToCart}>{t.addToCart}</button>
                   </div>
                 </div>
               </div>
@@ -1047,7 +1047,7 @@ export default function Home() {
           <img src="/new-arrivals.png" alt="New Arrivals" className="banner-image" />
           <div className="banner-content">
             <div className="banner-label">{t.newArrivals}</div>
-            <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
+            <Link href="/product/1" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
       </section>
@@ -1056,27 +1056,27 @@ export default function Home() {
       <section className="section">
         <h2 className="section-title">{t.shopByElement}</h2>
         <div className="element-grid">
-          <Link href="/category/wood" className="element-card">
+          <Link href="/product/4" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/wood.png')" }}></div>
             <div className="element-name">{t.wood}</div>
           </Link>
 
-          <Link href="/category/fire" className="element-card">
+          <Link href="/product/6" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/fire.png')" }}></div>
             <div className="element-name">{t.fire}</div>
           </Link>
 
-          <Link href="/category/earth" className="element-card">
+          <Link href="/product/8" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/earth.png')" }}></div>
             <div className="element-name">{t.earth}</div>
           </Link>
 
-          <Link href="/category/metal" className="element-card">
+          <Link href="/product/2" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/metal.png')" }}></div>
             <div className="element-name">{t.metal}</div>
           </Link>
 
-          <Link href="/category/water" className="element-card">
+          <Link href="/product/1" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/water.png')" }}></div>
             <div className="element-name">{t.water}</div>
           </Link>
