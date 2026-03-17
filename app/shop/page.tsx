@@ -1,123 +1,121 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useApp } from '@/app/context/AppContext';
-
-interface Product {
-  id: string;
-  name: string;
-  element: string;
-  elementType: 'water' | 'fire' | 'wood' | 'metal' | 'earth';
-  price: number;
-  image: string;
-  isNew?: boolean;
-  isBestSeller?: boolean;
-}
-
-const PRODUCTS: Product[] = [
-  { id: '1', name: 'Cosmic Turquoise Bracelet', element: '🌊 Water', elementType: 'water', price: 226, image: '/product-1.png', isNew: true, isBestSeller: true },
-  { id: '2', name: 'Imperial Jasper Bracelet', element: '✨ Metal', elementType: 'metal', price: 183, image: '/product-2.png', isBestSeller: true },
-  { id: '3', name: 'Santa Maria Aquamarine', element: '🌊 Water', elementType: 'water', price: 2524, image: '/product-3.png', isNew: true },
-  { id: '4', name: 'Labradorite Bracelet', element: '🌿 Wood', elementType: 'wood', price: 310, image: '/product-4.png' },
-  { id: '5', name: 'Blue Aventurine Bracelet', element: '🌊 Water', elementType: 'water', price: 310, image: '/product-5.png', isNew: true },
-  { id: '6', name: 'Tiger Eye - Hematite Pair', element: '🔥 Fire', elementType: 'fire', price: 60, image: '/product-6.png', isBestSeller: true },
-  { id: '7', name: 'Lava Bracelet', element: '🔥 Fire', elementType: 'fire', price: 310, image: '/product-7.png' },
-  { id: '8', name: 'Dragon Blood Jasper', element: '🌍 Earth', elementType: 'earth', price: 297, image: '/product-8.png' },
-];
-
-type SortOption = 'newest' | 'price-low' | 'price-high' | 'bestseller';
+import { useState } from 'react';
 
 export default function ShopPage() {
-  const { addToCart, toggleFavorite, favorites } = useApp();
-  const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedElement, setSelectedElement] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState('newest');
 
-  const filteredProducts = PRODUCTS.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
-  const sortedProducts = filteredProducts.sort((a, b) => {
-    switch (sortBy) {
-      case 'price-high': return b.price - a.price;
-      case 'price-low': return a.price - b.price;
-      case 'bestseller': return (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0);
-      default: return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
-    }
-  });
+  const mockProducts = [
+    { id: 1, name: 'Cosmic Turquoise Bracelet', price: '$226.00', image: '/product-1.png' },
+    { id: 2, name: 'Imperial Jasper Bracelet', price: '$183.00', image: '/product-2.png' },
+    { id: 3, name: 'Santa Maria Aquamarine', price: '$2,524.00', image: '/product-3.png' },
+    { id: 4, name: 'Labradorite Bracelet', price: '$310.00', image: '/product-4.png' },
+    { id: 5, name: 'Blue Aventurine Bracelet', price: '$310.00', image: '/product-5.png' },
+    { id: 6, name: 'Tiger Eye - Hematite Pair', price: '$60.00', image: '/product-6.png' },
+  ];
+
+  const categories = ['Bracelets', 'Accessories', 'Earrings', 'Necklaces'];
+  const elements = ['Metal', 'Wood', 'Water', 'Fire', 'Earth'];
+  const sortOptions = [
+    { value: 'price-low', label: 'Price: Low to High' },
+    { value: 'price-high', label: 'Price: High to Low' },
+    { value: 'bestseller', label: 'Best Sellers' },
+  ];
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <h1 className="text-5xl font-serif font-light text-gray-900">All Products</h1>
-          <p className="text-gray-600 mt-2">{sortedProducts.length} items</p>
+      {/* Header */}
+      <div className="border-b border-gray-200 py-8 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-4xl font-serif font-light text-gray-900">Shop</h1>
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex gap-12">
-          <div className="w-64 flex-shrink-0">
-            <div className="sticky top-6">
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Sort</h3>
-                  <div className="space-y-3">
-                    {[
-                      { value: 'newest' as SortOption, label: 'Newest' },
-                      { value: 'price-low' as SortOption, label: 'Price: Low to High' },
-                      { value: 'price-high' as SortOption, label: 'Price: High to Low' },
-                      { value: 'bestseller' as SortOption, label: 'Best Sellers' },
-                    ].map((option) => (
-                      <label key={option.value} className="flex items-center cursor-pointer">
-                        <input type="radio" name="sort" value={option.value} checked={sortBy === option.value} onChange={(e) => setSortBy(e.target.value as SortOption)} className="w-4 h-4" />
-                        <span className="ml-3 text-sm text-gray-700">{option.label}</span>
-                      </label>
-                    ))}
-                  </div>
+          {/* Left Sidebar - Filters */}
+          <div className="w-56 flex-shrink-0">
+            <div className="sticky top-20">
+              {/* Category Section */}
+              <div className="mb-10">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Style</h3>
+                <div className="space-y-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
+                      className={`block w-full text-left px-4 py-2 rounded text-sm transition-colors ${
+                        selectedCategory === cat
+                          ? 'bg-gray-900 text-white'
+                          : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
+              </div>
 
-                <div className="pt-8 border-t border-gray-200">
-                  <h3 className="text-sm font-semibold text-gray-900 mb-6 uppercase tracking-wider">Price</h3>
-                  <div className="space-y-6">
-                    <div>
-                      <div className="flex justify-between mb-3">
-                        <label className="text-xs text-gray-600">Min</label>
-                        <span className="text-sm font-semibold">${priceRange[0]}</span>
-                      </div>
-                      <input type="range" min="0" max="3000" value={priceRange[0]} onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])} className="w-full" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-3">
-                        <label className="text-xs text-gray-600">Max</label>
-                        <span className="text-sm font-semibold">${priceRange[1]}</span>
-                      </div>
-                      <input type="range" min="0" max="3000" value={priceRange[1]} onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])} className="w-full" />
-                    </div>
-                  </div>
+              {/* Element Section */}
+              <div className="mb-10 pt-10 border-t border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Element</h3>
+                <div className="space-y-2">
+                  {elements.map((elem) => (
+                    <button
+                      key={elem}
+                      onClick={() => setSelectedElement(selectedElement === elem ? null : elem)}
+                      className={`block w-full text-left px-4 py-2 rounded text-sm transition-colors ${
+                        selectedElement === elem
+                          ? 'bg-gray-900 text-white'
+                          : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                      }`}
+                    >
+                      {elem}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Right Content Area */}
           <div className="flex-1">
+            {/* Sort Bar */}
+            <div className="mb-8 flex justify-between items-center">
+              <p className="text-sm text-gray-600">{mockProducts.length} products</p>
+              <div className="flex gap-2">
+                {sortOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => setSortBy(option.value)}
+                    className={`px-4 py-2 rounded text-sm font-semibold transition-colors ${
+                      sortBy === option.value
+                        ? 'bg-gray-900 text-white'
+                        : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Products Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {sortedProducts.map((product) => (
+              {mockProducts.map((product) => (
                 <div key={product.id} className="group">
-                  <div className="relative aspect-square bg-gray-100 overflow-hidden mb-4">
-                    <Link href={`/product/${product.id}`}>
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    </Link>
-                    {product.isNew && <div className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-1 text-xs font-semibold uppercase">New</div>}
-                    {product.isBestSeller && <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 text-xs font-semibold uppercase">Best</div>}
-                    <button onClick={() => toggleFavorite(product.id)} className={`absolute bottom-4 right-4 text-2xl ${favorites.includes(product.id) ? 'text-red-700' : 'text-gray-400 hover:text-gray-900'}`}>♡</button>
+                  <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4 hover:shadow-lg transition-shadow">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-xs text-gray-600 uppercase tracking-wider">{product.element}</p>
-                    <Link href={`/product/${product.id}`}><h3 className="text-sm font-serif text-gray-900 hover:text-gray-600">{product.name}</h3></Link>
-                    <p className="text-lg font-semibold text-gray-900">${product.price.toFixed(2)}</p>
-                    <div className="flex gap-2 pt-3">
-                      <button onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })} className="flex-1 bg-gray-900 text-white py-2 text-xs font-semibold uppercase hover:bg-gray-800">Add to Bag</button>
-                      <Link href={`/product/${product.id}`} className="flex-1 border border-gray-900 text-gray-900 py-2 text-xs font-semibold uppercase hover:bg-gray-50 text-center">View</Link>
-                    </div>
-                  </div>
+                  <h3 className="text-sm font-serif text-gray-900 mb-2">{product.name}</h3>
+                  <p className="text-lg font-semibold text-gray-900">{product.price}</p>
                 </div>
               ))}
             </div>
