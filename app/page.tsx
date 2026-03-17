@@ -986,9 +986,9 @@ export default function Home() {
         <div className="hero-content">
           <h1>{t.heroTitle}</h1>
           <p className="hero-subtitle">{t.heroSubtitle}</p>
-          <Link href="/shop" className="btn-primary">
+          <button onClick={() => window.location.href = '/shop'} className="btn-primary">
             {t.shopNow}
-          </Link>
+          </button>
         </div>
       </section>
 
