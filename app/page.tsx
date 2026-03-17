@@ -8,7 +8,7 @@ export default function Home() {
   const shopRef = useRef<HTMLDivElement>(null);
   const { language, addToCart, toggleFavorite, favorites } = useApp();
 
-  const scrollToShop = () => {
+  //const scrollToShop = () => {
     shopRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
