@@ -1001,7 +1001,7 @@ export default function Home() {
       </section>
 
       {/* BEST SELLERS SECTION - WITH SWIPER HORIZONTAL SCROLL */}
-      <section className="section" ref={shopRef}>
+      <section className="section" >
         <h2 className="section-title">{t.bestSellers}</h2>
         <div className="swiper mySwiper">
           <div className="swiper-wrapper">
