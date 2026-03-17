@@ -105,8 +105,6 @@ function StripePaymentForm({ totalAmount, cartItems }: { totalAmount: number; ca
 }
 
 function PayPalPaymentForm({ totalAmount, cartItems }: { totalAmount: number; cartItems: any[] }) {
-  const [orderId, setOrderId] = useState<string | null>(null);
-
   const createOrder = async () => {
     try {
       const response = await fetch('/api/paypal/create-order', {
@@ -121,7 +119,6 @@ function PayPalPaymentForm({ totalAmount, cartItems }: { totalAmount: number; ca
 
       const data = await response.json();
       if (data.orderId) {
-        setOrderId(data.orderId);
         return data.orderId;
       }
       throw new Error('Failed to create PayPal order');
