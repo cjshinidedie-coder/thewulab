@@ -986,9 +986,9 @@ export default function Home() {
         <div className="hero-content">
           <h1>{t.heroTitle}</h1>
           <p className="hero-subtitle">{t.heroSubtitle}</p>
-          <button onClick={scrollToShop} className="btn-primary">
+          <Link href="/shop" className="btn-primary">
             {t.shopNow}
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -1047,7 +1047,7 @@ export default function Home() {
           <img src="/new-arrivals.png" alt="New Arrivals" className="banner-image" />
           <div className="banner-content">
             <div className="banner-label">{t.newArrivals}</div>
-            <Link href="/product/1" className="banner-btn">{t.viewProducts}</Link>
+            <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
       </section>
@@ -1056,27 +1056,27 @@ export default function Home() {
       <section className="section">
         <h2 className="section-title">{t.shopByElement}</h2>
         <div className="element-grid">
-          <Link href="/product/4" className="element-card">
+          <Link href="/category/wood" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/wood.png')" }}></div>
             <div className="element-name">{t.wood}</div>
           </Link>
 
-          <Link href="/product/6" className="element-card">
+          <Link href="/category/fire" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/fire.png')" }}></div>
             <div className="element-name">{t.fire}</div>
           </Link>
 
-          <Link href="/product/8" className="element-card">
+          <Link href="/category/earth" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/earth.png')" }}></div>
             <div className="element-name">{t.earth}</div>
           </Link>
 
-          <Link href="/product/2" className="element-card">
+          <Link href="/category/metal" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/metal.png')" }}></div>
             <div className="element-name">{t.metal}</div>
           </Link>
 
-          <Link href="/product/1" className="element-card">
+          <Link href="/category/water" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/water.png')" }}></div>
             <div className="element-name">{t.water}</div>
           </Link>

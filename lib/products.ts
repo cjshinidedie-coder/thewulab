@@ -1,83 +1,117 @@
 export interface Product {
   id: string;
   name: string;
+  element: string;
+  elementType: 'water' | 'fire' | 'wood' | 'metal' | 'earth';
   price: number;
   image: string;
-  element: string;
+  isNew?: boolean;
+  isBestSeller?: boolean;
 }
 
-// 这是你的真实商品数据库（后端验证用）
 export const PRODUCTS: Product[] = [
   {
-    id: 'product-1',
+    id: '1',
     name: 'Cosmic Turquoise Bracelet',
+    element: '🌊 Water Element',
+    elementType: 'water',
     price: 226.00,
-    image: 'products/product-1.png',
-    element: '🌊 Water Element',
+    image: '/product-1.png',
+    isNew: true,
+    isBestSeller: true,
   },
   {
-    id: 'product-2',
+    id: '2',
     name: 'Imperial Jasper Bracelet',
-    price: 183.00,
-    image: 'products/product-2.png',
     element: '✨ Metal Element',
+    elementType: 'metal',
+    price: 183.00,
+    image: '/product-2.png',
+    isBestSeller: true,
   },
   {
-    id: 'product-3',
+    id: '3',
     name: 'Santa Maria Aquamarine',
+    element: '🌊 Water Element',
+    elementType: 'water',
     price: 2524.00,
-    image: 'products/product-3.png',
-    element: '🌊 Water Element',
+    image: '/product-3.png',
+    isNew: true,
   },
   {
-    id: 'product-4',
+    id: '4',
     name: 'Labradorite Bracelet',
-    price: 310.00,
-    image: 'products/product-4.png',
     element: '🌿 Wood Element',
+    elementType: 'wood',
+    price: 310.00,
+    image: '/product-4.png',
   },
   {
-    id: 'product-5',
+    id: '5',
     name: 'Blue Aventurine Bracelet',
-    price: 310.00,
-    image: 'products/product-5.png',
     element: '🌊 Water Element',
-  },
-  {
-    id: 'product-6',
-    name: 'Tiger Eye - Hematite Pair',
-    price: 60.00,
-    image: 'products/product-6.png',
-    element: '🔥 Fire Element',
-  },
-  {
-    id: 'product-7',
-    name: 'Lava Bracelet',
+    elementType: 'water',
     price: 310.00,
-    image: 'products/product-7.png',
-    element: '🔥 Fire Element',
+    image: '/product-5.png',
+    isNew: true,
   },
   {
-    id: 'product-8',
+    id: '6',
+    name: 'Tiger Eye - Hematite Pair',
+    element: '🔥 Fire Element',
+    elementType: 'fire',
+    price: 60.00,
+    image: '/product-6.png',
+    isBestSeller: true,
+  },
+  {
+    id: '7',
+    name: 'Lava Bracelet',
+    element: '🔥 Fire Element',
+    elementType: 'fire',
+    price: 310.00,
+    image: '/product-7.png',
+  },
+  {
+    id: '8',
     name: 'Dragon Blood Jasper',
-    price: 297.00,
-    image: 'products/product-8.png',
     element: '🌍 Earth Element',
+    elementType: 'earth',
+    price: 297.00,
+    image: '/product-8.png',
   },
 ];
 
-// 根据 ID 获取商品（后端验证用）
-export function getProductById(id: string): Product | undefined {
-  return PRODUCTS.find((p) => p.id === id);
+export type SortOption = 'newest' | 'price-high' | 'price-low' | 'bestseller';
+
+export function sortProducts(products: Product[], sortBy: SortOption): Product[] {
+  const sorted = [...products];
+
+  switch (sortBy) {
+    case 'price-high':
+      return sorted.sort((a, b) => b.price - a.price);
+    case 'price-low':
+      return sorted.sort((a, b) => a.price - b.price);
+    case 'bestseller':
+      return sorted.sort((a, b) => {
+        if (a.isBestSeller && !b.isBestSeller) return -1;
+        if (!a.isBestSeller && b.isBestSeller) return 1;
+        return 0;
+      });
+    case 'newest':
+    default:
+      return sorted.sort((a, b) => {
+        if (a.isNew && !b.isNew) return -1;
+        if (!a.isNew && b.isNew) return 1;
+        return 0;
+      });
+  }
 }
 
-// 计算真实总价（后端验证用）
-export function calculateTotalPrice(
-  items: Array<{ id: string; quantity: number }>
-): number {
-  return items.reduce((total, item) => {
-    const product = getProductById(item.id);
-    if (!product) throw new Error(`Product ${item.id} not found`);
-    return total + product.price * item.quantity;
-  }, 0);
+export function filterByElement(products: Product[], element: string): Product[] {
+  return products.filter(p => p.elementType === element);
+}
+
+export function filterByNewArrivals(products: Product[]): Product[] {
+  return products.filter(p => p.isNew);
 }
