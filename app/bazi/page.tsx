@@ -194,6 +194,10 @@ export default function BaziCalculator() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 60px 40px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
         }
 
         .bazi-header {
@@ -208,6 +212,7 @@ export default function BaziCalculator() {
           color: #333333;
           margin-bottom: 12px;
           letter-spacing: 0.05em;
+          text-align: center;
         }
 
         .bazi-subtitle {
@@ -221,6 +226,11 @@ export default function BaziCalculator() {
           grid-template-columns: 1fr 1fr;
           gap: 60px;
           margin-bottom: 60px;
+          max-width: 2xl;
+          width: 100%;
+          max-width: 896px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .form-section {
