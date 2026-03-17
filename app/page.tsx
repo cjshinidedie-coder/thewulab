@@ -66,12 +66,12 @@ export default function Home() {
           <p className="text-lg md:text-2xl font-light mb-12 tracking-wide">
             {t.heroSubtitle}
           </p>
-          <button
-            onClick={() => shopRef.current?.scrollIntoView({ behavior: 'smooth' })}
+          <Link
+            href="/shop"
             className="inline-block bg-red-700 hover:bg-red-800 text-white px-14 py-4 rounded text-sm font-semibold uppercase tracking-widest transition-colors"
           >
             {t.shopNow}
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -90,7 +90,7 @@ export default function Home() {
                   {t.newArrivals}
                 </h2>
                 <Link
-                  href="#"
+                  href="/new-arrivals"
                   className="inline-block bg-white text-gray-900 px-10 py-3 rounded text-sm font-semibold hover:bg-gray-100 transition-colors"
                 >
                   {t.viewProducts}
@@ -110,20 +110,20 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-12">
             {[
-              { name: t.wood, emoji: '🌿', color: 'from-green-100 to-green-50' },
-              { name: t.fire, emoji: '🔥', color: 'from-red-100 to-red-50' },
-              { name: t.earth, emoji: '🌍', color: 'from-yellow-100 to-yellow-50' },
-              { name: t.metal, emoji: '✨', color: 'from-gray-100 to-gray-50' },
-              { name: t.water, emoji: '🌊', color: 'from-blue-100 to-blue-50' },
+              { name: t.wood, emoji: '🌿', color: 'from-green-100 to-green-50', href: '/category/wood' },
+              { name: t.fire, emoji: '🔥', color: 'from-red-100 to-red-50', href: '/category/fire' },
+              { name: t.earth, emoji: '🌍', color: 'from-yellow-100 to-yellow-50', href: '/category/earth' },
+              { name: t.metal, emoji: '✨', color: 'from-gray-100 to-gray-50', href: '/category/metal' },
+              { name: t.water, emoji: '🌊', color: 'from-blue-100 to-blue-50', href: '/category/water' },
             ].map((element) => (
-              <div key={element.name} className="group text-center cursor-pointer">
+              <Link key={element.name} href={element.href} className="group text-center cursor-pointer">
                 <div className={`w-full aspect-square rounded-full bg-gradient-to-br ${element.color} flex items-center justify-center mb-6 shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110`}>
                   <span className="text-8xl">{element.emoji}</span>
                 </div>
                 <p className="text-2xl font-serif font-semibold text-gray-900 group-hover:text-red-700 transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>
                   {element.name}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
