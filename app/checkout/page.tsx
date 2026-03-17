@@ -1,38 +1,300 @@
 'use client';
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useApp } from '../context/AppContext';
 
-export default function CheckoutPage() {
-  // 使用 any 强行封住 Vercel 的嘴，不让它检查类型
-  const context = useApp() as any;
-  const cart = context?.state?.cart || [];
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+
+function StripePaymentForm({ totalAmount, cartItems }: { totalAmount: number; cartItems: any[] }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // 创建支付意图
+      const response = await fetch('/api/stripe/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalAmount,
+          cartItems: cartItems,
+          customerEmail: 'customer@example.com',
+        }),
+      });
+
+      const { clientSecret } = await response.json();
+
+      if (!clientSecret) {
+        throw new Error('Failed to create payment intent');
+      }
+
+      // 确认支付
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement)!,
+          billing_details: {
+            name: 'Customer Name',
+          },
+        },
+      });
+
+      if (result.error) {
+        setError(result.error.message || 'Payment failed');
+      } else if (result.paymentIntent?.status === 'succeeded') {
+        setSuccess(true);
+        setError(null);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Payment error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="p-6 bg-green-50 border border-green-200 rounded-lg text-center">
+        <div className="text-green-700 font-semibold mb-2">✓ Payment Successful!</div>
+        <p className="text-green-600 text-sm">Your payment has been processed successfully.</p>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', textAlign: 'center', fontFamily: 'sans-serif' }}>
-      <h1 style={{ color: '#333' }}>Payment Testing</h1>
-      
-      <div style={{ border: '1px solid #eee', padding: '20px', borderRadius: '10px', marginBottom: '20px', backgroundColor: '#fff' }}>
-        <h3 style={{ margin: '0 0 10px 0' }}>Order Summary</h3>
-        <p>Items in Cart: <span style={{ fontWeight: 'bold', color: '#ff4d4f' }}>{cart.length}</span></p>
-        <p style={{ fontSize: '22px', fontWeight: 'bold' }}>Total: $999</p>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="p-4 border border-gray-300 rounded-lg bg-white">
+        <CardElement
+          options={{
+            style: {
+              base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': {
+                  color: '#aab7c4',
+                },
+              },
+              invalid: {
+                color: '#9e2146',
+              },
+            },
+          }}
+        />
       </div>
-      
-      <div style={{ background: '#f9f9f9', padding: '30px', border: '2px dashed #ffc439', borderRadius: '15px' }}>
-        <h2 style={{ color: '#333', marginBottom: '20px' }}>Select Payment Method</h2>
-        
-        {/* 模拟 PayPal 按钮 */}
-        <div style={{ background: '#ffc439', color: '#111', padding: '15px', marginBottom: '15px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-          Pay with PayPal
+      {error && <div className="text-red-600 text-sm">{error}</div>}
+      <button
+        type="submit"
+        disabled={!stripe || loading}
+        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+      >
+        {loading ? 'Processing...' : `Pay $${totalAmount.toFixed(2)}`}
+      </button>
+    </form>
+  );
+}
+
+function PayPalPaymentForm({ totalAmount, cartItems }: { totalAmount: number; cartItems: any[] }) {
+  const [orderId, setOrderId] = useState<string | null>(null);
+
+  const createOrder = async () => {
+    try {
+      const response = await fetch('/api/paypal/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalAmount,
+          cartItems: cartItems,
+          customerEmail: 'customer@example.com',
+        }),
+      });
+
+      const data = await response.json();
+      if (data.orderId) {
+        setOrderId(data.orderId);
+        return data.orderId;
+      }
+      throw new Error('Failed to create PayPal order');
+    } catch (error) {
+      console.error('PayPal order creation error:', error);
+      throw error;
+    }
+  };
+
+  const onApprove = async (data: any) => {
+    try {
+      const response = await fetch('/api/paypal/capture-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: data.orderID }),
+      });
+
+      const result = await response.json();
+      if (result.status === 'COMPLETED') {
+        alert('Payment successful!');
+      }
+    } catch (error) {
+      console.error('PayPal capture error:', error);
+      alert('Payment capture failed');
+    }
+  };
+
+  return (
+    <PayPalButtons
+      createOrder={(data, actions) => createOrder()}
+      onApprove={onApprove}
+      onError={(err) => {
+        console.error('PayPal error:', err);
+        alert('PayPal payment failed');
+      }}
+      style={{
+        layout: 'vertical',
+        color: 'gold',
+        shape: 'rect',
+        label: 'pay',
+      }}
+    />
+  );
+}
+
+export default function CheckoutPage() {
+  const { cartItems } = useApp();
+  const [activeTab, setActiveTab] = useState<'stripe' | 'paypal'>('stripe');
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  // 动态计算总价
+  useEffect(() => {
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    setTotalAmount(total);
+  }, [cartItems]);
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Checkout</h1>
+          <p className="text-gray-600">Complete your payment securely</p>
         </div>
-        
-        {/* 模拟 Stripe 按钮 */}
-        <div style={{ background: '#6772e5', color: '#fff', padding: '15px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-          Pay with Credit Card (Stripe)
+
+        {/* Order Summary */}
+        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h2>
+
+          {cartItems.length > 0 ? (
+            <>
+              <div className="space-y-4 mb-6 border-b border-gray-200 pb-6">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold text-gray-900">{item.name}</p>
+                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                    </div>
+                    <p className="font-semibold text-gray-900">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-lg font-semibold text-gray-900">Total:</span>
+                <span className="text-3xl font-bold text-red-700">
+                  ${totalAmount.toFixed(2)}
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-600 mb-4">Your cart is empty</p>
+              <a
+                href="/shop"
+                className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Continue Shopping
+              </a>
+            </div>
+          )}
         </div>
-        
-        <p style={{ marginTop: '20px', fontSize: '12px', color: '#999' }}>
-          * 如果看到这两个按钮，说明支付网关已成功连通 *
-        </p>
+
+        {/* Payment Methods */}
+        {cartItems.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {/* Tabs */}
+            <div className="flex border-b border-gray-200">
+              <button
+                onClick={() => setActiveTab('stripe')}
+                className={`flex-1 py-4 px-6 font-semibold transition-colors ${
+                  activeTab === 'stripe'
+                    ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                💳 Credit Card (Stripe)
+              </button>
+              <button
+                onClick={() => setActiveTab('paypal')}
+                className={`flex-1 py-4 px-6 font-semibold transition-colors ${
+                  activeTab === 'paypal'
+                    ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                🅿️ PayPal
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            <div className="p-8">
+              {activeTab === 'stripe' && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Pay with Credit Card
+                  </h3>
+                  <Elements stripe={stripePromise}>
+                    <StripePaymentForm totalAmount={totalAmount} cartItems={cartItems} />
+                  </Elements>
+                  <p className="text-xs text-gray-500 mt-4">
+                    Test card: 4242 4242 4242 4242 | Any future date | Any CVC
+                  </p>
+                </div>
+              )}
+
+              {activeTab === 'paypal' && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Pay with PayPal
+                  </h3>
+                  <PayPalScriptProvider
+                    options={{
+                      clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
+                      currency: 'USD',
+                    }}
+                  >
+                    <PayPalPaymentForm totalAmount={totalAmount} cartItems={cartItems} />
+                  </PayPalScriptProvider>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Security Info */}
+        <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            🔒 Your payment information is encrypted and secure. We use industry-standard SSL encryption.
+          </p>
+        </div>
       </div>
     </div>
   );
