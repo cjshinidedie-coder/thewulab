@@ -1,16 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
 
 export default function Home() {
-  const shopRef = useRef<HTMLDivElement>(null);
   const { language, addToCart, toggleFavorite, favorites } = useApp();
-
-  const scrollToShop = () => {
-    shopRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   // 多语言文案
   const translations = {
