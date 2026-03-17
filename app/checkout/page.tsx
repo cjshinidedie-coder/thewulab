@@ -148,7 +148,7 @@ function PayPalPaymentForm({ totalAmount, cartItems }: { totalAmount: number; ca
 
   return (
     <PayPalButtons
-      createOrder={(data, actions) => createOrder()}
+      createOrder={(_data, _actions) => createOrder()}
       onApprove={onApprove}
       onError={(err) => {
         console.error('PayPal error:', err);
