@@ -29,7 +29,7 @@ export default function ShopPage() {
       {/* Header */}
       <div className="border-b border-gray-200 py-8 px-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-serif font-light text-gray-900">Shop</h1>
+          <h1 className="text-4xl font-serif font-light text-gray-900">All Products</h1>
         </div>
       </div>
 
