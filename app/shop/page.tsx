@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { useApp } from '@/app/context/AppContext';
 
 export default function ShopPage() {
+  const { addToCart } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('newest');
@@ -153,10 +156,31 @@ export default function ShopPage() {
                       </div>
                     )}
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-3">
                     <p className="text-xs text-gray-500 uppercase tracking-wider">{product.element} • {product.category}</p>
                     <h3 className="text-sm font-serif text-gray-900">{product.name}</h3>
-                    <p className="text-lg font-semibold text-gray-900">{product.priceDisplay}</p>
+                    <p className="text-lg font-semibold text-gray-900 mb-4">{product.priceDisplay}</p>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Link
+                        href={`/product/${product.id}`}
+                        className="flex-1 bg-gray-900 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-gray-800 transition-colors text-center"
+                      >
+                        Buy Now
+                      </Link>
+                      <button
+                        onClick={() => addToCart({
+                          id: product.id.toString(),
+                          name: product.name,
+                          price: product.price,
+                          image: product.image
+                        })}
+                        className="flex-1 border border-gray-900 text-gray-900 py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-gray-50 transition-colors"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
