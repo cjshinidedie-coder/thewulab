@@ -165,7 +165,7 @@ export default function ShopPage() {
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Link
                         href={`/product/${product.id}`}
-                        className="flex-1 bg-gray-900 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-gray-800 transition-colors text-center"
+                        className="flex-1 bg-red-700 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-red-800 transition-colors text-center"
                       >
                         Buy Now
                       </Link>
@@ -176,7 +176,7 @@ export default function ShopPage() {
                           price: product.price,
                           image: product.image
                         })}
-                        className="flex-1 border border-gray-900 text-gray-900 py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-gray-50 transition-colors"
+                        className="flex-1 bg-red-700 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-red-800 transition-colors"
                       >
                         Add to Cart
                       </button>
