@@ -1041,7 +1041,7 @@ export default function Home() {
           <img src="/new-arrivals.png" alt="New Arrivals" className="banner-image" />
           <div className="banner-content">
             <div className="banner-label">{t.newArrivals}</div>
-            <Link href="/product/1" className="banner-btn">{t.viewProducts}</Link>
+            <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
       </section>
