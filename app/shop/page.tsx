@@ -1,19 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 export default function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('newest');
 
-  const mockProducts = [
-    { id: 1, name: 'Cosmic Turquoise Bracelet', price: '$226.00', image: '/product-1.png' },
-    { id: 2, name: 'Imperial Jasper Bracelet', price: '$183.00', image: '/product-2.png' },
-    { id: 3, name: 'Santa Maria Aquamarine', price: '$2,524.00', image: '/product-3.png' },
-    { id: 4, name: 'Labradorite Bracelet', price: '$310.00', image: '/product-4.png' },
-    { id: 5, name: 'Blue Aventurine Bracelet', price: '$310.00', image: '/product-5.png' },
-    { id: 6, name: 'Tiger Eye - Hematite Pair', price: '$60.00', image: '/product-6.png' },
+  const allProducts = [
+    { id: 1, name: 'Cosmic Turquoise Bracelet', price: 226.00, priceDisplay: '$226.00', image: '/product-1.png', category: 'Bracelets', element: 'Water', isBestSeller: true },
+    { id: 2, name: 'Imperial Jasper Bracelet', price: 183.00, priceDisplay: '$183.00', image: '/product-2.png', category: 'Bracelets', element: 'Metal', isBestSeller: true },
+    { id: 3, name: 'Santa Maria Aquamarine', price: 2524.00, priceDisplay: '$2,524.00', image: '/product-3.png', category: 'Necklaces', element: 'Water', isBestSeller: false },
+    { id: 4, name: 'Labradorite Bracelet', price: 310.00, priceDisplay: '$310.00', image: '/product-4.png', category: 'Bracelets', element: 'Wood', isBestSeller: false },
+    { id: 5, name: 'Blue Aventurine Bracelet', price: 310.00, priceDisplay: '$310.00', image: '/product-5.png', category: 'Bracelets', element: 'Water', isBestSeller: false },
+    { id: 6, name: 'Tiger Eye - Hematite Pair', price: 60.00, priceDisplay: '$60.00', image: '/product-6.png', category: 'Accessories', element: 'Fire', isBestSeller: true },
+    { id: 7, name: 'Golden Citrine Earrings', price: 145.00, priceDisplay: '$145.00', image: '/product-7.png', category: 'Earrings', element: 'Metal', isBestSeller: false },
+    { id: 8, name: 'Jade Harmony Necklace', price: 420.00, priceDisplay: '$420.00', image: '/product-8.png', category: 'Necklaces', element: 'Wood', isBestSeller: false },
   ];
 
   const categories = ['Bracelets', 'Accessories', 'Earrings', 'Necklaces'];
@@ -23,6 +25,38 @@ export default function ShopPage() {
     { value: 'price-high', label: 'Price: High to Low' },
     { value: 'bestseller', label: 'Best Sellers' },
   ];
+
+  const filteredAndSortedProducts = useMemo(() => {
+    let filtered = allProducts;
+
+    // Filter by category
+    if (selectedCategory) {
+      filtered = filtered.filter(product => product.category === selectedCategory);
+    }
+
+    // Filter by element
+    if (selectedElement) {
+      filtered = filtered.filter(product => product.element === selectedElement);
+    }
+
+    // Sort products
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return a.price - b.price;
+        case 'price-high':
+          return b.price - a.price;
+        case 'bestseller':
+          if (a.isBestSeller && !b.isBestSeller) return -1;
+          if (!a.isBestSeller && b.isBestSeller) return 1;
+          return 0;
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [selectedCategory, selectedElement, sortBy]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -85,7 +119,7 @@ export default function ShopPage() {
           <div className="flex-1">
             {/* Sort Bar */}
             <div className="mb-8 flex justify-between items-center">
-              <p className="text-sm text-gray-600">{mockProducts.length} products</p>
+              <p className="text-sm text-gray-600">{filteredAndSortedProducts.length} products</p>
               <div className="flex gap-2">
                 {sortOptions.map((option) => (
                   <button
@@ -105,7 +139,7 @@ export default function ShopPage() {
 
             {/* Products Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {mockProducts.map((product) => (
+              {filteredAndSortedProducts.map((product) => (
                 <div key={product.id} className="group">
                   <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4 hover:shadow-lg transition-shadow">
                     <img
@@ -113,12 +147,28 @@ export default function ShopPage() {
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+                    {product.isBestSeller && (
+                      <div className="absolute top-3 left-3 bg-gray-900 text-white px-2 py-1 text-xs font-semibold rounded">
+                        BEST SELLER
+                      </div>
+                    )}
                   </div>
-                  <h3 className="text-sm font-serif text-gray-900 mb-2">{product.name}</h3>
-                  <p className="text-lg font-semibold text-gray-900">{product.price}</p>
+                  <div className="space-y-1">
+                    <p className="text-xs text-gray-500 uppercase tracking-wider">{product.element} • {product.category}</p>
+                    <h3 className="text-sm font-serif text-gray-900">{product.name}</h3>
+                    <p className="text-lg font-semibold text-gray-900">{product.priceDisplay}</p>
+                  </div>
                 </div>
               ))}
             </div>
+
+            {/* No Results */}
+            {filteredAndSortedProducts.length === 0 && (
+              <div className="text-center py-16">
+                <p className="text-gray-500 text-lg">No products found</p>
+                <p className="text-gray-400 text-sm mt-2">Try adjusting your filters</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
