@@ -1050,27 +1050,27 @@ export default function Home() {
       <section className="section">
         <h2 className="section-title">{t.shopByElement}</h2>
         <div className="element-grid">
-          <Link href="/product/4" className="element-card">
+          <Link href="/elements/wood" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/wood.png')" }}></div>
             <div className="element-name">{t.wood}</div>
           </Link>
 
-          <Link href="/product/6" className="element-card">
+          <Link href="/elements/fire" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/fire.png')" }}></div>
             <div className="element-name">{t.fire}</div>
           </Link>
 
-          <Link href="/product/8" className="element-card">
+          <Link href="/elements/earth" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/earth.png')" }}></div>
             <div className="element-name">{t.earth}</div>
           </Link>
 
-          <Link href="/product/2" className="element-card">
+          <Link href="/elements/metal" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/metal.png')" }}></div>
             <div className="element-name">{t.metal}</div>
           </Link>
 
-          <Link href="/product/1" className="element-card">
+          <Link href="/elements/water" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/water.png')" }}></div>
             <div className="element-name">{t.water}</div>
           </Link>

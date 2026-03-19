@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
 import { productsData } from '@/lib/productsData';
 
-export default function ShopPage() {
+export default function ElementPage({ params }: { params: { elementName: string } }) {
   const { addToCart } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState('newest');
+
+  const elementName = params.elementName.charAt(0).toUpperCase() + params.elementName.slice(1);
 
   const allProducts = productsData;
 
@@ -22,14 +24,15 @@ export default function ShopPage() {
   ];
 
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = allProducts;
+    // Start with products matching the element
+    let filtered = allProducts.filter(product => product.element === elementName);
 
     // Filter by category
     if (selectedCategory) {
       filtered = filtered.filter(product => product.category === selectedCategory);
     }
 
-    // Filter by element
+    // Filter by element (additional filter if user selects)
     if (selectedElement) {
       filtered = filtered.filter(product => product.element === selectedElement);
     }
@@ -58,7 +61,7 @@ export default function ShopPage() {
       {/* Header */}
       <div className="border-b border-gray-200 py-8 px-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-serif font-light text-gray-900">All Products</h1>
+          <h1 className="text-4xl font-serif font-light text-gray-900">{elementName} Collection</h1>
         </div>
       </div>
 
@@ -145,6 +148,11 @@ export default function ShopPage() {
                     {product.isBestSeller && (
                       <div className="absolute top-3 left-3 bg-gray-900 text-white px-2 py-1 text-xs font-semibold rounded">
                         BEST SELLER
+                      </div>
+                    )}
+                    {product.isNew && (
+                      <div className="absolute top-3 right-3 bg-red-700 text-white px-2 py-1 text-xs font-semibold rounded">
+                        NEW
                       </div>
                     )}
                   </div>
