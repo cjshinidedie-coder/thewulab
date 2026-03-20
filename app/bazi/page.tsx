@@ -176,7 +176,7 @@ export default function BaziCalculator() {
   const recommendedProducts = getRecommendedProducts();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[url('/bazi-bg.jpg')] bg-cover bg-center bg-no-repeat bg-fixed py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -191,7 +191,7 @@ export default function BaziCalculator() {
         {/* Main Content - Form and Result */}
         <div className="flex flex-col lg:flex-row gap-12 justify-center items-start mb-12">
           {/* Form Section */}
-          <div className="w-full lg:w-96 bg-white p-10 rounded-lg shadow-sm">
+          <div className="w-full lg:w-96 bg-white/80 backdrop-blur-md border border-white/20 p-10 rounded-lg shadow-sm">
             {/* Birth Date */}
             <div className="mb-6">
               <label className="block text-xs font-semibold text-gray-900 mb-2 uppercase tracking-wider">
