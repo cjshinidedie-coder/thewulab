@@ -507,20 +507,20 @@ export default function Navbar() {
                 <div className="mega-menu-column">
                   <h3>{t.shopByElement}</h3>
                   <ul>
-                    <li><a href="#">✨ {t.metal}</a></li>
-                    <li><a href="#">🌿 {t.wood}</a></li>
-                    <li><a href="#">💧 {t.water}</a></li>
-                    <li><a href="#">🔥 {t.fire}</a></li>
-                    <li><a href="#">🌍 {t.earth}</a></li>
+                    <li><Link href="/elements/metal">✨ {t.metal}</Link></li>
+                    <li><Link href="/elements/wood">🌿 {t.wood}</Link></li>
+                    <li><Link href="/elements/water">💧 {t.water}</Link></li>
+                    <li><Link href="/elements/fire">🔥 {t.fire}</Link></li>
+                    <li><Link href="/elements/earth">🌍 {t.earth}</Link></li>
                   </ul>
                 </div>
                 <div className="mega-menu-column">
                   <h3>{t.shopByStyle}</h3>
                   <ul>
-                    <li><a href="#">{t.bracelets}</a></li>
-                    <li><a href="#">{t.handJewelry}</a></li>
-                    <li><a href="#">{t.earrings}</a></li>
-                    <li><a href="#">{t.necklaces}</a></li>
+                    <li><Link href="/shop?category=bracelets">{t.bracelets}</Link></li>
+                    <li><Link href="/shop?category=hand-jewelry">{t.handJewelry}</Link></li>
+                    <li><Link href="/shop?category=earrings">{t.earrings}</Link></li>
+                    <li><Link href="/shop?category=necklaces">{t.necklaces}</Link></li>
                   </ul>
                 </div>
               </div>
