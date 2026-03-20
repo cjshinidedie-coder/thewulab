@@ -46,11 +46,11 @@ export default function BaziCalculator() {
       metal: 'Metal',
       earth: 'Earth',
       placeholders: {
-        year: 'e.g., 1990',
-        month: '1-12',
-        day: '1-31',
-        hour: '0-23',
-        minute: '0-59',
+        year: 'Year',
+        month: 'Month',
+        day: 'Day',
+        hour: 'Hour',
+        minute: 'Minute',
         birthPlace: 'e.g., New York',
       },
       validation: {
@@ -85,11 +85,11 @@ export default function BaziCalculator() {
       metal: '金',
       earth: '土',
       placeholders: {
-        year: '例如：1990',
-        month: '1-12',
-        day: '1-31',
-        hour: '0-23',
-        minute: '0-59',
+        year: 'Year',
+        month: 'Month',
+        day: 'Day',
+        hour: 'Hour',
+        minute: 'Minute',
         birthPlace: '例如：北京',
       },
       validation: {
