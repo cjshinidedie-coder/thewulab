@@ -191,7 +191,7 @@ export default function BaziCalculator() {
         {/* Main Content - Form and Result */}
         <div className="flex flex-col lg:flex-row gap-12 justify-center items-start mb-12">
           {/* Form Section */}
-          <div className="w-full lg:w-96 bg-white/80 backdrop-blur-md border border-white/20 p-10 rounded-lg shadow-sm">
+          <div className="w-full lg:w-96 bg-white p-10 rounded-lg shadow-sm">
             {/* Birth Date */}
             <div className="mb-6">
               <label className="block text-xs font-semibold text-gray-900 mb-2 uppercase tracking-wider">
