@@ -986,20 +986,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DISCOVER ELEMENT BANNER SECTION */}
-      <section className="discover-banner-section">
-        <div className="discover-banner-merged">
-          <img src="/missing-element.png" alt="Discover Your Missing Element" className="discover-banner-bg" />
-          <div className="discover-overlay">
-            <h2 className="discover-title">{t.discoverTitle}</h2>
-            <p className="discover-text">
-              {t.discoverText}
-            </p>
-            <Link href="/bazi" className="btn-secondary">{t.calculateNow}</Link>
-          </div>
-        </div>
-      </section>
-
       {/* BEST SELLERS SECTION - WITH SWIPER HORIZONTAL SCROLL */}
       <section className="section" >
         <h2 className="section-title">{t.bestSellers}</h2>
@@ -1031,6 +1017,20 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DISCOVER ELEMENT BANNER SECTION */}
+      <section className="discover-banner-section">
+        <div className="discover-banner-merged">
+          <img src="/missing-element.png" alt="Discover Your Missing Element" className="discover-banner-bg" />
+          <div className="discover-overlay">
+            <h2 className="discover-title">{t.discoverTitle}</h2>
+            <p className="discover-text">
+              {t.discoverText}
+            </p>
+            <Link href="/bazi" className="btn-secondary">{t.calculateNow}</Link>
           </div>
         </div>
       </section>
