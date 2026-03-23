@@ -319,7 +319,7 @@ export default function BaziCalculator() {
 
           {/* Result Section */}
           {showResult && result && (
-            <div className="w-full lg:w-96 bg-gradient-to-br from-red-50 to-pink-50 p-10 rounded-lg border-2 border-red-700">
+            <div className="w-full lg:w-96 bg-white/80 backdrop-blur-md border border-white/20 p-10 rounded-lg">
               <h2 className="font-serif text-2xl font-bold text-gray-900 mb-6 text-center">
                 {t.yourElements}
               </h2>
