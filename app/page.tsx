@@ -180,7 +180,7 @@ export default function Home() {
 
         body {
           font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
-          background-color: #FAFAFA;
+          background-color: #FFFFFF;
           color: #333333;
           line-height: 1.6;
           font-weight: 300;
@@ -587,7 +587,7 @@ export default function Home() {
           position: relative;
           border-radius: 0;
           overflow: hidden;
-          height: 400px;
+          min-height: 80vh;
         }
 
         .banner-image {
@@ -685,7 +685,7 @@ export default function Home() {
 
         /* ===== REVIEWS SECTION ===== */
         .reviews-section {
-          background-color: #FAFAFA;
+          background-color: #FFFFFF;
           padding: 20px 40px;
           margin: 0;
         }
