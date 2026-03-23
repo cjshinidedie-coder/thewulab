@@ -276,16 +276,16 @@ export default function Home() {
 
         /* ===== DISCOVER BANNER SECTION ===== */
         .discover-banner-section {
-          padding: 20px 40px;
+          padding: 0;
           margin: 0;
           background-color: #FFFFFF;
         }
 
         .discover-banner-merged {
-          max-width: 1400px;
-          margin: 0 auto;
+          max-width: 100%;
+          margin: 0;
           position: relative;
-          border-radius: 12px;
+          border-radius: 0;
           overflow: hidden;
           height: 500px;
         }
@@ -310,9 +310,16 @@ export default function Home() {
           flex-direction: column;
           justify-content: center;
           align-items: flex-start;
-          padding: 50px;
+          padding: 0;
           background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100%);
           gap: 20px;
+        }
+
+        .discover-content-wrapper {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 50px;
+          width: 100%;
         }
 
         .discover-title {
@@ -1026,11 +1033,13 @@ export default function Home() {
         <div className="discover-banner-merged">
           <img src="/missing-element.png" alt="Discover Your Missing Element" className="discover-banner-bg" />
           <div className="discover-overlay">
-            <h2 className="discover-title">{t.discoverTitle}</h2>
-            <p className="discover-text">
-              {t.discoverText}
-            </p>
-            <Link href="/bazi" className="btn-secondary">{t.calculateNow}</Link>
+            <div className="discover-content-wrapper">
+              <h2 className="discover-title">{t.discoverTitle}</h2>
+              <p className="discover-text">
+                {t.discoverText}
+              </p>
+              <Link href="/bazi" className="btn-secondary">{t.calculateNow}</Link>
+            </div>
           </div>
         </div>
       </section>
