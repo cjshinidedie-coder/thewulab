@@ -526,7 +526,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            <Link href="/bazi" className="nav-link">{t.bazi}</Link>
+            <Link href="/bazi" className="mega-menu-trigger" style={{ textDecoration: 'none' }}>{t.bazi}</Link>
             <a href="#meaning" className="nav-link">{t.meaning}</a>
           </nav>
 
