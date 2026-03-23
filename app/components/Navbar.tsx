@@ -507,11 +507,11 @@ export default function Navbar() {
                 <div className="mega-menu-column">
                   <h3>{t.shopByElement}</h3>
                   <ul>
-                    <li><Link href="/elements/metal">✨ {t.metal}</Link></li>
-                    <li><Link href="/elements/wood">🌿 {t.wood}</Link></li>
-                    <li><Link href="/elements/water">💧 {t.water}</Link></li>
-                    <li><Link href="/elements/fire">🔥 {t.fire}</Link></li>
-                    <li><Link href="/elements/earth">🌍 {t.earth}</Link></li>
+                    <li><Link href="/elements/metal">{t.metal}</Link></li>
+                    <li><Link href="/elements/wood">{t.wood}</Link></li>
+                    <li><Link href="/elements/water">{t.water}</Link></li>
+                    <li><Link href="/elements/fire">{t.fire}</Link></li>
+                    <li><Link href="/elements/earth">{t.earth}</Link></li>
                   </ul>
                 </div>
                 <div className="mega-menu-column">
