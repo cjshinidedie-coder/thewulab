@@ -187,8 +187,8 @@ export default function Home() {
         }
 
         section {
-          padding-top: 2.5rem !important;
-          padding-bottom: 2.5rem !important;
+          padding-top: 1.5rem !important;
+          padding-bottom: 1.5rem !important;
           margin-top: 0 !important;
           margin-bottom: 0 !important;
         }
@@ -276,7 +276,7 @@ export default function Home() {
 
         /* ===== DISCOVER BANNER SECTION ===== */
         .discover-banner-section {
-          padding: 30px 40px;
+          padding: 20px 40px;
           margin: 0;
           background-color: #FFFFFF;
         }
@@ -357,7 +357,7 @@ export default function Home() {
 
         /* ===== SECTION ===== */
         .section {
-          padding: 30px 40px;
+          padding: 20px 40px;
           max-width: 1400px;
           margin: 0 auto;
         }
@@ -576,16 +576,16 @@ export default function Home() {
 
         /* ===== FEATURED BANNER SECTION ===== */
         .featured-banner-section {
-          padding: 30px 40px;
+          padding: 0;
           margin: 0;
           background-color: #FFFFFF;
         }
 
         .featured-banner {
-          max-width: 1400px;
-          margin: 0 auto;
+          max-width: 100%;
+          margin: 0;
           position: relative;
-          border-radius: 12px;
+          border-radius: 0;
           overflow: hidden;
           height: 400px;
         }
@@ -686,7 +686,7 @@ export default function Home() {
         /* ===== REVIEWS SECTION ===== */
         .reviews-section {
           background-color: #FAFAFA;
-          padding: 30px 40px;
+          padding: 20px 40px;
           margin: 0;
         }
 
@@ -749,7 +749,7 @@ export default function Home() {
         /* ===== TRUST SECTION ===== */
         .trust-section {
           background-color: #FFFFFF;
-          padding: 30px 40px;
+          padding: 20px 40px;
           margin: 0;
         }
 
