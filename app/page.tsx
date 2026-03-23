@@ -1045,29 +1045,21 @@ export default function Home() {
       </section>
 
       {/* SPLIT-SCREEN HERO SECTION */}
-      <section className="w-full grid grid-cols-1 md:grid-cols-2">
+      <section className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 my-12">
         {/* LEFT: NEW ARRIVALS */}
-        <div className="relative overflow-hidden min-h-[70vh]">
+        <div className="relative overflow-hidden h-[450px]">
           <img src="/new-arrivals.png" alt="New Arrivals" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute bottom-12 left-10 md:left-16 z-10 flex flex-col items-start">
+          <div className="absolute bottom-12 left-10 z-20 flex flex-col items-start">
             <div className="banner-label">{t.newArrivals}</div>
             <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
 
         {/* RIGHT: GIFT VIDEO */}
-        <div className="relative overflow-hidden min-h-[70vh]">
-          <video
-            className="absolute inset-0 w-full h-full object-cover z-0"
-            autoPlay
-            loop
-            muted
-            playsInline
-          >
-            <source src="/gift.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-[1]"></div>
-          <div className="absolute bottom-12 left-10 md:left-16 z-10 flex flex-col items-start">
+        <div className="relative overflow-hidden h-[450px]">
+          <video src="/gift.mp4" autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0"></video>
+          <div className="absolute inset-0 bg-black/20 z-10"></div>
+          <div className="absolute bottom-12 left-10 z-20 flex flex-col items-start">
             <div className="banner-label">GIFT</div>
             <div className="flex space-x-4 mt-4">
               <Link href="/gift/him" className="banner-btn">FOR HIM</Link>
