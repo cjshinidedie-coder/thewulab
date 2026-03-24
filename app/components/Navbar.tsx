@@ -148,7 +148,7 @@ export default function Navbar() {
         .logo {
           font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 28px;
-          font-weight: 400;
+          font-weight: 300;
           color: #333333;
           letter-spacing: 1.5px;
           text-decoration: none;
@@ -176,7 +176,7 @@ export default function Navbar() {
           color: #333333;
           text-decoration: none;
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 400;
           letter-spacing: 0.5px;
           text-transform: uppercase;
           transition: color 0.3s ease;
@@ -201,7 +201,7 @@ export default function Navbar() {
           color: #333333;
           text-decoration: none;
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 400;
           letter-spacing: 0.5px;
           text-transform: uppercase;
           transition: color 0.3s ease;
@@ -245,7 +245,7 @@ export default function Navbar() {
         .mega-menu-column h3 {
           font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 16px;
-          font-weight: 400;
+          font-weight: 300;
           color: #333333;
           margin-bottom: 16px;
           letter-spacing: 0.05em;
@@ -265,10 +265,10 @@ export default function Navbar() {
           color: #666666;
           text-decoration: none;
           font-size: 13px;
-          font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
+          font-family: var(--font-montserrat), 'Noto Sans SC', sans-serif;
           transition: color 0.3s ease;
           text-transform: none;
-          font-weight: 400;
+          font-weight: 300;
         }
 
         .mega-menu-column ul li a:hover {
