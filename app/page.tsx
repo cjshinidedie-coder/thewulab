@@ -232,9 +232,9 @@ export default function Home() {
         }
 
         .hero h1 {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 72px;
-          font-weight: 700;
+          font-weight: 400;
           color: #FFFFFF;
           margin-bottom: 12px;
           line-height: 1.2;
@@ -323,9 +323,9 @@ export default function Home() {
         }
 
         .discover-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 36px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
           letter-spacing: 0.05em;
           max-width: 400px;
@@ -370,9 +370,9 @@ export default function Home() {
         }
 
         .section-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 48px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
           text-align: center;
           margin-bottom: 25px;
@@ -497,9 +497,9 @@ export default function Home() {
         }
 
         .product-name {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 6px;
           letter-spacing: 0.05em;
@@ -614,9 +614,9 @@ export default function Home() {
         }
 
         .banner-label {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 36px;
-          font-weight: 700;
+          font-weight: 400;
           color: #FFFFFF;
           letter-spacing: 0.05em;
           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -683,9 +683,9 @@ export default function Home() {
         }
 
         .element-name {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           letter-spacing: 0.05em;
         }
@@ -703,9 +703,9 @@ export default function Home() {
         }
 
         .reviews-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 32px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
           text-align: center;
           margin-bottom: 30px;
@@ -785,9 +785,9 @@ export default function Home() {
         }
 
         .trust-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 6px;
           letter-spacing: 0.05em;
@@ -816,9 +816,9 @@ export default function Home() {
         }
 
         .footer-section h3 {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 12px;
           letter-spacing: 0.05em;
@@ -850,9 +850,9 @@ export default function Home() {
         }
 
         .newsletter-box h3 {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 8px;
           letter-spacing: 0.05em;

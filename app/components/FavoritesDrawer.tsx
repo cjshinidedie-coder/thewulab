@@ -143,9 +143,9 @@ export default function FavoritesDrawer({ isOpen, onClose }: FavoritesDrawerProp
         }
 
         .favorites-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 20px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
         }
 

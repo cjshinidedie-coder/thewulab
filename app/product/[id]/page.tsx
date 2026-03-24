@@ -196,7 +196,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
   if (!product) {
     return (
       <div style={{ padding: '60px 40px', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <h1 style={{ fontSize: '32px', marginBottom: '16px', fontFamily: "'Playfair Display', serif" }}>{t.productNotFound}</h1>
+        <h1 style={{ fontSize: '32px', marginBottom: '16px', fontFamily: "var(--font-cormorant), serif", fontWeight: 400 }}>{t.productNotFound}</h1>
         <p style={{ fontSize: '16px', color: '#666666', marginBottom: '24px' }}>{t.notFoundDescription}</p>
         <Link href="/" style={{ color: '#C41E3A', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
           {t.backToHome}
@@ -318,9 +318,9 @@ Root yourself in strength and embrace your power with this magnificent piece.`
         }
 
         .product-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 48px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
           letter-spacing: 0.05em;
           line-height: 1.2;
@@ -501,9 +501,9 @@ Root yourself in strength and embrace your power with this magnificent piece.`
         }
 
         .section-title {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 36px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
           text-align: center;
           margin-bottom: 50px;
@@ -547,9 +547,9 @@ Root yourself in strength and embrace your power with this magnificent piece.`
         }
 
         .product-card-name {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 15px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 6px;
           letter-spacing: 0.05em;
@@ -591,9 +591,9 @@ Root yourself in strength and embrace your power with this magnificent piece.`
         }
 
         .footer-section h3 {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 12px;
           letter-spacing: 0.05em;

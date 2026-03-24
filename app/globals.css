@@ -760,3 +760,21 @@ h1, h2, h3, h4, h5, h6, .font-serif {
   letter-spacing: 0.05em !important;
 }
 
+/* Nuclear override: kill all bold on headings even from inline styles */
+.hero h1,
+.section-title,
+.discover-title,
+.banner-label,
+.reviews-title,
+.trust-title,
+.element-name,
+.product-name,
+.footer-section h3,
+.newsletter-box h3,
+.mega-menu-column h3,
+.logo {
+  font-family: var(--font-cormorant), serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+}
+

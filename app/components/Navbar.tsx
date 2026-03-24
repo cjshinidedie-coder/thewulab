@@ -148,7 +148,7 @@ export default function Navbar() {
         .logo {
           font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 28px;
-          font-weight: 700;
+          font-weight: 400;
           color: #333333;
           letter-spacing: 1.5px;
           text-decoration: none;
@@ -243,9 +243,9 @@ export default function Navbar() {
         }
 
         .mega-menu-column h3 {
-          font-family: 'Playfair Display', 'Noto Serif SC', serif;
+          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 400;
           color: #333333;
           margin-bottom: 16px;
           letter-spacing: 0.05em;
