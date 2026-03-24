@@ -234,7 +234,7 @@ export default function Home() {
         .hero h1 {
           font-family: var(--font-cormorant), 'Noto Serif SC', serif;
           font-size: 72px;
-          font-weight: 400;
+          font-weight: 300;
           color: #FFFFFF;
           margin-bottom: 12px;
           line-height: 1.2;
@@ -985,7 +985,7 @@ export default function Home() {
         </video>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1 className="font-serif tracking-widest font-normal">{t.heroTitle}</h1>
+          <h1 className="font-serif font-light tracking-widest text-4xl">{t.heroTitle}</h1>
           <p className="hero-subtitle">{t.heroSubtitle}</p>
           <button onClick={() => window.location.href = '/shop'} className="btn-primary">
             {t.shopNow}
@@ -1052,7 +1052,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
             <div className="banner-label font-serif tracking-widest font-normal">{t.newArrivals}</div>
-            <p className="font-sans font-medium text-base md:text-lg text-white/80 tracking-wide mt-2 mb-8">Fresh Energies, Timeless Elegance.</p>
+            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">Fresh Energies, Timeless Elegance.</p>
             <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
@@ -1063,7 +1063,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
             <div className="banner-label font-serif tracking-widest font-normal">GIFT</div>
-            <p className="font-sans font-medium text-base md:text-lg text-white/80 tracking-wide mt-2 mb-8">Pure Intentions, Infinite Fortune.</p>
+            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">Pure Intentions, Infinite Fortune.</p>
             <div className="flex space-x-4 mt-4">
               <Link href="/gift/him" className="banner-btn">FOR HIM</Link>
               <Link href="/gift/her" className="banner-btn">FOR HER</Link>
