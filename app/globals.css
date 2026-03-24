@@ -294,7 +294,7 @@ body {
   .section-title {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 48px;
-    font-weight: 700;
+    font-weight: 400;
     color: #333333;
     text-align: center;
     margin-bottom: 25px;
@@ -342,7 +342,7 @@ body {
   .hero h1 {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 72px;
-    font-weight: 700;
+    font-weight: 400;
     color: #FFFFFF;
     margin-bottom: 12px;
     line-height: 1.2;
@@ -405,7 +405,7 @@ body {
   .discover-title {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 36px;
-    font-weight: 700;
+    font-weight: 400;
     color: #333333;
     letter-spacing: 0.05em;
     max-width: 400px;
@@ -455,7 +455,7 @@ body {
   .banner-label {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 36px;
-    font-weight: 700;
+    font-weight: 400;
     color: #FFFFFF;
     letter-spacing: 0.05em;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -544,7 +544,7 @@ body {
   .reviews-title {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 32px;
-    font-weight: 700;
+    font-weight: 400;
     color: #333333;
     text-align: center;
     margin-bottom: 30px;
