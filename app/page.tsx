@@ -985,7 +985,7 @@ export default function Home() {
         </video>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1>{t.heroTitle}</h1>
+          <h1 className="font-serif">{t.heroTitle}</h1>
           <p className="hero-subtitle">{t.heroSubtitle}</p>
           <button onClick={() => window.location.href = '/shop'} className="btn-primary">
             {t.shopNow}
@@ -995,7 +995,7 @@ export default function Home() {
 
       {/* BEST SELLERS SECTION - WITH SWIPER HORIZONTAL SCROLL */}
       <section className="section" >
-        <h2 className="section-title">{t.bestSellers}</h2>
+        <h2 className="section-title font-serif">{t.bestSellers}</h2>
         <div className="swiper mySwiper">
           <div className="swiper-wrapper">
             {products.map((product) => (
@@ -1034,7 +1034,7 @@ export default function Home() {
           <img src="/missing-element.png" alt="Discover Your Missing Element" className="discover-banner-bg" />
           <div className="discover-overlay">
             <div className="discover-content-wrapper">
-              <h2 className="discover-title">{t.discoverTitle}</h2>
+              <h2 className="discover-title font-serif">{t.discoverTitle}</h2>
               <p className="discover-text">
                 {t.discoverText}
               </p>
@@ -1051,7 +1051,7 @@ export default function Home() {
           <img src="/new-arrivals.png" alt="New Arrivals" className="absolute inset-0 w-full h-full object-cover z-0" />
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
-            <div className="banner-label">{t.newArrivals}</div>
+            <div className="banner-label font-serif">{t.newArrivals}</div>
             <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
@@ -1061,7 +1061,7 @@ export default function Home() {
           <img src="/gift-bg.png" alt="Gift" className="absolute inset-0 w-full h-full object-cover z-0" />
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
-            <div className="banner-label">GIFT</div>
+            <div className="banner-label font-serif">GIFT</div>
             <div className="flex space-x-4 mt-4">
               <Link href="/gift/him" className="banner-btn">FOR HIM</Link>
               <Link href="/gift/her" className="banner-btn">FOR HER</Link>
@@ -1072,7 +1072,7 @@ export default function Home() {
 
       {/* SHOP BY ELEMENT SECTION */}
       <section className="section">
-        <h2 className="section-title">{t.shopByElement}</h2>
+        <h2 className="section-title font-serif">{t.shopByElement}</h2>
         <div className="element-grid">
           <Link href="/elements/wood" className="element-card">
             <div className="element-circle" style={{ backgroundImage: "url('/wood.png')" }}></div>
@@ -1104,7 +1104,7 @@ export default function Home() {
       {/* REVIEWS SECTION */}
       <section className="reviews-section">
         <div className="reviews-container">
-          <h2 className="reviews-title">{t.customerReviews}</h2>
+          <h2 className="reviews-title font-serif">{t.customerReviews}</h2>
           <div className="reviews-grid">
             <div className="review-card">
               <div className="review-stars">★★★★★</div>

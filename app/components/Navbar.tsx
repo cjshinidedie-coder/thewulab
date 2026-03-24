@@ -487,7 +487,7 @@ export default function Navbar() {
 
       <header>
         <div className="header-container">
-          <Link href="/" className="logo">
+          <Link href="/" className="logo font-serif">
             the wu lab
           </Link>
 
