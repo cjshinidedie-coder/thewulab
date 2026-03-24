@@ -1052,7 +1052,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
             <div className="banner-label font-serif tracking-widest font-normal">{t.newArrivals}</div>
-            <p className="font-serif italic text-base md:text-lg text-white/80 tracking-wide mt-2 mb-8">Fresh Energies, Timeless Elegance.</p>
+            <p className="font-sans font-light text-base md:text-lg text-white/80 tracking-wide mt-2 mb-8">Fresh Energies, Timeless Elegance.</p>
             <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
           </div>
         </div>
@@ -1063,7 +1063,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
             <div className="banner-label font-serif tracking-widest font-normal">GIFT</div>
-            <p className="font-serif italic text-base md:text-lg text-white/80 tracking-wide mt-2 mb-8">Pure Intentions, Infinite Fortune.</p>
+            <p className="font-sans font-light text-base md:text-lg text-white/80 tracking-wide mt-2 mb-8">Pure Intentions, Infinite Fortune.</p>
             <div className="flex space-x-4 mt-4">
               <Link href="/gift/him" className="banner-btn">FOR HIM</Link>
               <Link href="/gift/her" className="banner-btn">FOR HER</Link>
