@@ -1,20 +1,20 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Montserrat } from 'next/font/google';
+import { Crimson_Pro, Inter } from 'next/font/google';
 import Navbar from './components/Navbar';
 import { AppProvider } from './context/AppContext';
 import './globals.css';
 
-const cormorantGaramond = Cormorant_Garamond({
+const crimsonPro = Crimson_Pro({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-cormorant',
+  variable: '--font-crimson',
   display: 'swap',
 });
 
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-montserrat',
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -34,13 +34,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorantGaramond.variable} ${montserrat.variable}`}>
+    <html lang="en" className={`${crimsonPro.variable} ${inter.variable}`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Discover handcrafted energy jewelry and BaZi analysis at the wu lab" />
       </head>
-      <body className={`${cormorantGaramond.variable} ${montserrat.variable} font-sans`}>
+      <body className={`${crimsonPro.variable} ${inter.variable} font-sans`}>
         <AppProvider>
           <Navbar />
           {children}

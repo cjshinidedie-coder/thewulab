@@ -146,7 +146,7 @@ export default function Navbar() {
         }
 
         .logo {
-          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
+          font-family: var(--font-crimson), 'Noto Serif SC', serif;
           font-size: 28px;
           font-weight: 700;
           color: #333333;
@@ -180,7 +180,7 @@ export default function Navbar() {
           letter-spacing: 0.5px;
           text-transform: uppercase;
           transition: color 0.3s ease;
-          font-family: var(--font-montserrat), 'Noto Sans SC', sans-serif;
+          font-family: var(--font-inter), 'Noto Sans SC', sans-serif;
           cursor: pointer;
           line-height: 1;
           display: flex;
@@ -205,7 +205,7 @@ export default function Navbar() {
           letter-spacing: 0.5px;
           text-transform: uppercase;
           transition: color 0.3s ease;
-          font-family: var(--font-montserrat), 'Noto Sans SC', sans-serif;
+          font-family: var(--font-inter), 'Noto Sans SC', sans-serif;
           cursor: pointer;
           border: none;
           background: none;
