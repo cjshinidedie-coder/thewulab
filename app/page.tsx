@@ -21,11 +21,11 @@ export default function Home() {
       newArrivals: 'New Arrivals',
       viewProducts: 'View Products',
       shopByElement: 'Shop by Element',
-      wood: '🌿 Wood',
-      fire: '🔥 Fire',
-      earth: '🌍 Earth',
-      metal: '✨ Metal',
-      water: '🌊 Water',
+      wood: 'Wood',
+      fire: 'Fire',
+      earth: 'Earth',
+      metal: 'Metal',
+      water: 'Water',
       customerReviews: 'Customer Reviews',
       handmadeWithLove: 'Handmade with Love',
       bringsGoodFortune: 'Brings Good Fortune',
@@ -68,11 +68,11 @@ export default function Home() {
       newArrivals: '新品上市',
       viewProducts: '查看商品',
       shopByElement: '按元素购物',
-      wood: '🌿 木',
-      fire: '🔥 火',
-      earth: '🌍 土',
-      metal: '✨ 金',
-      water: '🌊 水',
+      wood: '木',
+      fire: '火',
+      earth: '土',
+      metal: '金',
+      water: '水',
       customerReviews: '客户评价',
       handmadeWithLove: '用爱手工制作',
       bringsGoodFortune: '带来好运',
@@ -110,56 +110,56 @@ export default function Home() {
     {
       id: '1',
       name: 'Cosmic Turquoise Bracelet',
-      element: '🌊 Water Element',
+      element: 'Water Element',
       price: '$226.00',
       image: '/product-1.png'
     },
     {
       id: '2',
       name: 'Imperial Jasper Bracelet',
-      element: '✨ Metal Element',
+      element: 'Metal Element',
       price: '$183.00',
       image: '/product-2.png'
     },
     {
       id: '3',
       name: 'Santa Maria Aquamarine',
-      element: '🌊 Water Element',
+      element: 'Water Element',
       price: '$2,524.00',
       image: '/product-3.png'
     },
     {
       id: '4',
       name: 'Labradorite Bracelet',
-      element: '🌿 Wood Element',
+      element: 'Wood Element',
       price: '$310.00',
       image: '/product-4.png'
     },
     {
       id: '5',
       name: 'Blue Aventurine Bracelet',
-      element: '🌊 Water Element',
+      element: 'Water Element',
       price: '$310.00',
       image: '/product-5.png'
     },
     {
       id: '6',
       name: 'Tiger Eye - Hematite Pair',
-      element: '🔥 Fire Element',
+      element: 'Fire Element',
       price: '$60.00',
       image: '/product-6.png'
     },
     {
       id: '7',
       name: 'Lava Bracelet',
-      element: '🔥 Fire Element',
+      element: 'Fire Element',
       price: '$310.00',
       image: '/product-7.png'
     },
     {
       id: '8',
       name: 'Dragon Blood Jasper',
-      element: '🌍 Earth Element',
+      element: 'Earth Element',
       price: '$297.00',
       image: '/product-8.png'
     }

@@ -104,14 +104,14 @@ export default function BaziCalculator() {
 
   // 商品数据库
   const products = [
-    { id: '1', name: 'Cosmic Turquoise Bracelet', element: '🌊 Water Element', price: 226.00, image: '/product-1.png' },
-    { id: '2', name: 'Imperial Jasper Bracelet', element: '✨ Metal Element', price: 183.00, image: '/product-2.png' },
-    { id: '3', name: 'Santa Maria Aquamarine', element: '🌊 Water Element', price: 2524.00, image: '/product-3.png' },
-    { id: '4', name: 'Labradorite Bracelet', element: '🌿 Wood Element', price: 310.00, image: '/product-4.png' },
-    { id: '5', name: 'Blue Aventurine Bracelet', element: '🌊 Water Element', price: 310.00, image: '/product-5.png' },
-    { id: '6', name: 'Tiger Eye - Hematite Pair', element: '🔥 Fire Element', price: 60.00, image: '/product-6.png' },
-    { id: '7', name: 'Lava Bracelet', element: '🔥 Fire Element', price: 310.00, image: '/product-7.png' },
-    { id: '8', name: 'Dragon Blood Jasper', element: '🌍 Earth Element', price: 297.00, image: '/product-8.png' }
+    { id: '1', name: 'Cosmic Turquoise Bracelet', element: 'Water Element', price: 226.00, image: '/product-1.png' },
+    { id: '2', name: 'Imperial Jasper Bracelet', element: 'Metal Element', price: 183.00, image: '/product-2.png' },
+    { id: '3', name: 'Santa Maria Aquamarine', element: 'Water Element', price: 2524.00, image: '/product-3.png' },
+    { id: '4', name: 'Labradorite Bracelet', element: 'Wood Element', price: 310.00, image: '/product-4.png' },
+    { id: '5', name: 'Blue Aventurine Bracelet', element: 'Water Element', price: 310.00, image: '/product-5.png' },
+    { id: '6', name: 'Tiger Eye - Hematite Pair', element: 'Fire Element', price: 60.00, image: '/product-6.png' },
+    { id: '7', name: 'Lava Bracelet', element: 'Fire Element', price: 310.00, image: '/product-7.png' },
+    { id: '8', name: 'Dragon Blood Jasper', element: 'Earth Element', price: 297.00, image: '/product-8.png' }
   ];
 
   // 八字测算逻辑
@@ -162,15 +162,15 @@ export default function BaziCalculator() {
     if (!result) return [];
 
     const elementMap: Record<string, string> = {
-      water: '🌊',
-      fire: '🔥',
-      wood: '🌿',
-      metal: '✨',
-      earth: '🌍',
+      water: 'Water',
+      fire: 'Fire',
+      wood: 'Wood',
+      metal: 'Metal',
+      earth: 'Earth',
     };
 
-    const emoji = elementMap[result.missingElement];
-    return products.filter(p => p.element.includes(emoji)).slice(0, 4);
+    const elementName = elementMap[result.missingElement];
+    return products.filter(p => p.element.includes(elementName)).slice(0, 4);
   };
 
   const recommendedProducts = getRecommendedProducts();
