@@ -6,14 +6,14 @@ import './globals.css';
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-cormorant',
   display: 'swap',
 });
 
 const montserrat = Montserrat({
   subsets: ['latin'],
-  weight: ['300', '400', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-montserrat',
   display: 'swap',
 });
@@ -38,10 +38,9 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Discover handcrafted energy jewelry
-and BaZi analysis at the wu lab" />
+        <meta name="description" content="Discover handcrafted energy jewelry and BaZi analysis at the wu lab" />
       </head>
-      <body className={montserrat.className}>
+      <body className={`${montserrat.className} font-sans`}>
         <AppProvider>
           <Navbar />
           {children}

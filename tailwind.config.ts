@@ -6,7 +6,12 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-montserrat)', 'sans-serif'],
+        serif: ['var(--font-cormorant)', 'serif'],
+      },
+    },
   },
   plugins: [],
 }
