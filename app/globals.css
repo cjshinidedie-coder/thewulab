@@ -148,7 +148,7 @@ body {
   .product-name {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 400;
     color: #333333;
     margin-bottom: 6px;
     letter-spacing: 0.05em;
@@ -524,7 +524,7 @@ body {
   .element-name {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 400;
     color: #333333;
     letter-spacing: 0.05em;
   }
@@ -626,7 +626,7 @@ body {
   .trust-title {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 400;
     color: #333333;
     margin-bottom: 6px;
     letter-spacing: 0.05em;
@@ -657,7 +657,7 @@ body {
   .footer-section h3 {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 400;
     color: #333333;
     margin-bottom: 12px;
     letter-spacing: 0.05em;
@@ -691,7 +691,7 @@ body {
   .newsletter-box h3 {
     font-family: var(--font-cormorant), 'Noto Serif SC', serif;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 400;
     color: #333333;
     margin-bottom: 8px;
     letter-spacing: 0.05em;
