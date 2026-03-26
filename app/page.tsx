@@ -1072,6 +1072,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* DIY BRACELET BANNER */}
+      <section className="w-full px-4 md:px-8 my-10">
+        <div className="relative w-full h-[320px] md:h-[420px] overflow-hidden rounded-xl bg-stone-200">
+          <img
+            src="/diy-bracelet-banner.png"
+            alt="DIY Crystal Bracelet"
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-r from-stone-900/35 via-stone-800/20 to-transparent z-10" />
+
+          <div className="relative z-20 h-full flex items-center">
+            <div className="max-w-xl px-6 md:px-12">
+              <h2 className="font-serif font-normal tracking-widest text-3xl md:text-5xl text-stone-100">
+                Design Your Aura
+              </h2>
+              <p className="mt-3 md:mt-4 font-sans font-light text-base md:text-lg tracking-wide text-stone-200/90">
+                Bespoke your crystal journey and align your energy.
+              </p>
+              <a
+                href="/diy"
+                className="inline-flex items-center justify-center mt-8 px-7 md:px-8 py-3 md:py-3.5 text-sm md:text-base font-sans font-medium tracking-[0.18em] uppercase text-stone-800 bg-stone-100/95 hover:bg-stone-100 transition-colors duration-300 rounded-sm"
+              >
+                DIY NOW
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SHOP BY ELEMENT SECTION */}
       <section className="section">
         <h2 className="section-title font-serif tracking-widest font-normal">{t.shopByElement}</h2>
