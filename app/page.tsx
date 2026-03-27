@@ -1074,7 +1074,7 @@ export default function Home() {
 
       {/* DIY BRACELET BANNER */}
       <section className="w-full px-4 md:px-8 my-10">
-        <div className="relative w-full min-h-[550px] h-[60vh] overflow-hidden rounded-none bg-stone-200">
+        <div className="relative w-full min-h-[380px] md:min-h-[400px] h-[50vh] overflow-hidden rounded-none bg-stone-200">
           <img
             src="/diy-bracelet-banner.png"
             alt="DIY Crystal Bracelet"
@@ -1083,21 +1083,19 @@ export default function Home() {
 
           <div className="absolute inset-0 bg-gradient-to-r from-stone-900/35 via-stone-800/20 to-transparent z-10" />
 
-          <div className="relative z-20 h-full flex items-end">
-            <div className="max-w-xl pl-8 md:pl-12 pb-12 md:pb-16">
-              <h2 className="font-serif font-normal tracking-widest text-3xl md:text-5xl text-stone-100">
-                Design Your Aura
-              </h2>
-              <p className="mt-3 md:mt-4 font-sans font-light text-base md:text-lg tracking-wide text-stone-200/90">
-                Bespoke your crystal journey and align your energy.
-              </p>
-              <a
-                href="/diy"
-                className="inline-flex items-center justify-center mt-8 px-6 py-2 text-[11px] md:text-xs font-medium tracking-[0.18em] uppercase bg-red-700 text-white hover:bg-red-800 transition-colors duration-200"
-              >
-                DIY NOW
-              </a>
-            </div>
+          <div className="absolute bottom-16 left-12 md:bottom-16 md:left-12 z-20 max-w-xl">
+            <h2 className="font-serif font-normal tracking-widest text-3xl md:text-5xl text-stone-100">
+              Design Your Aura
+            </h2>
+            <p className="mt-3 md:mt-4 font-sans font-light text-base md:text-lg tracking-wide text-stone-200/90">
+              Bespoke your crystal journey and align your energy.
+            </p>
+            <a
+              href="/diy"
+              className="inline-flex items-center justify-center mt-8 px-6 py-2 text-[11px] md:text-xs font-medium tracking-[0.18em] uppercase bg-red-700 text-white rounded-sm hover:bg-red-800 transition-colors duration-200"
+            >
+              DIY NOW
+            </a>
           </div>
         </div>
       </section>
