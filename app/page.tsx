@@ -1074,17 +1074,17 @@ export default function Home() {
 
       {/* DIY BRACELET BANNER */}
       <section className="w-full px-4 md:px-8 my-10">
-        <div className="relative w-full h-[320px] md:h-[420px] overflow-hidden rounded-xl bg-stone-200">
+        <div className="relative w-full min-h-[550px] h-[60vh] overflow-hidden rounded-none bg-stone-200">
           <img
             src="/diy-bracelet-banner.png"
             alt="DIY Crystal Bracelet"
-            className="absolute inset-0 w-full h-full object-cover z-0"
+            className="absolute inset-0 w-full h-full object-cover object-center rounded-none z-0"
           />
 
           <div className="absolute inset-0 bg-gradient-to-r from-stone-900/35 via-stone-800/20 to-transparent z-10" />
 
-          <div className="relative z-20 h-full flex items-center">
-            <div className="max-w-xl px-6 md:px-12">
+          <div className="relative z-20 h-full flex items-end">
+            <div className="max-w-xl pl-8 md:pl-12 pb-12 md:pb-16">
               <h2 className="font-serif font-normal tracking-widest text-3xl md:text-5xl text-stone-100">
                 Design Your Aura
               </h2>
@@ -1093,7 +1093,7 @@ export default function Home() {
               </p>
               <a
                 href="/diy"
-                className="inline-flex items-center justify-center mt-8 px-7 md:px-8 py-3 md:py-3.5 text-sm md:text-base font-sans font-medium tracking-[0.18em] uppercase text-stone-800 bg-stone-100/95 hover:bg-stone-100 transition-colors duration-300 rounded-sm"
+                className="inline-flex items-center justify-center mt-8 px-6 py-2 text-[11px] md:text-xs font-medium tracking-[0.18em] uppercase bg-red-700 text-white hover:bg-red-800 transition-colors duration-200"
               >
                 DIY NOW
               </a>
