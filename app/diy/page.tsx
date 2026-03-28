@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { beads, type Bead } from '@/src/data/beads';
 
 interface SelectedBead extends Bead {
@@ -9,6 +9,8 @@ interface SelectedBead extends Bead {
 
 export default function DiyPage() {
   const [selectedBeads, setSelectedBeads] = useState<SelectedBead[]>([]);
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   const totalPrice = selectedBeads.reduce((sum, b) => sum + b.price, 0);
 
@@ -29,17 +31,64 @@ export default function DiyPage() {
   const beadSize = 44;
   const radius = canvasSize / 2 - beadSize / 2 - 20;
 
+  // Given mouse position relative to canvas, compute nearest slot index
+  const getSlotFromMouse = useCallback(
+    (clientX: number, clientY: number): number | null => {
+      if (!canvasRef.current || selectedBeads.length < 2) return null;
+      const rect = canvasRef.current.getBoundingClientRect();
+      const mx = clientX - rect.left - center;
+      const my = clientY - rect.top - center;
+      let angle = Math.atan2(my, mx) + Math.PI / 2; // offset to match our -PI/2 start
+      if (angle < 0) angle += 2 * Math.PI;
+      const slotAngle = (2 * Math.PI) / selectedBeads.length;
+      return Math.round(angle / slotAngle) % selectedBeads.length;
+    },
+    [selectedBeads.length, center],
+  );
+
+  const handleDragStart = (index: number, e: React.DragEvent) => {
+    setDraggingIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    // transparent drag image
+    const img = new Image();
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    e.dataTransfer.setDragImage(img, 0, 0);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (draggingIndex === null) return;
+    const targetIndex = getSlotFromMouse(e.clientX, e.clientY);
+    if (targetIndex === null || targetIndex === draggingIndex) return;
+    // swap in place
+    setSelectedBeads((prev) => {
+      const next = [...prev];
+      const [moved] = next.splice(draggingIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+    setDraggingIndex(targetIndex);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingIndex(null);
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row">
-      {/* ── LEFT: CANVAS + TOOLBAR (sticky on desktop) ── */}
+      {/* ── LEFT: CANVAS + DELETE BTN (sticky on desktop) ── */}
       <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
         {/* Canvas */}
         <div
+          ref={canvasRef}
           className="relative rounded-full border border-stone-200/60 shrink-0"
           style={{ width: canvasSize, height: canvasSize, background: '#F0EBE4' }}
+          onDragOver={handleDragOver}
+          onDrop={(e) => e.preventDefault()}
         >
           {/* centre dot */}
-          <div className="absolute w-2 h-2 rounded-full bg-stone-300/50"
+          <div
+            className="absolute w-2 h-2 rounded-full bg-stone-300/50"
             style={{ top: center - 4, left: center - 4 }}
           />
 
@@ -59,12 +108,16 @@ export default function DiyPage() {
             const angle = (2 * Math.PI * i) / selectedBeads.length - Math.PI / 2;
             const x = center + radius * Math.cos(angle) - beadSize / 2;
             const y = center + radius * Math.sin(angle) - beadSize / 2;
+            const isDragging = draggingIndex === i;
             return (
               <img
                 key={bead.uid}
                 src={bead.image}
                 alt={bead.name}
-                className="absolute rounded-full object-contain drop-shadow-md transition-all duration-300"
+                draggable
+                onDragStart={(e) => handleDragStart(i, e)}
+                onDragEnd={handleDragEnd}
+                className={`absolute rounded-full object-contain drop-shadow-md transition-all duration-300 cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40 scale-110' : ''}`}
                 style={{ width: beadSize, height: beadSize, top: y, left: x }}
               />
             );
@@ -80,20 +133,16 @@ export default function DiyPage() {
           {/* floating stats panel */}
           <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50">
             <div className="text-[11px] text-stone-400 tracking-wider uppercase">Beads</div>
-            <div className="text-lg font-light text-stone-700">{selectedBeads.length} <span className="text-xs text-stone-400">颗</span></div>
+            <div className="text-lg font-light text-stone-700">
+              {selectedBeads.length} <span className="text-xs text-stone-400">颗</span>
+            </div>
             <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">Total</div>
             <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
           </div>
         </div>
 
-        {/* Toolbar */}
-        <div className="flex justify-center gap-4 mt-8">
-          <button className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
-            ↺ 逆时针
-          </button>
-          <button className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
-            ↻ 顺时针
-          </button>
+        {/* Delete button only */}
+        <div className="flex justify-center mt-8">
           <button
             onClick={removeLast}
             className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors"
