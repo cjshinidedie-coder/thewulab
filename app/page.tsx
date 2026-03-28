@@ -1092,7 +1092,7 @@ export default function Home() {
             </p>
             <a
               href="/diy"
-              className="banner-btn inline-flex items-center justify-center mt-8 tracking-[0.18em] uppercase"
+              className="banner-btn inline-flex items-center justify-center mt-8 !px-16 tracking-[0.18em] uppercase"
             >
               DIY NOW
             </a>
