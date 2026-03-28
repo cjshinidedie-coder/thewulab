@@ -1074,7 +1074,7 @@ export default function Home() {
 
       {/* DIY BRACELET BANNER */}
       <section className="w-full px-4 md:px-8 my-10">
-        <div className="relative w-full min-h-[380px] md:min-h-[400px] h-[50vh] overflow-hidden rounded-none bg-stone-200">
+        <div className="relative w-full min-h-[430px] md:min-h-[480px] overflow-hidden rounded-none bg-stone-200">
           <img
             src="/diy-bracelet-banner.png"
             alt="DIY Crystal Bracelet"
@@ -1092,7 +1092,7 @@ export default function Home() {
             </p>
             <a
               href="/diy"
-              className="inline-flex items-center justify-center mt-8 px-6 py-2 text-[11px] md:text-xs font-medium tracking-[0.18em] uppercase bg-red-700 text-white rounded-sm hover:bg-red-800 transition-colors duration-200"
+              className="banner-btn inline-flex items-center justify-center mt-8 tracking-[0.18em] uppercase"
             >
               DIY NOW
             </a>
