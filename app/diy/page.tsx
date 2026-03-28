@@ -30,12 +30,13 @@ export default function DiyPage() {
   const radius = canvasSize / 2 - beadSize / 2 - 20;
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5]">
-      {/* ── CANVAS ── */}
-      <section className="relative w-full flex justify-center pt-10 pb-6">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row">
+      {/* ── LEFT: CANVAS + TOOLBAR (sticky on desktop) ── */}
+      <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
+        {/* Canvas */}
         <div
-          className="relative rounded-full border border-stone-200/60"
-          style={{ width: canvasSize, height: canvasSize, background: '#F5F0EB' }}
+          className="relative rounded-full border border-stone-200/60 shrink-0"
+          style={{ width: canvasSize, height: canvasSize, background: '#F0EBE4' }}
         >
           {/* centre dot */}
           <div className="absolute w-2 h-2 rounded-full bg-stone-300/50"
@@ -72,7 +73,7 @@ export default function DiyPage() {
           {/* empty state */}
           {selectedBeads.length === 0 && (
             <p className="absolute inset-0 flex items-center justify-center text-stone-400 text-sm tracking-wide font-light select-none">
-              点击下方珠子开始设计
+              点击珠子开始设计
             </p>
           )}
 
@@ -84,31 +85,28 @@ export default function DiyPage() {
             <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
           </div>
         </div>
-      </section>
 
-      {/* ── TOOLBAR ── */}
-      <section className="flex justify-center gap-4 pb-6">
-        <button className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
-          ↺ 逆时针
-        </button>
-        <button className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
-          ↻ 顺时针
-        </button>
-        <button
-          onClick={removeLast}
-          className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors"
-        >
-          ✕ 删除末颗
-        </button>
-      </section>
+        {/* Toolbar */}
+        <div className="flex justify-center gap-4 mt-8">
+          <button className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
+            ↺ 逆时针
+          </button>
+          <button className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
+            ↻ 顺时针
+          </button>
+          <button
+            onClick={removeLast}
+            className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors"
+          >
+            ✕ 删除末颗
+          </button>
+        </div>
+      </div>
 
-      {/* ── DIVIDER ── */}
-      <div className="w-full h-px bg-stone-200/70" />
-
-      {/* ── ASSETS GRID ── */}
-      <section className="px-4 md:px-8 py-8 max-w-5xl mx-auto">
+      {/* ── RIGHT: ASSETS GRID (scrollable) ── */}
+      <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto p-6 lg:p-10">
         <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-6">选择珠子</h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {beads.map((bead) => (
             <button
               key={bead.id}
@@ -127,7 +125,7 @@ export default function DiyPage() {
             </button>
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 }
