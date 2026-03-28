@@ -10,6 +10,7 @@ interface SelectedBead extends Bead {
 export default function DiyPage() {
   const [selectedBeads, setSelectedBeads] = useState<SelectedBead[]>([]);
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
+  const draggingIndexRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const totalPrice = selectedBeads.reduce((sum, b) => sum + b.price, 0);
@@ -17,12 +18,18 @@ export default function DiyPage() {
   const addBead = (bead: Bead) => {
     setSelectedBeads((prev) => [
       ...prev,
-      { ...bead, uid: `${bead.id}-${Date.now()}-${Math.random()}` },
+      { ...bead, uid: `${bead.id}-${Date.now()}-${Math.random().toString(36).slice(2)}` },
     ]);
   };
 
   const removeLast = () => {
     setSelectedBeads((prev) => prev.slice(0, -1));
+  };
+
+  const clearAll = () => {
+    if (window.confirm('确定要清空当前所有珠子吗？')) {
+      setSelectedBeads([]);
+    }
   };
 
   // Canvas dimensions
@@ -33,22 +40,25 @@ export default function DiyPage() {
 
   // Given mouse position relative to canvas, compute nearest slot index
   const getSlotFromMouse = useCallback(
-    (clientX: number, clientY: number): number | null => {
-      if (!canvasRef.current || selectedBeads.length < 2) return null;
+    (clientX: number, clientY: number, count: number): number | null => {
+      if (!canvasRef.current || count < 2) return null;
       const rect = canvasRef.current.getBoundingClientRect();
       const mx = clientX - rect.left - center;
       const my = clientY - rect.top - center;
-      let angle = Math.atan2(my, mx) + Math.PI / 2; // offset to match our -PI/2 start
+      let angle = Math.atan2(my, mx) + Math.PI / 2;
       if (angle < 0) angle += 2 * Math.PI;
-      const slotAngle = (2 * Math.PI) / selectedBeads.length;
-      return Math.round(angle / slotAngle) % selectedBeads.length;
+      const slotAngle = (2 * Math.PI) / count;
+      return Math.round(angle / slotAngle) % count;
     },
-    [selectedBeads.length, center],
+    [center],
   );
 
   const handleDragStart = (index: number, e: React.DragEvent) => {
+    e.stopPropagation();
+    draggingIndexRef.current = index;
     setDraggingIndex(index);
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(index));
     // transparent drag image
     const img = new Image();
     img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
@@ -57,27 +67,41 @@ export default function DiyPage() {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    if (draggingIndex === null) return;
-    const targetIndex = getSlotFromMouse(e.clientX, e.clientY);
-    if (targetIndex === null || targetIndex === draggingIndex) return;
-    // swap in place
+    const fromIndex = draggingIndexRef.current;
+    if (fromIndex === null) return;
+
     setSelectedBeads((prev) => {
+      const targetIndex = getSlotFromMouse(e.clientX, e.clientY, prev.length);
+      if (targetIndex === null || targetIndex === draggingIndexRef.current) return prev;
       const next = [...prev];
-      const [moved] = next.splice(draggingIndex, 1);
+      const [moved] = next.splice(draggingIndexRef.current!, 1);
       next.splice(targetIndex, 0, moved);
+      draggingIndexRef.current = targetIndex;
+      setDraggingIndex(targetIndex);
       return next;
     });
-    setDraggingIndex(targetIndex);
   };
 
   const handleDragEnd = () => {
+    draggingIndexRef.current = null;
     setDraggingIndex(null);
   };
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row">
-      {/* ── LEFT: CANVAS + DELETE BTN (sticky on desktop) ── */}
-      <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
+      {/* ── LEFT: CANVAS + BUTTONS (sticky on desktop) ── */}
+      <div className="relative w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
+
+        {/* Stats panel — pinned to container top-right, outside the circle */}
+        <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50 z-30">
+          <div className="text-[11px] text-stone-400 tracking-wider uppercase">Beads</div>
+          <div className="text-lg font-light text-stone-700">
+            {selectedBeads.length} <span className="text-xs text-stone-400">颗</span>
+          </div>
+          <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">Total</div>
+          <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
+        </div>
+
         {/* Canvas */}
         <div
           ref={canvasRef}
@@ -117,8 +141,15 @@ export default function DiyPage() {
                 draggable
                 onDragStart={(e) => handleDragStart(i, e)}
                 onDragEnd={handleDragEnd}
-                className={`absolute rounded-full object-contain drop-shadow-md transition-all duration-300 cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40 scale-110' : ''}`}
-                style={{ width: beadSize, height: beadSize, top: y, left: x }}
+                className={`absolute rounded-full object-contain drop-shadow-md cursor-grab active:cursor-grabbing select-none ${isDragging ? 'opacity-40 scale-110' : ''}`}
+                style={{
+                  width: beadSize,
+                  height: beadSize,
+                  top: y,
+                  left: x,
+                  transition: isDragging ? 'none' : 'all 0.3s ease',
+                  zIndex: isDragging ? 50 : 10,
+                }}
               />
             );
           })}
@@ -129,25 +160,21 @@ export default function DiyPage() {
               点击珠子开始设计
             </p>
           )}
-
-          {/* floating stats panel */}
-          <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50">
-            <div className="text-[11px] text-stone-400 tracking-wider uppercase">Beads</div>
-            <div className="text-lg font-light text-stone-700">
-              {selectedBeads.length} <span className="text-xs text-stone-400">颗</span>
-            </div>
-            <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">Total</div>
-            <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
-          </div>
         </div>
 
-        {/* Delete button only */}
-        <div className="flex justify-center mt-8">
+        {/* Buttons */}
+        <div className="flex justify-center gap-4 mt-8">
           <button
             onClick={removeLast}
             className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors"
           >
             ✕ 删除末颗
+          </button>
+          <button
+            onClick={clearAll}
+            className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors"
+          >
+            ✕ 删除全部
           </button>
         </div>
       </div>
