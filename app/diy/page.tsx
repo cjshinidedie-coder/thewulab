@@ -182,22 +182,23 @@ export default function DiyPage() {
       {/* ── RIGHT: ASSETS GRID (scrollable) ── */}
       <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto p-6 lg:p-10">
         <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-6">选择珠子</h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {beads.map((bead) => (
             <button
               key={bead.id}
               onClick={() => addBead(bead)}
               className="group flex flex-col items-center bg-white rounded-lg p-3 border border-stone-100 hover:border-stone-300 hover:shadow-md transition-all duration-200"
             >
-              <div className="w-16 h-16 flex items-center justify-center">
+              <div className="w-14 h-14 flex items-center justify-center">
                 <img
                   src={bead.image}
                   alt={bead.name}
-                  className="w-14 h-14 object-contain drop-shadow-[0_3px_6px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-200"
+                  className="w-12 h-12 object-contain drop-shadow-[0_3px_6px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-200"
                 />
               </div>
-              <span className="mt-2 text-xs text-stone-600 tracking-wide">{bead.name}</span>
-              <span className="text-[11px] text-stone-400">¥{bead.price}</span>
+              <span className="mt-1.5 text-xs text-stone-600 tracking-wide leading-tight">{bead.name}</span>
+              <span className="mt-0.5 text-sm font-semibold text-stone-700">¥{bead.price}</span>
+              <span className="text-[10px] text-stone-400">{bead.size}</span>
             </button>
           ))}
         </div>
