@@ -180,7 +180,6 @@ const nameEnMap: Record<string, string> = {
   "绿发晶": "Green Rutilated Quartz",
   "绿幽灵": "Green Phantom Quartz",
   "绿方解": "Green Calcite",
-  "绿松石": "Turquoise",
   "绿水晶": "Green Quartz (Prasiolite)",
   "绿玉髓": "Chrysoprase",
   "绿碧玺": "Green Tourmaline (Verdelite)",
@@ -191,7 +190,6 @@ const nameEnMap: Record<string, string> = {
   "绿龙晶": "Green Dragon Quartz",
   "翠榴石": "Demantoid Garnet",
   "翡翠": "Jadeite",
-  "葡萄石": "Prehnite",
   "透辉石": "Diopside",
   "金绿石": "Chrysoberyl",
 };
