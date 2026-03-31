@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { beads, categories, allCategoryLabel, type Bead } from '@/src/data/beads';
 import { useApp } from '@/app/context/AppContext';
 
@@ -9,21 +10,49 @@ interface SelectedBead extends Bead {
 }
 
 export default function DiyPage() {
-  const { language } = useApp();
+  const { language, addDiyToCart } = useApp();
+  const router = useRouter();
   const [selectedBeads, setSelectedBeads] = useState<SelectedBead[]>([]);
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [activeCategoryZh, setActiveCategoryZh] = useState('全部');
+  const [toast, setToast] = useState<string | null>(null);
   const draggingIndexRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const isEn = language === 'en';
-
   const totalPrice = selectedBeads.reduce((sum, b) => sum + b.price, 0);
 
   const filteredBeads = useMemo(
     () => activeCategoryZh === '全部' ? beads : beads.filter((b) => b.category === activeCategoryZh),
     [activeCategoryZh],
   );
+
+  // Toast auto-dismiss
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2000);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  const showToast = (msg: string) => setToast(msg);
+
+  const buildDiyItem = () => ({
+    id: `diy-${Date.now()}`,
+    name: isEn ? 'Custom Crystal Bracelet' : 'DIY 定制手串',
+    beads: selectedBeads.map((b) => ({ name: b.name, nameEn: b.nameEn, size: b.size, price: b.price, image: b.image })),
+    totalPrice,
+    beadCount: selectedBeads.length,
+  });
+
+  const handleAddToCart = () => {
+    addDiyToCart(buildDiyItem());
+    showToast(isEn ? '✅ Added to cart' : '✅ 已成功加入购物车');
+  };
+
+  const handleBuyNow = () => {
+    addDiyToCart(buildDiyItem());
+    router.push('/checkout');
+  };
 
   const addBead = (bead: Bead) => {
     setSelectedBeads((prev) => [
@@ -32,9 +61,7 @@ export default function DiyPage() {
     ]);
   };
 
-  const removeLast = () => {
-    setSelectedBeads((prev) => prev.slice(0, -1));
-  };
+  const removeLast = () => setSelectedBeads((prev) => prev.slice(0, -1));
 
   const clearAll = () => {
     if (window.confirm(isEn ? 'Clear all beads?' : '确定要清空当前所有珠子吗？')) {
@@ -42,7 +69,6 @@ export default function DiyPage() {
     }
   };
 
-  // Canvas dimensions
   const canvasSize = 360;
   const center = canvasSize / 2;
   const beadSize = 44;
@@ -75,8 +101,7 @@ export default function DiyPage() {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    const fromIndex = draggingIndexRef.current;
-    if (fromIndex === null) return;
+    if (draggingIndexRef.current === null) return;
     setSelectedBeads((prev) => {
       const targetIndex = getSlotFromMouse(e.clientX, e.clientY, prev.length);
       if (targetIndex === null || targetIndex === draggingIndexRef.current) return prev;
@@ -94,11 +119,17 @@ export default function DiyPage() {
     setDraggingIndex(null);
   };
 
-  // Category display helpers
   const allCats = [allCategoryLabel, ...categories];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row relative">
+      {/* Toast */}
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[999] px-6 py-3 bg-stone-900 text-white text-sm rounded-lg shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
+
       {/* ── LEFT: CANVAS + BUTTONS (sticky on desktop) ── */}
       <div className="relative w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
         {/* Stats panel */}
@@ -112,14 +143,14 @@ export default function DiyPage() {
           <div className="flex flex-col gap-2 mt-4">
             <button
               disabled={selectedBeads.length === 0}
-              onClick={() => alert(isEn ? 'Proceeding to checkout...' : '正在为您跳转结算...')}
+              onClick={handleBuyNow}
               className="w-full px-4 py-2 text-[11px] font-semibold tracking-widest uppercase text-white bg-red-800 rounded-md hover:bg-red-700 active:scale-95 transition-all shadow-sm hover:shadow-md disabled:bg-stone-300 disabled:text-stone-500 disabled:cursor-not-allowed disabled:shadow-none"
             >
               {isEn ? 'BUY NOW' : '立即购买'}
             </button>
             <button
               disabled={selectedBeads.length === 0}
-              onClick={() => alert(isEn ? 'Added to cart successfully!' : '已成功加入购物车！')}
+              onClick={handleAddToCart}
               className="w-full px-4 py-2 text-[11px] font-semibold tracking-widest uppercase border border-red-800 text-red-800 bg-transparent rounded-md hover:bg-red-800/10 active:scale-95 transition-all disabled:border-stone-300 disabled:text-stone-500 disabled:bg-transparent disabled:cursor-not-allowed"
             >
               {isEn ? 'ADD TO CART' : '加入购物车'}
@@ -186,16 +217,13 @@ export default function DiyPage() {
 
       {/* ── RIGHT: CATEGORY SIDEBAR + ASSETS GRID ── */}
       <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto flex flex-col">
-        {/* Mobile: horizontal scrollable tabs */}
         <div className="flex lg:hidden overflow-x-auto gap-2 px-4 py-3 border-b border-stone-200/60 bg-[#FAF8F5] sticky top-0 z-20">
           {allCats.map((cat) => (
             <button
               key={cat.zh}
               onClick={() => setActiveCategoryZh(cat.zh)}
               className={`shrink-0 px-4 py-1.5 rounded-full text-xs tracking-wide transition-colors ${
-                activeCategoryZh === cat.zh
-                  ? 'bg-stone-700 text-white'
-                  : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
+                activeCategoryZh === cat.zh ? 'bg-stone-700 text-white' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
               }`}
             >
               {isEn ? cat.en : cat.zh}
@@ -203,18 +231,14 @@ export default function DiyPage() {
           ))}
         </div>
 
-        {/* Desktop: sidebar + grid */}
         <div className="flex flex-1 min-h-0">
-          {/* Sidebar — desktop only */}
           <nav className="hidden lg:flex flex-col shrink-0 w-32 py-6 pl-4 pr-2 gap-1 sticky top-0 self-start">
             {allCats.map((cat) => (
               <button
                 key={cat.zh}
                 onClick={() => setActiveCategoryZh(cat.zh)}
                 className={`relative text-left text-xs tracking-wide py-2 pl-3 rounded-r-md transition-colors ${
-                  activeCategoryZh === cat.zh
-                    ? 'text-stone-800 font-semibold bg-stone-100'
-                    : 'text-stone-400 hover:text-stone-600'
+                  activeCategoryZh === cat.zh ? 'text-stone-800 font-semibold bg-stone-100' : 'text-stone-400 hover:text-stone-600'
                 }`}
               >
                 {activeCategoryZh === cat.zh && (
@@ -225,7 +249,6 @@ export default function DiyPage() {
             ))}
           </nav>
 
-          {/* Grid */}
           <div className="flex-1 p-4 lg:p-6">
             <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-4">
               {isEn ? 'Select Beads' : '选择珠子'}

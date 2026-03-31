@@ -2,15 +2,34 @@
 
   import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+    quantity: number;
+  }
+
+  export interface DiyCartItem {
+    id: string;
+    name: string;
+    beads: Array<{ name: string; nameEn: string; size: string; price: number; image: string }>;
+    totalPrice: number;
+    beadCount: number;
+  }
+
   interface AppContextType {
     language: 'en' | 'zh';
     setLanguage: (lang: 'en' | 'zh') => void;
     cartCount: number;
     setCartCount: (count: number) => void;
-    cartItems: Array<{ id: string; name: string; price: number; image: string; quantity: number }>;
+    cartItems: CartItem[];
     addToCart: (product: { id: string; name: string; price: number; image: string }) => void;
     removeFromCart: (productId: string) => void;
     clearCart: () => void;
+    diyCartItems: DiyCartItem[];
+    addDiyToCart: (item: DiyCartItem) => void;
+    removeDiyFromCart: (id: string) => void;
     favorites: string[];
     toggleFavorite: (productId: string) => void;
   }
@@ -20,7 +39,8 @@
   export function AppProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<'en' | 'zh'>('en');
     const [cartCount, setCartCount] = useState(0);
-    const [cartItems, setCartItems] = useState<Array<{ id: string; name: string; price: number; image: string; quantity: number }>>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [diyCartItems, setDiyCartItems] = useState<DiyCartItem[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
 
     const addToCart = (product: { id: string; name: string; price: number; image: string }) => {
@@ -51,6 +71,17 @@
     const clearCart = () => {
       setCartCount(0);
       setCartItems([]);
+      setDiyCartItems([]);
+    };
+
+    const addDiyToCart = (item: DiyCartItem) => {
+      setDiyCartItems(prev => [...prev, item]);
+      setCartCount(prev => prev + 1);
+    };
+
+    const removeDiyFromCart = (id: string) => {
+      setDiyCartItems(prev => prev.filter(item => item.id !== id));
+      setCartCount(prev => Math.max(0, prev - 1));
     };
 
     const toggleFavorite = (productId: string) => {
@@ -72,6 +103,9 @@
           addToCart,
           removeFromCart,
           clearCart,
+          diyCartItems,
+          addDiyToCart,
+          removeDiyFromCart,
           favorites,
           toggleFavorite,
         }}
