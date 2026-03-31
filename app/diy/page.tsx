@@ -130,8 +130,9 @@ export default function DiyPage() {
           {/* beads on ring */}
           {selectedBeads.map((bead, i) => {
             const angle = (2 * Math.PI * i) / selectedBeads.length - Math.PI / 2;
-            const x = center + radius * Math.cos(angle) - beadSize / 2;
-            const y = center + radius * Math.sin(angle) - beadSize / 2;
+            const pixelSize = parseInt(bead.size) * 4.5;
+            const x = center + radius * Math.cos(angle) - pixelSize / 2;
+            const y = center + radius * Math.sin(angle) - pixelSize / 2;
             const isDragging = draggingIndex === i;
             return (
               <img
@@ -143,8 +144,8 @@ export default function DiyPage() {
                 onDragEnd={handleDragEnd}
                 className={`absolute rounded-full object-contain drop-shadow-md cursor-grab active:cursor-grabbing select-none ${isDragging ? 'opacity-40 scale-110' : ''}`}
                 style={{
-                  width: beadSize,
-                  height: beadSize,
+                  width: pixelSize,
+                  height: pixelSize,
                   top: y,
                   left: x,
                   transition: isDragging ? 'none' : 'all 0.3s ease',
