@@ -1052,8 +1052,8 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
             <div className="banner-label font-serif tracking-widest font-normal">{t.newArrivals}</div>
-            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">Fresh Energies, Timeless Elegance.</p>
-            <Link href="/new-arrivals" className="banner-btn">{t.viewProducts}</Link>
+            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">{language === 'en' ? 'Fresh Energies, Timeless Elegance.' : '焕新能量，隽永优雅。'}</p>
+            <Link href="/new-arrivals" className="banner-btn">{language === 'en' ? 'Shop Now' : '查看商品'}</Link>
           </div>
         </div>
 
@@ -1062,11 +1062,11 @@ export default function Home() {
           <img src="/gift-bg.png" alt="Gift" className="absolute inset-0 w-full h-full object-cover z-0" />
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
-            <div className="banner-label font-serif tracking-widest font-normal">GIFT</div>
-            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">Pure Intentions, Infinite Fortune.</p>
+            <div className="banner-label font-serif tracking-widest font-normal">{language === 'en' ? 'GIFT' : '精选礼物'}</div>
+            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">{language === 'en' ? 'Pure Intentions, Infinite Fortune.' : '纯粹心意，无限好运。'}</p>
             <div className="flex space-x-4 mt-4">
-              <Link href="/gift/him" className="banner-btn">FOR HIM</Link>
-              <Link href="/gift/her" className="banner-btn">FOR HER</Link>
+              <Link href="/gift/him" className="banner-btn">{language === 'en' ? 'FOR HIM' : '送给他'}</Link>
+              <Link href="/gift/her" className="banner-btn">{language === 'en' ? 'FOR HER' : '送给她'}</Link>
             </div>
           </div>
         </div>
@@ -1085,16 +1085,16 @@ export default function Home() {
 
           <div className="absolute bottom-16 left-12 md:bottom-16 md:left-12 z-20 max-w-xl">
             <h2 className="font-serif font-normal tracking-widest text-3xl md:text-5xl text-stone-100">
-              Design Your Aura
+              {language === 'en' ? 'Design Your Aura' : '设计你的专属气场'}
             </h2>
             <p className="mt-3 md:mt-4 font-sans font-light text-base md:text-lg tracking-wide text-stone-200/90">
-              Bespoke your crystal journey and align your energy.
+              {language === 'en' ? 'Bespoke your crystal journey and align your energy.' : '开启专属水晶之旅，调频你的内在能量。'}
             </p>
             <a
               href="/diy"
               className="banner-btn inline-flex items-center justify-center mt-8 !px-16 tracking-[0.18em] uppercase"
             >
-              DIY NOW
+              {language === 'en' ? 'DIY NOW' : '立即定制'}
             </a>
           </div>
         </div>
