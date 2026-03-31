@@ -1,24 +1,28 @@
 'use client';
 
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { beads, categories, type Bead } from '@/src/data/beads';
+import { beads, categories, allCategoryLabel, type Bead } from '@/src/data/beads';
+import { useApp } from '@/app/context/AppContext';
 
 interface SelectedBead extends Bead {
   uid: string;
 }
 
 export default function DiyPage() {
+  const { language } = useApp();
   const [selectedBeads, setSelectedBeads] = useState<SelectedBead[]>([]);
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState('全部');
+  const [activeCategoryZh, setActiveCategoryZh] = useState('全部');
   const draggingIndexRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  const isEn = language === 'en';
 
   const totalPrice = selectedBeads.reduce((sum, b) => sum + b.price, 0);
 
   const filteredBeads = useMemo(
-    () => activeCategory === '全部' ? beads : beads.filter((b) => b.category === activeCategory),
-    [activeCategory],
+    () => activeCategoryZh === '全部' ? beads : beads.filter((b) => b.category === activeCategoryZh),
+    [activeCategoryZh],
   );
 
   const addBead = (bead: Bead) => {
@@ -33,7 +37,7 @@ export default function DiyPage() {
   };
 
   const clearAll = () => {
-    if (window.confirm('确定要清空当前所有珠子吗？')) {
+    if (window.confirm(isEn ? 'Clear all beads?' : '确定要清空当前所有珠子吗？')) {
       setSelectedBeads([]);
     }
   };
@@ -90,6 +94,9 @@ export default function DiyPage() {
     setDraggingIndex(null);
   };
 
+  // Category display helpers
+  const allCats = [allCategoryLabel, ...categories];
+
   return (
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row">
       {/* ── LEFT: CANVAS + BUTTONS (sticky on desktop) ── */}
@@ -98,9 +105,9 @@ export default function DiyPage() {
         <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50 z-30">
           <div className="text-[11px] text-stone-400 tracking-wider uppercase">Beads</div>
           <div className="text-lg font-light text-stone-700">
-            {selectedBeads.length} <span className="text-xs text-stone-400">颗</span>
+            {selectedBeads.length} <span className="text-xs text-stone-400">{isEn ? 'pcs' : '颗'}</span>
           </div>
-          <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">Total</div>
+          <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">{isEn ? 'Total' : '总价'}</div>
           <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
         </div>
 
@@ -129,7 +136,7 @@ export default function DiyPage() {
               <img
                 key={bead.uid}
                 src={bead.image}
-                alt={bead.name}
+                alt={isEn ? bead.nameEn : bead.name}
                 draggable
                 onDragStart={(e) => handleDragStart(i, e)}
                 onDragEnd={handleDragEnd}
@@ -145,7 +152,7 @@ export default function DiyPage() {
 
           {selectedBeads.length === 0 && (
             <p className="absolute inset-0 flex items-center justify-center text-stone-400 text-sm tracking-wide font-light select-none">
-              点击珠子开始设计
+              {isEn ? 'Tap a bead to start designing' : '点击珠子开始设计'}
             </p>
           )}
         </div>
@@ -153,10 +160,10 @@ export default function DiyPage() {
         {/* Buttons */}
         <div className="flex justify-center gap-4 mt-8">
           <button onClick={removeLast} className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors">
-            ✕ 删除末颗
+            ✕ {isEn ? 'Undo Last' : '删除末颗'}
           </button>
           <button onClick={clearAll} className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
-            ✕ 删除全部
+            ✕ {isEn ? 'Clear All' : '删除全部'}
           </button>
         </div>
       </div>
@@ -165,17 +172,17 @@ export default function DiyPage() {
       <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto flex flex-col">
         {/* Mobile: horizontal scrollable tabs */}
         <div className="flex lg:hidden overflow-x-auto gap-2 px-4 py-3 border-b border-stone-200/60 bg-[#FAF8F5] sticky top-0 z-20">
-          {categories.map((cat) => (
+          {allCats.map((cat) => (
             <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
+              key={cat.zh}
+              onClick={() => setActiveCategoryZh(cat.zh)}
               className={`shrink-0 px-4 py-1.5 rounded-full text-xs tracking-wide transition-colors ${
-                activeCategory === cat
+                activeCategoryZh === cat.zh
                   ? 'bg-stone-700 text-white'
                   : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
               }`}
             >
-              {cat}
+              {isEn ? cat.en : cat.zh}
             </button>
           ))}
         </div>
@@ -183,28 +190,30 @@ export default function DiyPage() {
         {/* Desktop: sidebar + grid */}
         <div className="flex flex-1 min-h-0">
           {/* Sidebar — desktop only */}
-          <nav className="hidden lg:flex flex-col shrink-0 w-28 py-6 pl-4 pr-2 gap-1 sticky top-0 self-start">
-            {categories.map((cat) => (
+          <nav className="hidden lg:flex flex-col shrink-0 w-32 py-6 pl-4 pr-2 gap-1 sticky top-0 self-start">
+            {allCats.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={cat.zh}
+                onClick={() => setActiveCategoryZh(cat.zh)}
                 className={`relative text-left text-xs tracking-wide py-2 pl-3 rounded-r-md transition-colors ${
-                  activeCategory === cat
+                  activeCategoryZh === cat.zh
                     ? 'text-stone-800 font-semibold bg-stone-100'
                     : 'text-stone-400 hover:text-stone-600'
                 }`}
               >
-                {activeCategory === cat && (
+                {activeCategoryZh === cat.zh && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-red-700 rounded-r" />
                 )}
-                {cat}
+                {isEn ? cat.en : cat.zh}
               </button>
             ))}
           </nav>
 
           {/* Grid */}
           <div className="flex-1 p-4 lg:p-6">
-            <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-4">选择珠子</h3>
+            <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-4">
+              {isEn ? 'Select Beads' : '选择珠子'}
+            </h3>
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {filteredBeads.map((bead) => (
                 <button
@@ -215,11 +224,13 @@ export default function DiyPage() {
                   <div className="w-14 h-14 flex items-center justify-center">
                     <img
                       src={bead.image}
-                      alt={bead.name}
+                      alt={isEn ? bead.nameEn : bead.name}
                       className="w-12 h-12 object-contain drop-shadow-[0_3px_6px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-200"
                     />
                   </div>
-                  <span className="mt-1.5 text-xs text-stone-600 tracking-wide leading-tight">{bead.name}</span>
+                  <span className="mt-1.5 text-xs text-stone-600 tracking-wide leading-tight text-center">
+                    {isEn ? bead.nameEn : bead.name}
+                  </span>
                   <span className="mt-0.5 text-sm font-semibold text-stone-700">¥{bead.price}</span>
                   <span className="text-[10px] text-stone-400">{bead.size}</span>
                 </button>
