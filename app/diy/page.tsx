@@ -120,7 +120,8 @@ export default function DiyPage() {
 
           {selectedBeads.map((bead, i) => {
             const angle = (2 * Math.PI * i) / selectedBeads.length - Math.PI / 2;
-            const pixelSize = parseInt(bead.size) * 4.5;
+            const sizeNum = parseInt(bead.size);
+            const pixelSize = sizeNum <= 6 ? 26 : sizeNum <= 8 ? 38 : sizeNum <= 10 ? 54 : 72;
             const x = center + radius * Math.cos(angle) - pixelSize / 2;
             const y = center + radius * Math.sin(angle) - pixelSize / 2;
             const isDragging = draggingIndex === i;
