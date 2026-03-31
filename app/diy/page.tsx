@@ -102,20 +102,29 @@ export default function DiyPage() {
       {/* ── LEFT: CANVAS + BUTTONS (sticky on desktop) ── */}
       <div className="relative w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
         {/* Stats panel */}
-        <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50 z-30">
+        <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50 z-50">
           <div className="text-[11px] text-stone-400 tracking-wider uppercase">Beads</div>
           <div className="text-lg font-light text-stone-700">
             {selectedBeads.length} <span className="text-xs text-stone-400">{isEn ? 'pcs' : '颗'}</span>
           </div>
           <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">{isEn ? 'Total' : '总价'}</div>
           <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
-          <button
-            disabled={selectedBeads.length === 0}
-            onClick={() => alert(isEn ? 'Added to cart successfully!' : '已成功加入购物车！')}
-            className="mt-3 w-full px-4 py-2 text-[11px] font-semibold tracking-widest uppercase text-white bg-red-800 rounded-md hover:bg-red-700 active:scale-95 transition-all shadow-sm hover:shadow-md disabled:bg-stone-300 disabled:cursor-not-allowed disabled:shadow-none"
-          >
-            {isEn ? 'ADD TO CART' : '加入购物车'}
-          </button>
+          <div className="flex flex-col gap-2 mt-4">
+            <button
+              disabled={selectedBeads.length === 0}
+              onClick={() => alert(isEn ? 'Proceeding to checkout...' : '正在为您跳转结算...')}
+              className="w-full px-4 py-2 text-[11px] font-semibold tracking-widest uppercase text-white bg-red-800 rounded-md hover:bg-red-700 active:scale-95 transition-all shadow-sm hover:shadow-md disabled:bg-stone-300 disabled:text-stone-500 disabled:cursor-not-allowed disabled:shadow-none"
+            >
+              {isEn ? 'BUY NOW' : '立即购买'}
+            </button>
+            <button
+              disabled={selectedBeads.length === 0}
+              onClick={() => alert(isEn ? 'Added to cart successfully!' : '已成功加入购物车！')}
+              className="w-full px-4 py-2 text-[11px] font-semibold tracking-widest uppercase border border-red-800 text-red-800 bg-transparent rounded-md hover:bg-red-800/10 active:scale-95 transition-all disabled:border-stone-300 disabled:text-stone-500 disabled:bg-transparent disabled:cursor-not-allowed"
+            >
+              {isEn ? 'ADD TO CART' : '加入购物车'}
+            </button>
+          </div>
         </div>
 
         {/* Canvas */}
