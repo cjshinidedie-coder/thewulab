@@ -109,6 +109,13 @@ export default function DiyPage() {
           </div>
           <div className="mt-1 text-[11px] text-stone-400 tracking-wider uppercase">{isEn ? 'Total' : '总价'}</div>
           <div className="text-lg font-light text-stone-700">¥{totalPrice}</div>
+          <button
+            disabled={selectedBeads.length === 0}
+            onClick={() => alert(isEn ? 'Added to cart successfully!' : '已成功加入购物车！')}
+            className="mt-3 w-full px-4 py-2 text-[11px] font-semibold tracking-widest uppercase text-white bg-red-800 rounded-md hover:bg-red-700 active:scale-95 transition-all shadow-sm hover:shadow-md disabled:bg-stone-300 disabled:cursor-not-allowed disabled:shadow-none"
+          >
+            {isEn ? 'ADD TO CART' : '加入购物车'}
+          </button>
         </div>
 
         {/* Canvas */}
