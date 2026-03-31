@@ -245,7 +245,7 @@ export const allCategoryLabel = { zh: "全部", en: "All" };
 export const beads: Bead[] = folders.flatMap(({ folder, category, categoryEn, materials }) =>
   materials.flatMap((name) =>
     sizes.map((s) => ({
-      id: `${name}_${s.size}`,
+      id: `${folder}_${name}_${s.size}`,
       name,
       nameEn: nameEnMap[name] || name,
       size: s.size,
