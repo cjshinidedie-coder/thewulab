@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import { beads, type Bead } from '@/src/data/beads';
+import { useState, useRef, useCallback, useMemo } from 'react';
+import { beads, categories, type Bead } from '@/src/data/beads';
 
 interface SelectedBead extends Bead {
   uid: string;
@@ -10,10 +10,16 @@ interface SelectedBead extends Bead {
 export default function DiyPage() {
   const [selectedBeads, setSelectedBeads] = useState<SelectedBead[]>([]);
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState('全部');
   const draggingIndexRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const totalPrice = selectedBeads.reduce((sum, b) => sum + b.price, 0);
+
+  const filteredBeads = useMemo(
+    () => activeCategory === '全部' ? beads : beads.filter((b) => b.category === activeCategory),
+    [activeCategory],
+  );
 
   const addBead = (bead: Bead) => {
     setSelectedBeads((prev) => [
@@ -38,7 +44,6 @@ export default function DiyPage() {
   const beadSize = 44;
   const radius = canvasSize / 2 - beadSize / 2 - 20;
 
-  // Given mouse position relative to canvas, compute nearest slot index
   const getSlotFromMouse = useCallback(
     (clientX: number, clientY: number, count: number): number | null => {
       if (!canvasRef.current || count < 2) return null;
@@ -59,7 +64,6 @@ export default function DiyPage() {
     setDraggingIndex(index);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', String(index));
-    // transparent drag image
     const img = new Image();
     img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     e.dataTransfer.setDragImage(img, 0, 0);
@@ -69,7 +73,6 @@ export default function DiyPage() {
     e.preventDefault();
     const fromIndex = draggingIndexRef.current;
     if (fromIndex === null) return;
-
     setSelectedBeads((prev) => {
       const targetIndex = getSlotFromMouse(e.clientX, e.clientY, prev.length);
       if (targetIndex === null || targetIndex === draggingIndexRef.current) return prev;
@@ -91,8 +94,7 @@ export default function DiyPage() {
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col lg:flex-row">
       {/* ── LEFT: CANVAS + BUTTONS (sticky on desktop) ── */}
       <div className="relative w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen flex flex-col items-center justify-center bg-[#F5F1EC] p-6 lg:p-10">
-
-        {/* Stats panel — pinned to container top-right, outside the circle */}
+        {/* Stats panel */}
         <div className="absolute top-4 right-4 bg-white/60 backdrop-blur-md rounded-lg px-4 py-3 shadow-sm border border-stone-200/50 z-30">
           <div className="text-[11px] text-stone-400 tracking-wider uppercase">Beads</div>
           <div className="text-lg font-light text-stone-700">
@@ -110,24 +112,12 @@ export default function DiyPage() {
           onDragOver={handleDragOver}
           onDrop={(e) => e.preventDefault()}
         >
-          {/* centre dot */}
-          <div
-            className="absolute w-2 h-2 rounded-full bg-stone-300/50"
-            style={{ top: center - 4, left: center - 4 }}
-          />
-
-          {/* ring guide */}
+          <div className="absolute w-2 h-2 rounded-full bg-stone-300/50" style={{ top: center - 4, left: center - 4 }} />
           <div
             className="absolute rounded-full border border-dashed border-stone-300/40"
-            style={{
-              width: radius * 2,
-              height: radius * 2,
-              top: center - radius,
-              left: center - radius,
-            }}
+            style={{ width: radius * 2, height: radius * 2, top: center - radius, left: center - radius }}
           />
 
-          {/* beads on ring */}
           {selectedBeads.map((bead, i) => {
             const angle = (2 * Math.PI * i) / selectedBeads.length - Math.PI / 2;
             const pixelSize = parseInt(bead.size) * 4.5;
@@ -144,10 +134,7 @@ export default function DiyPage() {
                 onDragEnd={handleDragEnd}
                 className={`absolute rounded-full object-contain drop-shadow-md cursor-grab active:cursor-grabbing select-none ${isDragging ? 'opacity-40 scale-110' : ''}`}
                 style={{
-                  width: pixelSize,
-                  height: pixelSize,
-                  top: y,
-                  left: x,
+                  width: pixelSize, height: pixelSize, top: y, left: x,
                   transition: isDragging ? 'none' : 'all 0.3s ease',
                   zIndex: isDragging ? 50 : 10,
                 }}
@@ -155,7 +142,6 @@ export default function DiyPage() {
             );
           })}
 
-          {/* empty state */}
           {selectedBeads.length === 0 && (
             <p className="absolute inset-0 flex items-center justify-center text-stone-400 text-sm tracking-wide font-light select-none">
               点击珠子开始设计
@@ -165,43 +151,80 @@ export default function DiyPage() {
 
         {/* Buttons */}
         <div className="flex justify-center gap-4 mt-8">
-          <button
-            onClick={removeLast}
-            className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors"
-          >
+          <button onClick={removeLast} className="px-5 py-2 text-xs tracking-wider uppercase text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors">
             ✕ 删除末颗
           </button>
-          <button
-            onClick={clearAll}
-            className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors"
-          >
+          <button onClick={clearAll} className="px-5 py-2 text-xs tracking-wider uppercase text-stone-500 border border-stone-300 rounded-md hover:bg-stone-100 transition-colors">
             ✕ 删除全部
           </button>
         </div>
       </div>
 
-      {/* ── RIGHT: ASSETS GRID (scrollable) ── */}
-      <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto p-6 lg:p-10">
-        <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-6">选择珠子</h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {beads.map((bead) => (
+      {/* ── RIGHT: CATEGORY SIDEBAR + ASSETS GRID ── */}
+      <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto flex flex-col">
+        {/* Mobile: horizontal scrollable tabs */}
+        <div className="flex lg:hidden overflow-x-auto gap-2 px-4 py-3 border-b border-stone-200/60 bg-[#FAF8F5] sticky top-0 z-20">
+          {categories.map((cat) => (
             <button
-              key={bead.id}
-              onClick={() => addBead(bead)}
-              className="group flex flex-col items-center bg-white rounded-lg p-3 border border-stone-100 hover:border-stone-300 hover:shadow-md transition-all duration-200"
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`shrink-0 px-4 py-1.5 rounded-full text-xs tracking-wide transition-colors ${
+                activeCategory === cat
+                  ? 'bg-stone-700 text-white'
+                  : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
+              }`}
             >
-              <div className="w-14 h-14 flex items-center justify-center">
-                <img
-                  src={bead.image}
-                  alt={bead.name}
-                  className="w-12 h-12 object-contain drop-shadow-[0_3px_6px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-200"
-                />
-              </div>
-              <span className="mt-1.5 text-xs text-stone-600 tracking-wide leading-tight">{bead.name}</span>
-              <span className="mt-0.5 text-sm font-semibold text-stone-700">¥{bead.price}</span>
-              <span className="text-[10px] text-stone-400">{bead.size}</span>
+              {cat}
             </button>
           ))}
+        </div>
+
+        {/* Desktop: sidebar + grid */}
+        <div className="flex flex-1 min-h-0">
+          {/* Sidebar — desktop only */}
+          <nav className="hidden lg:flex flex-col shrink-0 w-28 py-6 pl-4 pr-2 gap-1 sticky top-0 self-start">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`relative text-left text-xs tracking-wide py-2 pl-3 rounded-r-md transition-colors ${
+                  activeCategory === cat
+                    ? 'text-stone-800 font-semibold bg-stone-100'
+                    : 'text-stone-400 hover:text-stone-600'
+                }`}
+              >
+                {activeCategory === cat && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-red-700 rounded-r" />
+                )}
+                {cat}
+              </button>
+            ))}
+          </nav>
+
+          {/* Grid */}
+          <div className="flex-1 p-4 lg:p-6">
+            <h3 className="font-serif font-normal tracking-widest text-xl text-stone-600 mb-4">选择珠子</h3>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              {filteredBeads.map((bead) => (
+                <button
+                  key={bead.id}
+                  onClick={() => addBead(bead)}
+                  className="group flex flex-col items-center bg-white rounded-lg p-3 border border-stone-100 hover:border-stone-300 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="w-14 h-14 flex items-center justify-center">
+                    <img
+                      src={bead.image}
+                      alt={bead.name}
+                      className="w-12 h-12 object-contain drop-shadow-[0_3px_6px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform duration-200"
+                    />
+                  </div>
+                  <span className="mt-1.5 text-xs text-stone-600 tracking-wide leading-tight">{bead.name}</span>
+                  <span className="mt-0.5 text-sm font-semibold text-stone-700">¥{bead.price}</span>
+                  <span className="text-[10px] text-stone-400">{bead.size}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
