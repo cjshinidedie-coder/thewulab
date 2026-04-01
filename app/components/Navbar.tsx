@@ -32,6 +32,7 @@ export default function Navbar() {
     en: {
       shop: 'Shop',
       bazi: 'Bazi Calculator',
+      auraDesign: 'AURA DESIGN',
       meaning: 'Meaning',
       search: 'Search products...',
       shopByElement: 'Shop by Element',
@@ -50,6 +51,7 @@ export default function Navbar() {
     zh: {
       shop: '购物',
       bazi: '八字测算',
+      auraDesign: '气场定制',
       meaning: '含义',
       search: '搜索商品...',
       shopByElement: '按元素购物',
@@ -527,6 +529,7 @@ export default function Navbar() {
             </div>
 
             <Link href="/bazi" className="mega-menu-trigger" style={{ textDecoration: 'none' }}>{t.bazi}</Link>
+            <Link href="/diy" className="mega-menu-trigger" style={{ textDecoration: 'none' }}>{t.auraDesign}</Link>
             <a href="#meaning" className="nav-link">{t.meaning}</a>
           </nav>
 
