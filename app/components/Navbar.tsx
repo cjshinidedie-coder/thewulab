@@ -109,7 +109,7 @@ export default function Navbar() {
           {/* Centered logo */}
           <Link
             href="/"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[26px] md:text-[32px] font-bold tracking-[0.22em] uppercase text-stone-900 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
+            className="navbar-logo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[26px] md:text-[32px] font-bold tracking-[0.22em] uppercase text-stone-900 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
           >
             the wu lab
           </Link>

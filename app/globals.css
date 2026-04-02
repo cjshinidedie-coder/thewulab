@@ -778,3 +778,9 @@ h1, h2, h3, h4, h5, h6, .font-serif {
   letter-spacing: 0.05em !important;
 }
 
+/* Navbar logo needs bold weight to override the global .font-serif rule */
+.navbar-logo {
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+}
+
