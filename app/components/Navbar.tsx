@@ -16,7 +16,6 @@ export default function Navbar() {
   const [favoritesDrawerOpen, setFavoritesDrawerOpen] = useState(false);
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 商品数据库
   const products = [
     { id: '1', name: 'Cosmic Turquoise Bracelet', price: 226.00, image: '/product-1.png' },
     { id: '2', name: 'Imperial Jasper Bracelet', price: 183.00, image: '/product-2.png' },
@@ -32,7 +31,7 @@ export default function Navbar() {
     en: {
       shop: 'Shop',
       bazi: 'Bazi Calculator',
-      auraDesign: 'AURA DESIGN',
+      auraDesign: 'Aura Design',
       meaning: 'Meaning',
       search: 'Search products...',
       shopByElement: 'Shop by Element',
@@ -71,505 +70,80 @@ export default function Navbar() {
 
   const t = translations[language];
 
-  // 处理搜索输入
   const handleSearchInput = (value: string) => {
     setSearchQuery(value);
-
-    if (value.trim() === '') {
-      setSearchResults([]);
-      return;
-    }
-
+    if (value.trim() === '') { setSearchResults([]); return; }
     const query = value.toLowerCase();
-    const results = products.filter(product =>
-      product.name.toLowerCase().includes(query)
-    );
-    setSearchResults(results);
+    setSearchResults(products.filter(p => p.name.toLowerCase().includes(query)));
   };
 
-  // 处理 Mega Menu 悬停（带延迟关闭）
   const handleMegaMenuLeave = () => {
-    megaMenuTimeoutRef.current = setTimeout(() => {
-      setMegaMenuOpen(false);
-    }, 150);
+    megaMenuTimeoutRef.current = setTimeout(() => setMegaMenuOpen(false), 150);
   };
-
   const handleMegaMenuEnter = () => {
-    if (megaMenuTimeoutRef.current) {
-      clearTimeout(megaMenuTimeoutRef.current);
-    }
+    if (megaMenuTimeoutRef.current) clearTimeout(megaMenuTimeoutRef.current);
     setMegaMenuOpen(true);
   };
-
-  // 处理搜索结果点击
   const handleSearchResultClick = () => {
-    setSearchOpen(false);
-    setSearchQuery('');
-    setSearchResults([]);
+    setSearchOpen(false); setSearchQuery(''); setSearchResults([]);
   };
 
   useEffect(() => {
-    return () => {
-      if (megaMenuTimeoutRef.current) {
-        clearTimeout(megaMenuTimeoutRef.current);
-      }
-    };
+    return () => { if (megaMenuTimeoutRef.current) clearTimeout(megaMenuTimeoutRef.current); };
   }, []);
 
   return (
     <>
-      <style jsx>{`
-        .announcement-bar {
-          background-color: #8B3A3A;
-          color: #FFFFFF;
-          text-align: center;
-          padding: 10px 20px;
-          font-size: 13px;
-          font-weight: 600;
-          letter-spacing: 1px;
-        }
-
-        header {
-          background-color: #FFFFFF;
-          border-bottom: 1px solid #E8E8E8;
-          padding: 12px 40px;
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .header-container {
-          max-width: 1400px;
-          margin: 0 auto;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .logo {
-          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
-          font-size: 28px;
-          font-weight: 300;
-          color: #333333;
-          letter-spacing: 1.5px;
-          text-decoration: none;
-          transition: color 0.3s ease;
-        }
-
-        .logo:hover {
-          color: #C41E3A;
-        }
-
-        nav {
-          display: flex;
-          gap: 50px;
-          align-items: center;
-          flex: 1;
-          justify-content: center;
-          height: 20px;
-        }
-
-        .nav-item {
-          position: relative;
-        }
-
-        .nav-link {
-          color: #333333;
-          text-decoration: none;
-          font-size: 13px;
-          font-weight: 400;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-          transition: color 0.3s ease;
-          font-family: var(--font-montserrat), 'Noto Sans SC', sans-serif;
-          cursor: pointer;
-          line-height: 1;
-          display: flex;
-          align-items: center;
-        }
-
-        .nav-link:hover {
-          color: #C41E3A;
-        }
-
-        .mega-menu-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-
-        .mega-menu-trigger {
-          color: #333333;
-          text-decoration: none;
-          font-size: 13px;
-          font-weight: 400;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-          transition: color 0.3s ease;
-          font-family: var(--font-montserrat), 'Noto Sans SC', sans-serif;
-          cursor: pointer;
-          border: none;
-          background: none;
-          padding: 0;
-          line-height: 1;
-          display: flex;
-          align-items: center;
-        }
-
-        .mega-menu-trigger:hover {
-          color: #C41E3A;
-        }
-
-        .mega-menu-dropdown {
-          position: absolute;
-          top: calc(100% + 8px);
-          left: 50%;
-          transform: translateX(-50%);
-          background-color: #FFFFFF;
-          border: 1px solid #E8E8E8;
-          border-radius: 8px;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-          padding: 30px 40px;
-          z-index: 200;
-          min-width: 600px;
-          display: none;
-          pointer-events: none;
-        }
-
-        .mega-menu-dropdown.active {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 40px;
-          pointer-events: auto;
-        }
-
-        .mega-menu-column h3 {
-          font-family: var(--font-cormorant), 'Noto Serif SC', serif;
-          font-size: 16px;
-          font-weight: 300;
-          color: #333333;
-          margin-bottom: 16px;
-          letter-spacing: 0.05em;
-        }
-
-        .mega-menu-column ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        .mega-menu-column ul li {
-          margin-bottom: 12px;
-        }
-
-        .mega-menu-column ul li a {
-          color: #666666;
-          text-decoration: none;
-          font-size: 13px;
-          font-family: var(--font-montserrat), 'Noto Sans SC', sans-serif;
-          transition: color 0.3s ease;
-          text-transform: none;
-          font-weight: 300;
-        }
-
-        .mega-menu-column ul li a:hover {
-          color: #C41E3A;
-        }
-
-        .nav-icons {
-          display: flex;
-          gap: 25px;
-          align-items: center;
-        }
-
-        .search-container {
-          position: relative;
-        }
-
-        .search-trigger {
-          background: none;
-          border: none;
-          color: #333333;
-          font-size: 18px;
-          cursor: pointer;
-          transition: color 0.3s ease;
-          padding: 0;
-        }
-
-        .search-trigger:hover {
-          color: #C41E3A;
-        }
-
-        .search-dropdown {
-          position: absolute;
-          top: 100%;
-          right: 0;
-          width: 380px;
-          background: #FFFFFF;
-          border: 1px solid #E8E8E8;
-          border-radius: 4px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-          margin-top: 8px;
-          z-index: 50;
-          padding: 12px;
-          display: none;
-        }
-
-        .search-dropdown.active {
-          display: block;
-        }
-
-        .search-dropdown input {
-          width: 100%;
-          padding: 12px 16px;
-          border: 1px solid #E8E8E8;
-          border-radius: 4px;
-          font-size: 14px;
-          font-family: 'Montserrat', sans-serif;
-          outline: none;
-          margin-bottom: 8px;
-        }
-
-        .search-dropdown input:focus {
-          border-color: #C41E3A;
-        }
-
-        .search-results {
-          max-height: 400px;
-          overflow-y: auto;
-        }
-
-        .search-result-item {
-          display: flex;
-          gap: 12px;
-          padding: 12px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.2s ease;
-          text-decoration: none;
-          color: inherit;
-        }
-
-        .search-result-item:hover {
-          background-color: #F5F5F5;
-        }
-
-        .search-result-image {
-          width: 60px;
-          height: 60px;
-          object-fit: cover;
-          border-radius: 4px;
-          flex-shrink: 0;
-        }
-
-        .search-result-info {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          gap: 4px;
-        }
-
-        .search-result-name {
-          font-size: 13px;
-          font-weight: 600;
-          color: #333333;
-          line-height: 1.3;
-        }
-
-        .search-result-price {
-          font-size: 12px;
-          color: #C41E3A;
-          font-weight: 600;
-        }
-
-        .search-no-results {
-          padding: 20px 12px;
-          text-align: center;
-          color: #999999;
-          font-size: 13px;
-        }
-
-        .lang-switcher {
-          display: flex;
-          gap: 8px;
-          font-size: 12px;
-          align-items: center;
-        }
-
-        .lang-btn {
-          background: none;
-          border: none;
-          color: #999;
-          cursor: pointer;
-          font-weight: 600;
-          transition: color 0.3s ease;
-          padding: 0;
-          font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
-        }
-
-        .lang-btn.active {
-          color: #333333;
-        }
-
-        .lang-btn:hover {
-          color: #C41E3A;
-        }
-
-        .lang-separator {
-          color: #ccc;
-        }
-
-        .icon-btn {
-          background: none;
-          border: none;
-          color: #333333;
-          font-size: 18px;
-          cursor: pointer;
-          transition: color 0.3s ease;
-          position: relative;
-          padding: 0;
-        }
-
-        .icon-btn:hover {
-          color: #C41E3A;
-        }
-
-        .cart-count {
-          position: absolute;
-          top: -8px;
-          right: -8px;
-          background-color: #C41E3A;
-          color: #FFFFFF;
-          border-radius: 50%;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-          header {
-            padding: 12px 20px;
-          }
-
-          .logo {
-            font-size: 20px;
-          }
-
-          nav {
-            gap: 20px;
-            font-size: 11px;
-          }
-
-          .nav-icons {
-            gap: 15px;
-          }
-
-          .search-dropdown {
-            width: 300px;
-          }
-
-          .mega-menu-dropdown {
-            min-width: 400px;
-            padding: 20px;
-            grid-template-columns: 1fr;
-            gap: 20px;
-          }
-        }
-      `}</style>
-
-      <div className="announcement-bar">
-        ✨ Free Worldwide Shipping on Orders Over $100 ✨
+      {/* Announcement bar */}
+      <div className="bg-[#8B3A3A] text-white text-center py-2.5 px-5 text-[13px] font-semibold tracking-wide">
+        {language === 'en' ? '✨ Free Worldwide Shipping on Orders Over $100 ✨' : '✨ 满 $100 全球免运费 ✨'}
       </div>
 
-      <header>
-        <div className="header-container">
-          <Link href="/" className="logo font-serif">
+      {/* Header wrapper — group for hover reveal */}
+      <header className="group sticky top-0 z-[100] bg-white border-b border-stone-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+        {/* Top bar */}
+        <div className="relative flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
+          {/* Left spacer — keeps logo centered */}
+          <div className="w-28 md:w-40 shrink-0" />
+
+          {/* Centered logo */}
+          <Link
+            href="/"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-[0.15em] text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
+          >
             the wu lab
           </Link>
 
-          <nav>
-            <div className="mega-menu-wrapper"
-              onMouseEnter={handleMegaMenuEnter}
-              onMouseLeave={handleMegaMenuLeave}
-            >
-              <button
-                className="mega-menu-trigger"
-              >
-                {t.shop}
-              </button>
-              <div
-                className={`mega-menu-dropdown ${megaMenuOpen ? 'active' : ''}`}
-              >
-                <div className="mega-menu-column">
-                  <h3>{t.shopByElement}</h3>
-                  <ul>
-                    <li><Link href="/elements/metal">{t.metal}</Link></li>
-                    <li><Link href="/elements/wood">{t.wood}</Link></li>
-                    <li><Link href="/elements/water">{t.water}</Link></li>
-                    <li><Link href="/elements/fire">{t.fire}</Link></li>
-                    <li><Link href="/elements/earth">{t.earth}</Link></li>
-                  </ul>
-                </div>
-                <div className="mega-menu-column">
-                  <h3>{t.shopByStyle}</h3>
-                  <ul>
-                    <li><Link href="/shop?category=bracelets">{t.bracelets}</Link></li>
-                    <li><Link href="/shop?category=hand-jewelry">{t.handJewelry}</Link></li>
-                    <li><Link href="/shop?category=earrings">{t.earrings}</Link></li>
-                    <li><Link href="/shop?category=necklaces">{t.necklaces}</Link></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <Link href="/bazi" className="mega-menu-trigger" style={{ textDecoration: 'none' }}>{t.bazi}</Link>
-            <Link href="/diy" className="mega-menu-trigger" style={{ textDecoration: 'none' }}>{t.auraDesign}</Link>
-            <a href="#meaning" className="nav-link">{t.meaning}</a>
-          </nav>
-
-          <div className="nav-icons">
-            <div className="search-container">
-              <button
-                className="search-trigger"
-                onClick={() => setSearchOpen(!searchOpen)}
-                title="Search"
-              >
+          {/* Right icons */}
+          <div className="flex items-center gap-5 md:gap-6 shrink-0">
+            {/* Search */}
+            <div className="relative">
+              <button onClick={() => setSearchOpen(!searchOpen)} className="text-stone-700 hover:text-[#C41E3A] transition-colors text-lg" title="Search">
                 🔍
               </button>
               {searchOpen && (
-                <div className="search-dropdown active">
+                <div className="absolute top-full right-0 w-[340px] md:w-[380px] bg-white border border-stone-200 rounded shadow-lg mt-2 z-50 p-3">
                   <input
                     type="text"
                     placeholder={t.search}
                     autoFocus
                     value={searchQuery}
                     onChange={(e) => handleSearchInput(e.target.value)}
+                    className="w-full px-4 py-3 border border-stone-200 rounded text-sm font-sans outline-none focus:border-[#C41E3A] mb-2"
                   />
                   {searchQuery.trim() !== '' && (
-                    <div className="search-results">
-                      {searchResults.length > 0 ? (
-                        searchResults.map((product) => (
-                          <Link
-                            key={product.id}
-                            href={`/product/${product.id}`}
-                            className="search-result-item"
-                            onClick={handleSearchResultClick}
-                          >
-                            <img src={product.image} alt={product.name} className="search-result-image" />
-                            <div className="search-result-info">
-                              <div className="search-result-name">{product.name}</div>
-                              <div className="search-result-price">${product.price.toFixed(2)}</div>
-                            </div>
-                          </Link>
-                        ))
-                      ) : (
-                        <div className="search-no-results">{t.noResults}</div>
+                    <div className="max-h-[400px] overflow-y-auto">
+                      {searchResults.length > 0 ? searchResults.map((product) => (
+                        <Link key={product.id} href={`/product/${product.id}`} onClick={handleSearchResultClick}
+                          className="flex gap-3 p-3 rounded hover:bg-stone-50 transition-colors no-underline text-inherit">
+                          <img src={product.image} alt={product.name} className="w-14 h-14 object-cover rounded shrink-0" />
+                          <div className="flex flex-col justify-center gap-1">
+                            <div className="text-[13px] font-semibold text-stone-800 leading-tight">{product.name}</div>
+                            <div className="text-xs text-[#C41E3A] font-semibold">${product.price.toFixed(2)}</div>
+                          </div>
+                        </Link>
+                      )) : (
+                        <div className="py-5 text-center text-stone-400 text-[13px]">{t.noResults}</div>
                       )}
                     </div>
                   )}
@@ -577,39 +151,81 @@ export default function Navbar() {
               )}
             </div>
 
-            <div className="lang-switcher">
-              <button
-                className={`lang-btn ${language === 'en' ? 'active' : ''}`}
-                onClick={() => setLanguage('en')}
-              >
+            {/* Language switcher */}
+            <div className="flex items-center gap-2 text-xs">
+              <button onClick={() => setLanguage('en')}
+                className={`font-semibold transition-colors font-sans ${language === 'en' ? 'text-stone-800' : 'text-stone-400 hover:text-[#C41E3A]'}`}>
                 EN
               </button>
-              <span className="lang-separator">|</span>
-              <button
-                className={`lang-btn ${language === 'zh' ? 'active' : ''}`}
-                onClick={() => setLanguage('zh')}
-              >
+              <span className="text-stone-300">|</span>
+              <button onClick={() => setLanguage('zh')}
+                className={`font-semibold transition-colors font-sans ${language === 'zh' ? 'text-stone-800' : 'text-stone-400 hover:text-[#C41E3A]'}`}>
                 中文
               </button>
             </div>
 
-            <button
-              className="icon-btn"
-              title="Shopping Cart"
-              onClick={() => setCartDrawerOpen(true)}
-            >
+            {/* Cart */}
+            <button onClick={() => setCartDrawerOpen(true)} className="relative text-stone-700 hover:text-[#C41E3A] transition-colors text-lg" title="Cart">
               🛒
-              {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-[#C41E3A] text-white rounded-full w-5 h-5 flex items-center justify-center text-[11px] font-semibold">{cartCount}</span>
+              )}
             </button>
 
-            <button
-              className="icon-btn"
-              title="Favorites"
-              onClick={() => setFavoritesDrawerOpen(true)}
-            >
+            {/* Favorites */}
+            <button onClick={() => setFavoritesDrawerOpen(true)} className="relative text-stone-700 hover:text-[#C41E3A] transition-colors text-lg" title="Favorites">
               ♡
-              {favorites.length > 0 && <span className="cart-count">{favorites.length}</span>}
+              {favorites.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-[#C41E3A] text-white rounded-full w-5 h-5 flex items-center justify-center text-[11px] font-semibold">{favorites.length}</span>
+              )}
             </button>
+          </div>
+        </div>
+
+        {/* Hidden nav links — revealed on hover */}
+        <div className="overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100 border-t border-stone-100">
+          <div className="flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto">
+            <div className="relative"
+              onMouseEnter={handleMegaMenuEnter}
+              onMouseLeave={handleMegaMenuLeave}
+            >
+              <button className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans bg-transparent border-none cursor-pointer">
+                {t.shop}
+              </button>
+              {megaMenuOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-stone-200 rounded-lg shadow-xl p-8 z-[200] min-w-[550px] grid grid-cols-2 gap-10">
+                  <div>
+                    <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByElement}</h3>
+                    <ul className="space-y-3">
+                      <li><Link href="/elements/metal" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.metal}</Link></li>
+                      <li><Link href="/elements/wood" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.wood}</Link></li>
+                      <li><Link href="/elements/water" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.water}</Link></li>
+                      <li><Link href="/elements/fire" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.fire}</Link></li>
+                      <li><Link href="/elements/earth" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earth}</Link></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByStyle}</h3>
+                    <ul className="space-y-3">
+                      <li><Link href="/shop?category=bracelets" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.bracelets}</Link></li>
+                      <li><Link href="/shop?category=hand-jewelry" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.handJewelry}</Link></li>
+                      <li><Link href="/shop?category=earrings" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earrings}</Link></li>
+                      <li><Link href="/shop?category=necklaces" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.necklaces}</Link></li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+              {t.bazi}
+            </Link>
+            <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+              {t.auraDesign}
+            </Link>
+            <a href="#meaning" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+              {t.meaning}
+            </a>
           </div>
         </div>
       </header>
