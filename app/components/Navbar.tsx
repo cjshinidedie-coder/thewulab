@@ -95,12 +95,12 @@ export default function Navbar() {
   return (
     <>
       {/* Announcement bar */}
-      <div className="bg-[#8B3A3A] text-white text-center py-2.5 px-5 text-[13px] font-semibold tracking-wide">
+      <div className="fixed top-0 left-0 w-full z-[101] bg-[#8B3A3A] text-white text-center py-2.5 px-5 text-[13px] font-semibold tracking-wide">
         {language === 'en' ? '✨ Free Worldwide Shipping on Orders Over $100 ✨' : '✨ 满 $100 全球免运费 ✨'}
       </div>
 
       {/* Header wrapper — group for hover reveal */}
-      <header className="group sticky top-0 z-[100] bg-white border-b border-stone-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <header className="group fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         {/* Top bar */}
         <div className="relative flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
           {/* Left spacer — keeps logo centered */}
@@ -109,7 +109,7 @@ export default function Navbar() {
           {/* Centered logo */}
           <Link
             href="/"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-[0.15em] text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[26px] md:text-[32px] font-bold tracking-[0.22em] uppercase text-stone-900 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
           >
             the wu lab
           </Link>
@@ -182,9 +182,9 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Hidden nav links — revealed on hover */}
-        <div className="overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100 border-t border-stone-100">
-          <div className="flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto">
+        {/* Hidden nav links — revealed on hover, seamless white block */}
+        <div className="overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
+          <div className="flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto border-t border-stone-100/60">
             <div className="relative"
               onMouseEnter={handleMegaMenuEnter}
               onMouseLeave={handleMegaMenuLeave}
@@ -229,6 +229,9 @@ export default function Navbar() {
           </div>
         </div>
       </header>
+
+      {/* Spacer to push page content below fixed header + announcement bar */}
+      <div className="h-[101px] md:h-[117px]" />
 
       <CartDrawer isOpen={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />
       <FavoritesDrawer isOpen={favoritesDrawerOpen} onClose={() => setFavoritesDrawerOpen(false)} />
