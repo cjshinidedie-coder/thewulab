@@ -13,7 +13,7 @@ export const giftProducts: GiftProduct[] = [
     name: '福运红绳 · 祖母绿点睛金马',
     nameEn: 'Lucky Red String · Emerald Eye Golden Horse',
     price: 699,
-    image: '/gifts/red-string-horse.jpg',
+    image: '/gifts/red-string-horse.png',
     category: 'for-her',
   },
 ];
