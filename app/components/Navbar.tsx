@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { Globe } from 'lucide-react';
 import { useApp } from '@/app/context/AppContext';
 import CartDrawer from './CartDrawer';
 import FavoritesDrawer from './FavoritesDrawer';
@@ -14,7 +15,9 @@ export default function Navbar() {
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [favoritesDrawerOpen, setFavoritesDrawerOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const langMenuRef = useRef<HTMLDivElement>(null);
 
   const products = [
     { id: '1', name: 'Cosmic Turquoise Bracelet', price: 226.00, image: '/product-1.png' },
@@ -88,9 +91,25 @@ export default function Navbar() {
     setSearchOpen(false); setSearchQuery(''); setSearchResults([]);
   };
 
+  const handleLangSelect = (lang: 'en' | 'zh') => {
+    setLanguage(lang);
+    setLangMenuOpen(false);
+  };
+
   useEffect(() => {
     return () => { if (megaMenuTimeoutRef.current) clearTimeout(megaMenuTimeoutRef.current); };
   }, []);
+
+  // Close language menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
+        setLangMenuOpen(false);
+      }
+    };
+    if (langMenuOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [langMenuOpen]);
 
   return (
     <>
@@ -99,17 +118,17 @@ export default function Navbar() {
         {language === 'en' ? '✨ Free Worldwide Shipping on Orders Over $100 ✨' : '✨ 满 $100 全球免运费 ✨'}
       </div>
 
-      {/* Header wrapper — group for hover reveal */}
+      {/* Header wrapper — group for hover reveal. NO overflow-hidden here. */}
       <header className="group fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         {/* Top bar */}
-        <div className="relative flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
+        <div className="relative z-[50] flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
           {/* Left spacer — keeps logo centered */}
           <div className="w-28 md:w-40 shrink-0" />
 
-          {/* Centered logo */}
+          {/* Centered logo — lowercase, elegant serif, no bold, no uppercase */}
           <Link
             href="/"
-            className="navbar-logo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[26px] md:text-[32px] font-bold tracking-[0.22em] uppercase text-stone-900 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-[0.15em] text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
           >
             the wu lab
           </Link>
@@ -122,7 +141,7 @@ export default function Navbar() {
                 🔍
               </button>
               {searchOpen && (
-                <div className="absolute top-full right-0 w-[340px] md:w-[380px] bg-white border border-stone-200 rounded shadow-lg mt-2 z-50 p-3">
+                <div className="absolute top-full right-0 w-[340px] md:w-[380px] bg-white border border-stone-200 rounded shadow-lg mt-2 z-[9999] p-3">
                   <input
                     type="text"
                     placeholder={t.search}
@@ -151,17 +170,31 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Language switcher */}
-            <div className="flex items-center gap-2 text-xs">
-              <button onClick={() => setLanguage('en')}
-                className={`font-semibold transition-colors font-sans ${language === 'en' ? 'text-stone-800' : 'text-stone-400 hover:text-[#C41E3A]'}`}>
-                EN
+            {/* Globe language switcher */}
+            <div className="relative" ref={langMenuRef}>
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="text-stone-700 hover:text-[#C41E3A] transition-colors"
+                title="Language"
+              >
+                <Globe className="w-5 h-5" />
               </button>
-              <span className="text-stone-300">|</span>
-              <button onClick={() => setLanguage('zh')}
-                className={`font-semibold transition-colors font-sans ${language === 'zh' ? 'text-stone-800' : 'text-stone-400 hover:text-[#C41E3A]'}`}>
-                中文
-              </button>
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-4 w-24 bg-white shadow-xl z-[9999] rounded-sm border border-stone-100">
+                  <button
+                    onClick={() => handleLangSelect('en')}
+                    className={`block w-full text-left px-4 py-2.5 text-[13px] font-sans transition-colors ${language === 'en' ? 'text-[#C41E3A] font-semibold' : 'text-stone-600 hover:text-[#C41E3A] hover:bg-stone-50'}`}
+                  >
+                    English
+                  </button>
+                  <button
+                    onClick={() => handleLangSelect('zh')}
+                    className={`block w-full text-left px-4 py-2.5 text-[13px] font-sans transition-colors ${language === 'zh' ? 'text-[#C41E3A] font-semibold' : 'text-stone-600 hover:text-[#C41E3A] hover:bg-stone-50'}`}
+                  >
+                    中文
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Cart */}
@@ -182,50 +215,53 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Hidden nav links — revealed on hover, seamless white block */}
-        <div className="overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-          <div className="flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto border-t border-stone-100/60">
-            <div className="relative"
-              onMouseEnter={handleMegaMenuEnter}
-              onMouseLeave={handleMegaMenuLeave}
-            >
-              <button className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans bg-transparent border-none cursor-pointer">
-                {t.shop}
-              </button>
-              {megaMenuOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-stone-200 rounded-lg shadow-xl p-8 z-[200] min-w-[550px] grid grid-cols-2 gap-10">
-                  <div>
-                    <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByElement}</h3>
-                    <ul className="space-y-3">
-                      <li><Link href="/elements/metal" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.metal}</Link></li>
-                      <li><Link href="/elements/wood" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.wood}</Link></li>
-                      <li><Link href="/elements/water" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.water}</Link></li>
-                      <li><Link href="/elements/fire" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.fire}</Link></li>
-                      <li><Link href="/elements/earth" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earth}</Link></li>
-                    </ul>
+        {/* Hidden nav links — revealed on hover.
+            Use grid row trick for smooth expand WITHOUT overflow-hidden clipping the mega menu. */}
+        <div className="grid transition-all duration-500 ease-in-out grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100">
+          <div className="min-h-0 overflow-hidden group-hover:overflow-visible">
+            <div className="relative z-[50] flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto border-t border-stone-100/60">
+              <div className="relative"
+                onMouseEnter={handleMegaMenuEnter}
+                onMouseLeave={handleMegaMenuLeave}
+              >
+                <button className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans bg-transparent border-none cursor-pointer">
+                  {t.shop}
+                </button>
+                {megaMenuOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-stone-200 rounded-lg shadow-xl p-8 z-[9999] min-w-[550px] grid grid-cols-2 gap-10">
+                    <div>
+                      <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByElement}</h3>
+                      <ul className="space-y-3">
+                        <li><Link href="/elements/metal" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.metal}</Link></li>
+                        <li><Link href="/elements/wood" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.wood}</Link></li>
+                        <li><Link href="/elements/water" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.water}</Link></li>
+                        <li><Link href="/elements/fire" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.fire}</Link></li>
+                        <li><Link href="/elements/earth" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earth}</Link></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByStyle}</h3>
+                      <ul className="space-y-3">
+                        <li><Link href="/shop?category=bracelets" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.bracelets}</Link></li>
+                        <li><Link href="/shop?category=hand-jewelry" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.handJewelry}</Link></li>
+                        <li><Link href="/shop?category=earrings" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earrings}</Link></li>
+                        <li><Link href="/shop?category=necklaces" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.necklaces}</Link></li>
+                      </ul>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByStyle}</h3>
-                    <ul className="space-y-3">
-                      <li><Link href="/shop?category=bracelets" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.bracelets}</Link></li>
-                      <li><Link href="/shop?category=hand-jewelry" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.handJewelry}</Link></li>
-                      <li><Link href="/shop?category=earrings" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earrings}</Link></li>
-                      <li><Link href="/shop?category=necklaces" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.necklaces}</Link></li>
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-            <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-              {t.bazi}
-            </Link>
-            <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-              {t.auraDesign}
-            </Link>
-            <a href="#meaning" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-              {t.meaning}
-            </a>
+              <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+                {t.bazi}
+              </Link>
+              <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+                {t.auraDesign}
+              </Link>
+              <a href="#meaning" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+                {t.meaning}
+              </a>
+            </div>
           </div>
         </div>
       </header>
