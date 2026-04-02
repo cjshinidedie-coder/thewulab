@@ -1065,8 +1065,8 @@ export default function Home() {
             <div className="banner-label font-serif tracking-widest font-normal">{language === 'en' ? 'GIFT' : '精选礼物'}</div>
             <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">{language === 'en' ? 'Pure Intentions, Infinite Fortune.' : '纯粹心意，无限好运。'}</p>
             <div className="flex space-x-4 mt-4">
-              <Link href="/gift/him" className="banner-btn">{language === 'en' ? 'FOR HIM' : '送给他'}</Link>
-              <Link href="/gift/her" className="banner-btn">{language === 'en' ? 'FOR HER' : '送给她'}</Link>
+              <Link href="/gifts/for-him" className="banner-btn">{language === 'en' ? 'FOR HIM' : '送给他'}</Link>
+              <Link href="/gifts/for-her" className="banner-btn">{language === 'en' ? 'FOR HER' : '送给她'}</Link>
             </div>
           </div>
         </div>
