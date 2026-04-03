@@ -144,7 +144,7 @@ export default function BaziCalculator() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 justify-center items-start mb-12">
-          {/* 左侧表单 - 保持高奢毛玻璃 */}
+          {/* 左侧表单 */}
           <div className="w-full lg:w-96 bg-white/40 backdrop-blur-md border border-white/20 p-10 rounded-lg shadow-sm">
             <div className="mb-6">
               <label className="block text-xs font-semibold text-gray-800 mb-2 uppercase tracking-wider">{t.birthDate}</label>
@@ -179,7 +179,7 @@ export default function BaziCalculator() {
             <button className="w-full bg-[#1a1a1a] text-white py-4 rounded text-sm font-semibold uppercase tracking-widest hover:bg-black transition-colors shadow-md mt-6" onClick={calculateBazi}>{t.calculate}</button>
           </div>
 
-          {/* 右侧结果 - 恢复高奢透明质感 */}
+          {/* 右侧结果 */}
           {showResult && result && (
             <div className="w-full lg:w-96 bg-white/40 backdrop-blur-md p-10 rounded-lg border border-white/20 shadow-sm flex flex-col justify-between">
               <div>
@@ -215,7 +215,7 @@ export default function BaziCalculator() {
           )}
         </div>
 
-        {/* 推荐商品 */}
+        {/* 推荐商品 (小爱心已经焊死在这里了！) */}
         {showResult && getRecommendedProducts().length > 0 && (
           <div className="mt-16">
             <h2 className="font-serif text-3xl font-bold text-gray-900 text-center mb-10 tracking-wide">{t.recommendedProducts}</h2>
@@ -224,6 +224,8 @@ export default function BaziCalculator() {
                 <div key={product.id} className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden group">
                   <div className="relative aspect-square bg-gray-100/50 overflow-hidden">
                     <Link href={`/product/${product.id}`}><img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" /></Link>
+                    {/* 这个就是导致保安发火的罪魁祸首，我把它补回来了 */}
+                    <button className={`absolute top-2 right-2 text-2xl transition-all ${favorites?.includes(product.id) ? 'text-red-700' : 'text-white drop-shadow'}`} onClick={() => toggleFavorite && toggleFavorite(product.id)}>♡</button>
                   </div>
                   <div className="p-4 text-center">
                     <div className="font-serif text-base font-semibold text-gray-900 mb-1 tracking-wide">{product.name}</div>
