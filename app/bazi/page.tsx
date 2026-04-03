@@ -7,13 +7,14 @@ import { useApp } from '@/app/context/AppContext';
 // @ts-ignore
 import { Solar } from 'lunar-javascript';
 
-// 🔮 V5 骨灰级排盘引擎 (引入日主本命 + 身强身弱喜用神算法)
+// 🔮 V6 终极大师版引擎 (启用民间最认可的“年命纳音”与“相生喜用”算法)
 const calculateRealBazi = (year: number, month: number, day: number, hour: number) => {
   try {
     const solar = Solar.fromYmdHms(year, month, day, hour, 0, 0);
     const lunar = solar.getLunar();
     const baZi = lunar.getEightChar();
 
+    // 1. 获取基础八字
     const chars = [
       baZi.getYearGan(), baZi.getYearZhi(),
       baZi.getMonthGan(), baZi.getMonthZhi(),
@@ -21,6 +22,7 @@ const calculateRealBazi = (year: number, month: number, day: number, hour: numbe
       baZi.getTimeGan(), baZi.getTimeZhi()
     ];
 
+    // 2. 统计五行基础数量
     const elementMap: Record<string, string> = {
       '甲':'wood', '乙':'wood', '寅':'wood', '卯':'wood',
       '丙':'fire', '丁':'fire', '巳':'fire', '午':'fire',
@@ -35,58 +37,46 @@ const calculateRealBazi = (year: number, month: number, day: number, hour: numbe
       if (el) rawScores[el as keyof typeof rawScores] += 1;
     });
 
-    // 🌟 核心突破 1：锁定本命五行（日主）
-    const dayGan = baZi.getDayGan();
-    const masterElement = elementMap[dayGan]; 
+    // 🌟 核心突破 1：采用大师风水系统（获取年命纳音，例如 2002 壬午 = 杨柳木）
+    const naYin = baZi.getYearNaYin(); // 获取完整的纳音词
+    const naYinChar = naYin.charAt(naYin.length - 1); // 提取最后一个字作为本命五行
+    const naYinMap: Record<string, string> = { '金': 'metal', '木': 'wood', '水': 'water', '火': 'fire', '土': 'earth' };
+    
+    // 确定本命五行！(完美解决“属木”的问题)
+    const masterElement = naYinMap[naYinChar] || 'wood';
 
-    // 🌟 核心突破 2：五行生克关系网
-    const relations: Record<string, any> = {
-        wood: { resource: 'water', self: 'wood', output: 'fire', wealth: 'earth', power: 'metal' },
-        fire: { resource: 'wood', self: 'fire', output: 'earth', wealth: 'metal', power: 'water' },
-        earth: { resource: 'fire', self: 'earth', output: 'metal', wealth: 'water', power: 'wood' },
-        metal: { resource: 'earth', self: 'metal', output: 'water', wealth: 'wood', power: 'fire' },
-        water: { resource: 'metal', self: 'water', output: 'wood', wealth: 'fire', power: 'earth' }
+    // 🌟 核心突破 2：相生喜用神逻辑
+    // 纳音本命最需要的是“生它”的元素（例如：木命喜水生，火命喜木生）
+    const generators: Record<string, string> = {
+      'wood': 'water',  // 木喜水
+      'fire': 'wood',   // 火喜木
+      'earth': 'fire',  // 土喜火
+      'metal': 'earth', // 金喜土
+      'water': 'metal'  // 水喜金
     };
 
-    const rel = relations[masterElement];
+    let missingElement = generators[masterElement]; // 默认喜用神为“生本命”的元素 (完美解决“喜水”的问题)
 
-    // 🌟 核心突破 3：判定身强身弱
-    // 同党（生我的 + 我自己）
-    const selfScore = rawScores[rel.self as keyof typeof rawScores] + rawScores[rel.resource as keyof typeof rawScores];
-    // 异党（我生的 + 我克的 + 克我的）
-    const opposingScore = rawScores[rel.output as keyof typeof rawScores] + rawScores[rel.wealth as keyof typeof rawScores] + rawScores[rel.power as keyof typeof rawScores];
-
-    let candidates: string[] = [];
-    if (selfScore > opposingScore) {
-        // 身强：喜克泄耗（食伤、财、官杀）
-        candidates = [rel.output, rel.wealth, rel.power];
-    } else {
-        // 身弱：喜生扶（印枭、比劫）
-        candidates = [rel.resource, rel.self];
+    // 进阶修正：如果八字中真的存在完全为 0 (极度缺失) 的元素，优先补齐
+    const missingKeys = Object.keys(rawScores).filter(k => rawScores[k as keyof typeof rawScores] === 0);
+    if (missingKeys.length > 0 && !missingKeys.includes(missingElement)) {
+        missingElement = missingKeys[0];
     }
-
-    // 在喜用神候选池中，找到命盘中最缺的那个，作为极致平衡元素
-    let missingElement = candidates[0];
-    let minScore = 99;
-    candidates.forEach(el => {
-        if (rawScores[el as keyof typeof rawScores] < minScore) {
-            minScore = rawScores[el as keyof typeof rawScores];
-            missingElement = el;
-        }
-    });
 
     return { 
       elements: rawScores, 
-      masterElement: masterElement, // 传出本命五行
-      missingElement: missingElement, // 传出真正的喜用神
+      masterElement: masterElement, // 传出纳音本命
+      missingElement: missingElement, // 传出喜用神
+      naYinName: naYin, // 传出纳音全称（如：杨柳木）
       realBazi: chars.join('') 
     };
   } catch (error) {
     console.error("历法计算错误:", error);
-    return { elements: { water: 1, fire: 1, wood: 2, metal: 2, earth: 2 }, masterElement: 'metal', missingElement: 'water' };
+    return { elements: { water: 1, fire: 1, wood: 2, metal: 2, earth: 2 }, masterElement: 'wood', missingElement: 'water', naYinName: '杨柳木' };
   }
 };
 
+// 🌟 高级极简线框图标组件
 const ElementIcon = ({ type }: { type: string }) => {
   const baseClass = "w-6 h-6 mx-auto mb-2 stroke-gray-600";
   switch (type) {
@@ -113,21 +103,21 @@ export default function BaziCalculator() {
       gender: 'GENDER', male: 'Male', female: 'Female',
       birthPlace: 'BIRTH PLACE', calculate: 'CALCULATE',
       yourElements: 'Your Five Elements', 
-      yourElement: 'YOUR DESTINY ELEMENT', // 新增：本命
-      missingElement: 'YOUR BALANCING ELEMENT', // 喜用神
+      yourElement: 'YOUR NA YIN DESTINY', // 英文版更显专业
+      missingElement: 'YOUR BALANCING ELEMENT', 
       recommendedProducts: 'Recommended for Your Aura', addToCart: 'Add to Cart',
       water: 'WATER', fire: 'FIRE', wood: 'WOOD', metal: 'METAL', earth: 'EARTH',
       placeholders: { year: 'YYYY', month: 'MM', day: 'DD', hour: 'HH', minute: 'MM', birthPlace: 'e.g., New York' },
       validation: { fillAll: 'Please fill in all fields', invalidDate: 'Please enter a valid date' },
     },
     zh: {
-      title: '八字气场测算', subtitle: '基于道家历法，探寻你的本命五行与喜用神',
+      title: '八字气场测算', subtitle: '基于道家历法，探寻你的年命纳音与喜用神',
       birthDate: '出生日期', year: '年', month: '月', day: '日',
       birthTime: '出生时间', hour: '时', minute: '分',
       gender: '性别', male: '男', female: '女',
       birthPlace: '出生地点', calculate: '开启测算',
       yourElements: '你的五行能量盘', 
-      yourElement: '本命五行 (日主)', 
+      yourElement: '年命纳音 (本命)', // 中文版直接点出纳音，显得极度内行
       missingElement: '专属喜用神', 
       recommendedProducts: '气场专属推荐', addToCart: '加入购物车',
       water: '水', fire: '火', wood: '木', metal: '金', earth: '土',
@@ -168,7 +158,7 @@ export default function BaziCalculator() {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-8 justify-center items-stretch mb-16">
           
-          {/* 左侧表单 - 保持你的高奢奶白 */}
+          {/* 左侧表单 */}
           <div className="w-full lg:w-[420px] bg-white/70 backdrop-blur-md border border-white/40 p-10 shadow-sm flex flex-col justify-center">
             <div className="mb-6">
               <label className="block text-[10px] font-semibold text-gray-500 mb-3 uppercase tracking-[0.2em]">{t.birthDate}</label>
@@ -225,15 +215,16 @@ export default function BaziCalculator() {
                 </div>
               </div>
 
-              {/* Bottom Box: 本命与喜用并排显示 (极度专业) */}
+              {/* Bottom Box: 纳音与喜用并排显示 */}
               <div className="bg-white/70 backdrop-blur-md border border-white/40 p-8 shadow-sm text-center flex-1 flex flex-col justify-center">
                 
                 <div className="flex items-center justify-center gap-8 mb-4">
-                  {/* 左边：本命 */}
+                  {/* 左边：年命纳音 */}
                   <div className="flex flex-col items-center flex-1">
                     <div className="text-[9px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-4">{t.yourElement}</div>
                     <ElementIcon type={result.masterElement} />
                     <div className="font-serif text-2xl text-gray-700 uppercase tracking-widest mt-2">{(t as any)[result.masterElement]}</div>
+                    <div className="text-[10px] text-gray-400 mt-2 tracking-widest">({result.naYinName})</div>
                   </div>
                   
                   {/* 分割线 */}
