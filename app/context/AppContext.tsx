@@ -1,6 +1,6 @@
   'use client';
 
-  import React, { createContext, useContext, useState, ReactNode } from 'react';
+  import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
   interface CartItem {
     id: string;
@@ -37,7 +37,20 @@
   const AppContext = createContext<AppContextType | undefined>(undefined);
 
   export function AppProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguage] = useState<'en' | 'zh'>('en');
+    const [language, setLanguageState] = useState<'en' | 'zh'>('en');
+
+    // Hydrate language from localStorage on mount
+    useEffect(() => {
+      const saved = localStorage.getItem('wu-lang');
+      if (saved === 'en' || saved === 'zh') {
+        setLanguageState(saved);
+      }
+    }, []);
+
+    const setLanguage = (lang: 'en' | 'zh') => {
+      setLanguageState(lang);
+      localStorage.setItem('wu-lang', lang);
+    };
     const [cartCount, setCartCount] = useState(0);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [diyCartItems, setDiyCartItems] = useState<DiyCartItem[]>([]);
