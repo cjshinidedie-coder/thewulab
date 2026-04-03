@@ -7,87 +7,94 @@ import { useApp } from '@/app/context/AppContext';
 // @ts-ignore
 import { Solar } from 'lunar-javascript';
 
-// 🔮 V3 终极版精准测算引擎
+// 🔮 V5 骨灰级排盘引擎 (引入日主本命 + 身强身弱喜用神算法)
 const calculateRealBazi = (year: number, month: number, day: number, hour: number) => {
   try {
     const solar = Solar.fromYmdHms(year, month, day, hour, 0, 0);
     const lunar = solar.getLunar();
     const baZi = lunar.getEightChar();
 
-    const yG = baZi.getYearGan(); const yZ = baZi.getYearZhi();
-    const mG = baZi.getMonthGan(); const mZ = baZi.getMonthZhi();
-    const dG = baZi.getDayGan(); const dZ = baZi.getDayZhi();
-    const tG = baZi.getTimeGan(); const tZ = baZi.getTimeZhi();
+    const chars = [
+      baZi.getYearGan(), baZi.getYearZhi(),
+      baZi.getMonthGan(), baZi.getMonthZhi(),
+      baZi.getDayGan(), baZi.getDayZhi(),
+      baZi.getTimeGan(), baZi.getTimeZhi()
+    ];
 
-    const stemMap: Record<string, string> = {
-      '甲':'wood', '乙':'wood', '丙':'fire', '丁':'fire', '戊':'earth',
-      '己':'earth', '庚':'metal', '辛':'metal', '壬':'water', '癸':'water'
+    const elementMap: Record<string, string> = {
+      '甲':'wood', '乙':'wood', '寅':'wood', '卯':'wood',
+      '丙':'fire', '丁':'fire', '巳':'fire', '午':'fire',
+      '戊':'earth', '己':'earth', '辰':'earth', '戌':'earth', '丑':'earth', '未':'earth',
+      '庚':'metal', '辛':'metal', '申':'metal', '酉':'metal',
+      '壬':'water', '癸':'water', '亥':'water', '子':'water'
     };
 
-    const branchMap: Record<string, any> = {
-      '子': { water: 100 }, '丑': { earth: 60, water: 30, metal: 10 },
-      '寅': { wood: 60, fire: 30, earth: 10 }, '卯': { wood: 100 },
-      '辰': { earth: 60, wood: 30, water: 10 }, '巳': { fire: 60, earth: 30, metal: 10 },
-      '午': { fire: 70, earth: 30 }, '未': { earth: 60, fire: 30, wood: 10 },
-      '申': { metal: 60, water: 30, earth: 10 }, '酉': { metal: 100 },
-      '戌': { earth: 60, metal: 30, fire: 10 }, '亥': { water: 70, wood: 30 }
-    };
-
-    let rawScores = { water: 0, fire: 0, wood: 0, metal: 0, earth: 0 };
-
-    [yG, mG, dG, tG].forEach(gan => {
-      if (stemMap[gan]) rawScores[stemMap[gan] as keyof typeof rawScores] += 100;
+    const rawScores = { water: 0, fire: 0, wood: 0, metal: 0, earth: 0 };
+    chars.forEach(char => {
+      const el = elementMap[char];
+      if (el) rawScores[el as keyof typeof rawScores] += 1;
     });
 
-    [yZ, mZ, dZ, tZ].forEach((zhi, index) => {
-      const weights = branchMap[zhi];
-      const multiplier = (index === 1) ? 2.5 : 1; 
-      if (weights) {
-        for (const [el, val] of Object.entries(weights)) {
-          rawScores[el as keyof typeof rawScores] += (val as number) * multiplier;
+    // 🌟 核心突破 1：锁定本命五行（日主）
+    const dayGan = baZi.getDayGan();
+    const masterElement = elementMap[dayGan]; 
+
+    // 🌟 核心突破 2：五行生克关系网
+    const relations: Record<string, any> = {
+        wood: { resource: 'water', self: 'wood', output: 'fire', wealth: 'earth', power: 'metal' },
+        fire: { resource: 'wood', self: 'fire', output: 'earth', wealth: 'metal', power: 'water' },
+        earth: { resource: 'fire', self: 'earth', output: 'metal', wealth: 'water', power: 'wood' },
+        metal: { resource: 'earth', self: 'metal', output: 'water', wealth: 'wood', power: 'fire' },
+        water: { resource: 'metal', self: 'water', output: 'wood', wealth: 'fire', power: 'earth' }
+    };
+
+    const rel = relations[masterElement];
+
+    // 🌟 核心突破 3：判定身强身弱
+    // 同党（生我的 + 我自己）
+    const selfScore = rawScores[rel.self as keyof typeof rawScores] + rawScores[rel.resource as keyof typeof rawScores];
+    // 异党（我生的 + 我克的 + 克我的）
+    const opposingScore = rawScores[rel.output as keyof typeof rawScores] + rawScores[rel.wealth as keyof typeof rawScores] + rawScores[rel.power as keyof typeof rawScores];
+
+    let candidates: string[] = [];
+    if (selfScore > opposingScore) {
+        // 身强：喜克泄耗（食伤、财、官杀）
+        candidates = [rel.output, rel.wealth, rel.power];
+    } else {
+        // 身弱：喜生扶（印枭、比劫）
+        candidates = [rel.resource, rel.self];
+    }
+
+    // 在喜用神候选池中，找到命盘中最缺的那个，作为极致平衡元素
+    let missingElement = candidates[0];
+    let minScore = 99;
+    candidates.forEach(el => {
+        if (rawScores[el as keyof typeof rawScores] < minScore) {
+            minScore = rawScores[el as keyof typeof rawScores];
+            missingElement = el;
         }
-      }
     });
-
-    let displayScores = { water: 0, fire: 0, wood: 0, metal: 0, earth: 0 };
-    for (const key in rawScores) {
-       displayScores[key as keyof typeof displayScores] = Math.round(rawScores[key as keyof typeof rawScores] / 100);
-    }
-
-    let missingElement = 'wood';
-    let minScore = 9999;
-    for (const [element, score] of Object.entries(rawScores)) {
-      if (score < minScore) {
-        minScore = score;
-        missingElement = element;
-      }
-    }
 
     return { 
-      elements: displayScores, 
-      missingElement: missingElement, 
-      realBazi: [yG, yZ, mG, mZ, dG, dZ, tG, tZ].join('') 
+      elements: rawScores, 
+      masterElement: masterElement, // 传出本命五行
+      missingElement: missingElement, // 传出真正的喜用神
+      realBazi: chars.join('') 
     };
   } catch (error) {
     console.error("历法计算错误:", error);
-    return { elements: { water: 1, fire: 1, wood: 2, metal: 2, earth: 2 }, missingElement: 'water' };
+    return { elements: { water: 1, fire: 1, wood: 2, metal: 2, earth: 2 }, masterElement: 'metal', missingElement: 'water' };
   }
 };
 
-// 🌟 高级极简线框图标组件 (替代廉价的 Emoji)
 const ElementIcon = ({ type }: { type: string }) => {
-  const baseClass = "w-6 h-6 mx-auto mb-3 stroke-gray-600";
+  const baseClass = "w-6 h-6 mx-auto mb-2 stroke-gray-600";
   switch (type) {
-    case 'water':
-      return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><path d="M12 22a8 8 0 0 0 8-8c0-6-8-12-8-12S4 8 4 14a8 8 0 0 0 8 8z" /></svg>;
-    case 'fire':
-      return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><path d="M12 22c5.5 0 8-4.5 8-9s-8-11-8-11-8 6.5-8 11 2.5 9 8 9z"/><path d="M12 22c-2.5 0-4-2-4-5s4-6 4-6 4 3 4 6-1.5 5-4 5z"/></svg>;
-    case 'wood':
-      return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><path d="M12 22V8M12 8L8 4M12 8l4-4M12 14l-4-4M12 14l4-4" /></svg>;
-    case 'metal':
-      return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg>;
-    case 'earth':
-      return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="3" ry="8"/><path d="M4 12h16"/></svg>;
+    case 'water': return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><path d="M12 22a8 8 0 0 0 8-8c0-6-8-12-8-12S4 8 4 14a8 8 0 0 0 8 8z" /></svg>;
+    case 'fire': return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><path d="M12 22c5.5 0 8-4.5 8-9s-8-11-8-11-8 6.5-8 11 2.5 9 8 9z"/><path d="M12 22c-2.5 0-4-2-4-5s4-6 4-6 4 3 4 6-1.5 5-4 5z"/></svg>;
+    case 'wood': return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><path d="M12 22V8M12 8L8 4M12 8l4-4M12 14l-4-4M12 14l4-4" /></svg>;
+    case 'metal': return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg>;
+    case 'earth': return <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className={baseClass}><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="3" ry="8"/><path d="M4 12h16"/></svg>;
     default: return null;
   }
 };
@@ -100,24 +107,28 @@ export default function BaziCalculator() {
 
   const translations = {
     en: {
-      title: 'BaZi Calculator', subtitle: 'Discover Your Five Elements & Balancing Energy',
+      title: 'BaZi Calculator', subtitle: 'Discover Your True Element & Balancing Energy',
       birthDate: 'BIRTH DATE', year: 'Year', month: 'Month', day: 'Day',
       birthTime: 'BIRTH TIME', hour: 'Hour', minute: 'Minute',
       gender: 'GENDER', male: 'Male', female: 'Female',
       birthPlace: 'BIRTH PLACE', calculate: 'CALCULATE',
-      yourElements: 'Your Five Elements', missingElement: 'YOUR BALANCING ELEMENT',
+      yourElements: 'Your Five Elements', 
+      yourElement: 'YOUR DESTINY ELEMENT', // 新增：本命
+      missingElement: 'YOUR BALANCING ELEMENT', // 喜用神
       recommendedProducts: 'Recommended for Your Aura', addToCart: 'Add to Cart',
       water: 'WATER', fire: 'FIRE', wood: 'WOOD', metal: 'METAL', earth: 'EARTH',
       placeholders: { year: 'YYYY', month: 'MM', day: 'DD', hour: 'HH', minute: 'MM', birthPlace: 'e.g., New York' },
       validation: { fillAll: 'Please fill in all fields', invalidDate: 'Please enter a valid date' },
     },
     zh: {
-      title: '八字气场测算', subtitle: '基于道家历法与地支藏干，精准推演你的五行能量盘',
+      title: '八字气场测算', subtitle: '基于道家历法，探寻你的本命五行与喜用神',
       birthDate: '出生日期', year: '年', month: '月', day: '日',
       birthTime: '出生时间', hour: '时', minute: '分',
       gender: '性别', male: '男', female: '女',
       birthPlace: '出生地点', calculate: '开启测算',
-      yourElements: '你的五行能量盘', missingElement: '专属平衡元素',
+      yourElements: '你的五行能量盘', 
+      yourElement: '本命五行 (日主)', 
+      missingElement: '专属喜用神', 
       recommendedProducts: '气场专属推荐', addToCart: '加入购物车',
       water: '水', fire: '火', wood: '木', metal: '金', earth: '土',
       placeholders: { year: '年', month: '月', day: '日', hour: '时', minute: '分', birthPlace: '例如：北京' },
@@ -155,13 +166,10 @@ export default function BaziCalculator() {
   return (
     <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 font-sans" style={{ backgroundImage: "url('/bazi-bg.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
       <div className="max-w-5xl mx-auto">
-        
-        {/* Main Content Layout */}
         <div className="flex flex-col lg:flex-row gap-8 justify-center items-stretch mb-16">
           
-          {/* 左侧表单 - 完美还原高奢奶白磨砂玻璃 */}
+          {/* 左侧表单 - 保持你的高奢奶白 */}
           <div className="w-full lg:w-[420px] bg-white/70 backdrop-blur-md border border-white/40 p-10 shadow-sm flex flex-col justify-center">
-            
             <div className="mb-6">
               <label className="block text-[10px] font-semibold text-gray-500 mb-3 uppercase tracking-[0.2em]">{t.birthDate}</label>
               <div className="grid grid-cols-3 gap-3">
@@ -197,18 +205,17 @@ export default function BaziCalculator() {
             </button>
           </div>
 
-          {/* 右侧结果 - 完美还原双透明分离盒子，白底高亮 */}
+          {/* 右侧结果 */}
           {showResult && result && (
             <div className="w-full lg:w-[460px] flex flex-col gap-6">
               
-              {/* Top Box: Elements */}
+              {/* Top Box: 8字本气计数 */}
               <div className="bg-white/70 backdrop-blur-md border border-white/40 p-8 shadow-sm text-center flex-1">
                 <h2 className="font-serif text-xl text-gray-600 mb-8 tracking-wide">{t.yourElements}</h2>
                 <div className="flex justify-between items-center px-2">
                   {['water', 'fire', 'wood', 'metal', 'earth'].map((el) => {
-                    const isMissing = result.missingElement === el;
                     return (
-                      <div key={el} className={`flex flex-col items-center py-4 px-2 transition-all ${isMissing ? 'bg-white shadow-sm' : 'opacity-60'}`}>
+                      <div key={el} className="flex flex-col items-center py-2 px-2 transition-all opacity-70 hover:opacity-100">
                         <ElementIcon type={el} />
                         <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">{(t as any)[el]}</div>
                         <div className="text-lg font-serif text-gray-700">{result.elements[el]}</div>
@@ -218,14 +225,29 @@ export default function BaziCalculator() {
                 </div>
               </div>
 
-              {/* Bottom Box: Balancing Element */}
+              {/* Bottom Box: 本命与喜用并排显示 (极度专业) */}
               <div className="bg-white/70 backdrop-blur-md border border-white/40 p-8 shadow-sm text-center flex-1 flex flex-col justify-center">
-                <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-[0.2em] mb-4">{t.missingElement}</div>
-                <ElementIcon type={result.missingElement} />
-                <div className="font-serif text-2xl text-gray-700 mb-4 uppercase tracking-widest mt-2">
-                  {(t as any)[result.missingElement]}
+                
+                <div className="flex items-center justify-center gap-8 mb-4">
+                  {/* 左边：本命 */}
+                  <div className="flex flex-col items-center flex-1">
+                    <div className="text-[9px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-4">{t.yourElement}</div>
+                    <ElementIcon type={result.masterElement} />
+                    <div className="font-serif text-2xl text-gray-700 uppercase tracking-widest mt-2">{(t as any)[result.masterElement]}</div>
+                  </div>
+                  
+                  {/* 分割线 */}
+                  <div className="w-[1px] h-16 bg-gray-300/50"></div>
+
+                  {/* 右边：喜用神 */}
+                  <div className="flex flex-col items-center flex-1">
+                    <div className="text-[9px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-4">{t.missingElement}</div>
+                    <ElementIcon type={result.missingElement} />
+                    <div className="font-serif text-2xl text-gray-900 uppercase tracking-widest mt-2 font-bold">{(t as any)[result.missingElement]}</div>
+                  </div>
                 </div>
-                <div className="text-xs text-gray-500 leading-relaxed font-light px-6">
+
+                <div className="text-xs text-gray-500 leading-relaxed font-light mt-4 px-2">
                   {result.missingElement === 'water' && 'Water brings calmness, intuition, and emotional depth — restoring the flow your chart seeks.'}
                   {result.missingElement === 'fire' && 'Fire brings passion, vitality, and transformative energy — igniting the spark your chart seeks.'}
                   {result.missingElement === 'wood' && 'Wood brings growth, creativity, and new beginnings — rooting the stability your chart seeks.'}
