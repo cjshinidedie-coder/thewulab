@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
 import { productsData } from '@/lib/productsData';
@@ -9,17 +9,32 @@ export default function ShopPage() {
   const { addToCart } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState('newest');
+  const [sortBy, setSortBy] = useState('featured');
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const allProducts = productsData;
 
   const categories = ['Bracelets', 'Accessories', 'Earrings', 'Necklaces'];
   const elements = ['Metal', 'Wood', 'Water', 'Fire', 'Earth'];
   const sortOptions = [
+    { value: 'featured', label: 'Featured' },
     { value: 'price-low', label: 'Price: Low to High' },
     { value: 'price-high', label: 'Price: High to Low' },
     { value: 'bestseller', label: 'Best Sellers' },
+    { value: 'newest', label: 'Newest' },
   ];
+
+  // Close sort dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
+        setSortOpen(false);
+      }
+    };
+    if (sortOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [sortOpen]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts;
@@ -114,21 +129,34 @@ export default function ShopPage() {
           <div className="flex-1">
             {/* Sort Bar */}
             <div className="mb-8 flex justify-between items-center">
-              <p className="text-sm text-gray-600">{filteredAndSortedProducts.length} products</p>
-              <div className="flex gap-2">
-                {sortOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => setSortBy(option.value)}
-                    className={`px-4 py-2 rounded text-sm font-semibold transition-colors ${
-                      sortBy === option.value
-                        ? 'bg-gray-900 text-white'
-                        : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+              <p className="text-sm font-serif text-gray-800">{filteredAndSortedProducts.length} products</p>
+              <div className="relative" ref={sortRef}>
+                <button
+                  onClick={() => setSortOpen(!sortOpen)}
+                  className="flex items-center gap-2 font-serif text-sm text-gray-800 hover:text-[#C41E3A] transition-colors bg-transparent border-none cursor-pointer"
+                >
+                  Sort by: {sortOptions.find(o => o.value === sortBy)?.label}
+                  <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${sortOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {sortOpen && (
+                  <div className="absolute right-0 mt-3 w-52 bg-white shadow-md border border-gray-100 z-50 rounded-sm">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => { setSortBy(option.value); setSortOpen(false); }}
+                        className={`block w-full text-left px-5 py-2.5 font-serif text-sm transition-colors ${
+                          sortBy === option.value
+                            ? 'text-[#C41E3A]'
+                            : 'text-gray-800 hover:bg-gray-50'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
