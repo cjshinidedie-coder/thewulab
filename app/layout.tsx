@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Cormorant_Garamond, Montserrat } from 'next/font/google';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import { AppProvider } from './context/AppContext';
 import './globals.css';
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <AppProvider>
           <Navbar />
           {children}
+          <Footer />
         </AppProvider>
       </body>
     </html>

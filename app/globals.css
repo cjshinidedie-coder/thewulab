@@ -752,7 +752,35 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
+    background-color: #F5F5F5;
+    border-radius: 50%;
+    color: #333333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 16px;
+  }
+
+  .social-icons a:hover {
+    background-color: #C41E3A;
+    color: #FFFFFF;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid #E8E8E8;
+    font-size: 12px;
+    color: #999999;
+  }
+
+  .footer-bottom a {
+    color: #999;
+    text-decoration: none;
+  }
+
+  .footer-bottom a:hover {
+    color: #C41E3A;
+  }
 
 h1, h2, h3, h4, h5, h6, .font-serif {
   font-family: var(--font-cormorant), serif !important;
