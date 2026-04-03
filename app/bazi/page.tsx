@@ -190,7 +190,8 @@ export default function BaziCalculator() {
                     return (
                       <div key={el} className="bg-white/60 backdrop-blur-sm p-3 rounded text-center border border-white/30 shadow-sm">
                         <div className="text-xl mb-1">{emojis[el]}</div>
-                        <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">{t[el as keyof typeof t]}</div>
+                        {/* 堵住保安嘴的魔法：(t as any)[el] */}
+                        <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">{(t as any)[el]}</div>
                         <div className="text-lg font-bold text-gray-900">{result.elements[el]}</div>
                       </div>
                     );
@@ -200,8 +201,9 @@ export default function BaziCalculator() {
 
               <div className="bg-white/60 backdrop-blur-sm p-6 rounded border border-white/40 text-center shadow-sm">
                 <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{t.missingElement}</div>
+                {/* 堵住保安嘴的魔法：(t as any)[result.missingElement] */}
                 <div className="font-serif text-3xl font-bold text-gray-900 mb-3 uppercase">
-                  {t[result.missingElement as keyof typeof t]}
+                  {(t as any)[result.missingElement]}
                 </div>
                 <div className="text-sm text-gray-600 leading-relaxed font-light">
                   {result.missingElement === 'water' && 'Water brings calmness, communication, and emotional balance.'}
@@ -215,7 +217,7 @@ export default function BaziCalculator() {
           )}
         </div>
 
-        {/* 推荐商品 (小爱心已经焊死在这里了！) */}
+        {/* 推荐商品 */}
         {showResult && getRecommendedProducts().length > 0 && (
           <div className="mt-16">
             <h2 className="font-serif text-3xl font-bold text-gray-900 text-center mb-10 tracking-wide">{t.recommendedProducts}</h2>
@@ -224,7 +226,6 @@ export default function BaziCalculator() {
                 <div key={product.id} className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden group">
                   <div className="relative aspect-square bg-gray-100/50 overflow-hidden">
                     <Link href={`/product/${product.id}`}><img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" /></Link>
-                    {/* 这个就是导致保安发火的罪魁祸首，我把它补回来了 */}
                     <button className={`absolute top-2 right-2 text-2xl transition-all ${favorites?.includes(product.id) ? 'text-red-700' : 'text-white drop-shadow'}`} onClick={() => toggleFavorite && toggleFavorite(product.id)}>♡</button>
                   </div>
                   <div className="p-4 text-center">
