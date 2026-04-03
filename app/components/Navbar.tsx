@@ -224,9 +224,9 @@ export default function Navbar() {
                 onMouseEnter={handleMegaMenuEnter}
                 onMouseLeave={handleMegaMenuLeave}
               >
-                <button className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans bg-transparent border-none cursor-pointer">
+                <Link href="/shop" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
                   {t.shop}
-                </button>
+                </Link>
                 {megaMenuOpen && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-stone-200 rounded-lg shadow-xl p-8 z-[9999] min-w-[550px] grid grid-cols-2 gap-10">
                     <div>
