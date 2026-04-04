@@ -245,7 +245,7 @@ export default function Navbar() {
             onMouseEnter={handleMegaMenuEnter}
             onMouseLeave={handleMegaMenuLeave}
           >
-            <Link href="/shop" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+            <Link href="/shop" className="text-[12px] md:text-[13px] font-semibold tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
               {t.shop}
             </Link>
             {megaMenuOpen && (
@@ -273,16 +273,16 @@ export default function Navbar() {
             )}
           </div>
 
-          <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+          <Link href="/bazi" className="text-[12px] md:text-[13px] font-semibold tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
             {t.bazi}
           </Link>
-          <Link href="/new-arrivals" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+          <Link href="/new-arrivals" className="text-[12px] md:text-[13px] font-semibold tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
             {t.newArrivals}
           </Link>
-          <Link href="/signature" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+          <Link href="/signature" className="text-[12px] md:text-[13px] font-semibold tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
             {t.signature}
           </Link>
-          <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+          <Link href="/diy" className="text-[12px] md:text-[13px] font-semibold tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
             {t.auraDesign}
           </Link>
         </div>

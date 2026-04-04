@@ -697,6 +697,7 @@ export default function Home() {
           background-color: #FFFFFF;
           padding: 20px 40px;
           margin: 0;
+          overflow: hidden;
         }
 
         .reviews-container {
@@ -710,14 +711,50 @@ export default function Home() {
           font-weight: 400;
           color: #333333;
           text-align: center;
-          margin-bottom: 30px;
+          margin-bottom: 50px;
           letter-spacing: 0.05em;
         }
 
-        .reviews-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 30px;
+        .reviews-marquee-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .reviews-marquee-row {
+          display: flex;
+          width: max-content;
+          gap: 20px;
+        }
+
+        .reviews-marquee-row:hover {
+          animation-play-state: paused;
+        }
+
+        .reviews-marquee-row.left {
+          animation: marqueeLeft 40s linear infinite;
+        }
+
+        .reviews-marquee-row.right {
+          animation: marqueeRight 40s linear infinite;
+        }
+
+        @keyframes marqueeLeft {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        @keyframes marqueeRight {
+          0% {
+            transform: translateX(-50%);
+          }
+          100% {
+            transform: translateX(0);
+          }
         }
 
         .review-card {
@@ -726,6 +763,8 @@ export default function Home() {
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
           transition: transform 0.3s ease;
+          min-width: 350px;
+          max-width: 350px;
         }
 
         .review-card:hover {
@@ -1136,41 +1175,115 @@ export default function Home() {
       <section className="reviews-section">
         <div className="reviews-container">
           <h2 className="reviews-title font-serif tracking-widest font-normal">{t.customerReviews}</h2>
-          <div className="reviews-grid">
-            <div className="review-card">
-              <div className="review-stars">★★★★★</div>
-              <div className="review-text">This bracelet perfectly matches my missing water element! I felt the energy shift within days. Highly recommend!</div>
-              <div className="review-author">Sarah M.</div>
+          <div className="reviews-marquee-wrapper">
+            {/* First row - scrolling left */}
+            <div className="reviews-marquee-row left">
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">This bracelet perfectly matches my missing water element! I felt the energy shift within days. Highly recommend!</div>
+                <div className="review-author">Sarah M.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">The BaZi calculator is incredibly accurate. The personalized recommendations helped me choose the perfect piece for my energy needs.</div>
+                <div className="review-author">David Chen</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">The craftsmanship is unparalleled. The fire element ring gave me the exact confidence boost I needed for my new business.</div>
+                <div className="review-author">Chloe S.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Never believed in energy alignment until I wore The Wu Lab signature piece. An absolute masterpiece.</div>
+                <div className="review-author">James L.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Stunning packaging, exquisite stones. The metal element bracelet is my new daily essential. The energy shift is real.</div>
+                <div className="review-author">Sophia W.</div>
+              </div>
+              {/* Duplicate for seamless loop */}
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">This bracelet perfectly matches my missing water element! I felt the energy shift within days. Highly recommend!</div>
+                <div className="review-author">Sarah M.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">The BaZi calculator is incredibly accurate. The personalized recommendations helped me choose the perfect piece for my energy needs.</div>
+                <div className="review-author">David Chen</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">The craftsmanship is unparalleled. The fire element ring gave me the exact confidence boost I needed for my new business.</div>
+                <div className="review-author">Chloe S.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Never believed in energy alignment until I wore The Wu Lab signature piece. An absolute masterpiece.</div>
+                <div className="review-author">James L.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Stunning packaging, exquisite stones. The metal element bracelet is my new daily essential. The energy shift is real.</div>
+                <div className="review-author">Sophia W.</div>
+              </div>
             </div>
 
-            <div className="review-card">
-              <div className="review-stars">★★★★★</div>
-              <div className="review-text">The BaZi calculator is incredibly accurate. The personalized recommendations helped me choose the perfect piece for my energy needs.</div>
-              <div className="review-author">David Chen</div>
-            </div>
-
-            <div className="review-card">
-              <div className="review-stars">★★★★★</div>
-              <div className="review-text">Beautiful craftsmanship and the energy is real! I've noticed positive changes in my life since wearing this. Worth every penny!</div>
-              <div className="review-author">Emma L.</div>
-            </div>
-
-            <div className="review-card">
-              <div className="review-stars">★★★★★</div>
-              <div className="review-text">I bought this as a gift for my sister based on her BaZi chart. She absolutely loves it and says it brings her good luck!</div>
-              <div className="review-author">Michael W.</div>
-            </div>
-
-            <div className="review-card">
-              <div className="review-stars">★★★★★</div>
-              <div className="review-text">The attention to detail is amazing. Each piece feels special and the energy alignment with my birth chart is spot on!</div>
-              <div className="review-author">Jessica R.</div>
-            </div>
-
-            <div className="review-card">
-              <div className="review-stars">★★★★★</div>
-              <div className="review-text">Finally found jewelry that actually works with my energy! The BaZi analysis was so detailed and helpful. Best purchase ever!</div>
-              <div className="review-author">Lisa T.</div>
+            {/* Second row - scrolling right */}
+            <div className="reviews-marquee-row right">
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Beautiful craftsmanship and the energy is real! I've noticed positive changes in my life since wearing this. Worth every penny!</div>
+                <div className="review-author">Emma L.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">I bought this as a gift for my sister based on her BaZi chart. She absolutely loves it and says it brings her good luck!</div>
+                <div className="review-author">Michael W.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">The attention to detail is amazing. Each piece feels special and the energy alignment with my birth chart is spot on!</div>
+                <div className="review-author">Jessica R.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Finally found jewelry that actually works with my energy! The BaZi analysis was so detailed and helpful. Best purchase ever!</div>
+                <div className="review-author">Lisa T.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">I gifted the earth element pendant to my mother. She was moved to tears by the personalized BaZi reading and the quality.</div>
+                <div className="review-author">Oliver T.</div>
+              </div>
+              {/* Duplicate for seamless loop */}
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Beautiful craftsmanship and the energy is real! I've noticed positive changes in my life since wearing this. Worth every penny!</div>
+                <div className="review-author">Emma L.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">I bought this as a gift for my sister based on her BaZi chart. She absolutely loves it and says it brings her good luck!</div>
+                <div className="review-author">Michael W.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">The attention to detail is amazing. Each piece feels special and the energy alignment with my birth chart is spot on!</div>
+                <div className="review-author">Jessica R.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">Finally found jewelry that actually works with my energy! The BaZi analysis was so detailed and helpful. Best purchase ever!</div>
+                <div className="review-author">Lisa T.</div>
+              </div>
+              <div className="review-card">
+                <div className="review-stars">★★★★★</div>
+                <div className="review-text">I gifted the earth element pendant to my mother. She was moved to tears by the personalized BaZi reading and the quality.</div>
+                <div className="review-author">Oliver T.</div>
+              </div>
             </div>
           </div>
         </div>
