@@ -120,8 +120,8 @@ export default function Navbar() {
         {language === 'en' ? '✨ Free Worldwide Shipping on Orders Over $100 ✨' : '✨ 满 $100 全球免运费 ✨'}
       </div>
 
-      {/* Header wrapper — group for hover reveal. NO overflow-hidden here. */}
-      <header className="group fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      {/* Header wrapper */}
+      <header className="fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         {/* Top bar */}
         <div className="relative z-[50] flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
           {/* Left spacer — keeps logo centered */}
@@ -217,57 +217,52 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Hidden nav links — revealed on hover.
-            Use grid row trick for smooth expand WITHOUT overflow-hidden clipping the mega menu. */}
-        <div className="grid transition-all duration-500 ease-in-out grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100">
-          <div className="min-h-0 overflow-hidden group-hover:overflow-visible">
-            <div className="relative z-[50] flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto border-t border-stone-100/60">
-              <div className="relative"
-                onMouseEnter={handleMegaMenuEnter}
-                onMouseLeave={handleMegaMenuLeave}
-              >
-                <Link href="/shop" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-                  {t.shop}
-                </Link>
-                {megaMenuOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-stone-200 rounded-lg shadow-xl p-8 z-[9999] min-w-[550px] grid grid-cols-2 gap-10">
-                    <div>
-                      <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByElement}</h3>
-                      <ul className="space-y-3">
-                        <li><Link href="/elements/metal" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.metal}</Link></li>
-                        <li><Link href="/elements/wood" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.wood}</Link></li>
-                        <li><Link href="/elements/water" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.water}</Link></li>
-                        <li><Link href="/elements/fire" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.fire}</Link></li>
-                        <li><Link href="/elements/earth" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earth}</Link></li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByStyle}</h3>
-                      <ul className="space-y-3">
-                        <li><Link href="/shop?category=bracelets" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.bracelets}</Link></li>
-                        <li><Link href="/shop?category=hand-jewelry" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.handJewelry}</Link></li>
-                        <li><Link href="/shop?category=earrings" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earrings}</Link></li>
-                        <li><Link href="/shop?category=necklaces" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.necklaces}</Link></li>
-                      </ul>
-                    </div>
-                  </div>
-                )}
+        {/* Main nav links — always visible */}
+        <div className="relative z-[50] flex justify-center items-center gap-8 md:gap-12 py-3.5 max-w-[1400px] mx-auto border-t border-stone-100/60">
+          <div className="relative"
+            onMouseEnter={handleMegaMenuEnter}
+            onMouseLeave={handleMegaMenuLeave}
+          >
+            <Link href="/shop" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+              {t.shop}
+            </Link>
+            {megaMenuOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-stone-200 rounded-lg shadow-xl p-8 z-[9999] min-w-[550px] grid grid-cols-2 gap-10">
+                <div>
+                  <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByElement}</h3>
+                  <ul className="space-y-3">
+                    <li><Link href="/elements/metal" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.metal}</Link></li>
+                    <li><Link href="/elements/wood" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.wood}</Link></li>
+                    <li><Link href="/elements/water" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.water}</Link></li>
+                    <li><Link href="/elements/fire" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.fire}</Link></li>
+                    <li><Link href="/elements/earth" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earth}</Link></li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-serif text-base font-light text-stone-700 mb-4 tracking-wide">{t.shopByStyle}</h3>
+                  <ul className="space-y-3">
+                    <li><Link href="/shop?category=bracelets" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.bracelets}</Link></li>
+                    <li><Link href="/shop?category=hand-jewelry" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.handJewelry}</Link></li>
+                    <li><Link href="/shop?category=earrings" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.earrings}</Link></li>
+                    <li><Link href="/shop?category=necklaces" className="text-[13px] text-stone-500 hover:text-[#C41E3A] transition-colors font-light no-underline">{t.necklaces}</Link></li>
+                  </ul>
+                </div>
               </div>
-
-              <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-                {t.bazi}
-              </Link>
-              <Link href="/new-arrivals" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-                {t.newArrivals}
-              </Link>
-              <Link href="/signature" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-                {t.signature}
-              </Link>
-              <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-                {t.auraDesign}
-              </Link>
-            </div>
+            )}
           </div>
+
+          <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+            {t.bazi}
+          </Link>
+          <Link href="/new-arrivals" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+            {t.newArrivals}
+          </Link>
+          <Link href="/signature" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+            {t.signature}
+          </Link>
+          <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+            {t.auraDesign}
+          </Link>
         </div>
       </header>
 
