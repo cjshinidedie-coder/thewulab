@@ -152,9 +152,9 @@ export default function Navbar() {
           {/* Centered logo */}
           <Link
             href="/"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-widest text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-[0.15em] text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
           >
-            THE WU LAB
+            the Wu lab
           </Link>
 
           {/* Right icons */}
