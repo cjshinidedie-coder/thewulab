@@ -35,7 +35,8 @@ export default function Navbar() {
       shop: 'Shop',
       bazi: 'Bazi Calculator',
       auraDesign: 'Aura Design',
-      meaning: 'Meaning',
+      newArrivals: 'New Arrivals',
+      signature: 'Signature',
       search: 'Search products...',
       shopByElement: 'Shop by Element',
       shopByStyle: 'Shop by Style',
@@ -54,7 +55,8 @@ export default function Navbar() {
       shop: '购物',
       bazi: '八字测算',
       auraDesign: '气场定制',
-      meaning: '含义',
+      newArrivals: '新品上市',
+      signature: '高定系列',
       search: '搜索商品...',
       shopByElement: '按元素购物',
       shopByStyle: '按款式购物',
@@ -255,12 +257,15 @@ export default function Navbar() {
               <Link href="/bazi" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
                 {t.bazi}
               </Link>
+              <Link href="/new-arrivals" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+                {t.newArrivals}
+              </Link>
+              <Link href="/signature" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
+                {t.signature}
+              </Link>
               <Link href="/diy" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
                 {t.auraDesign}
               </Link>
-              <a href="#meaning" className="text-[12px] md:text-[13px] font-normal tracking-[0.12em] uppercase text-stone-600 hover:text-[#C41E3A] transition-colors font-sans no-underline">
-                {t.meaning}
-              </a>
             </div>
           </div>
         </div>
