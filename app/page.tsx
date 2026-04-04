@@ -1057,17 +1057,16 @@ export default function Home() {
           </div>
         </div>
 
-        {/* RIGHT: GIFT */}
+        {/* RIGHT: SIGNATURE */}
         <div className="relative w-full h-[350px] md:h-[400px] overflow-hidden bg-zinc-900">
-          <img src="/gift-bg.png" alt="Gift" className="absolute inset-0 w-full h-full object-cover z-0" />
+          <video autoPlay loop muted playsInline className="object-cover w-full h-full absolute inset-0">
+            <source src="/signature-bg.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 flex flex-col items-start">
-            <div className="banner-label font-serif tracking-widest font-normal">{language === 'en' ? 'GIFT' : '精选礼物'}</div>
-            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">{language === 'en' ? 'Pure Intentions, Infinite Fortune.' : '纯粹心意，无限好运。'}</p>
-            <div className="flex space-x-4 mt-4">
-              <Link href="/gifts/for-him" className="banner-btn">{language === 'en' ? 'FOR HIM' : '送给他'}</Link>
-              <Link href="/gifts/for-her" className="banner-btn">{language === 'en' ? 'FOR HER' : '送给她'}</Link>
-            </div>
+            <div className="banner-label font-serif tracking-widest font-normal">Signature</div>
+            <p className="font-sans font-light text-base md:text-lg text-gray-200 tracking-wide mt-2 mb-8">{language === 'en' ? 'Harmonizing nature and destiny. Discover pieces tailored to resonate with your unique path.' : '萃取自然灵气，辉映本命星轨。探索你的专属印记。'}</p>
+            <Link href="/shop" className="banner-btn">{language === 'en' ? 'Shop Now' : '查看商品'}</Link>
           </div>
         </div>
       </section>
