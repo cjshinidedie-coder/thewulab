@@ -138,12 +138,12 @@ export default function Navbar() {
   return (
     <>
       {/* Announcement bar */}
-      <div className="fixed top-0 left-0 w-full z-[101] bg-[#8B3A3A] text-white text-center py-2.5 px-5 text-[13px] font-semibold tracking-wide">
+      <div className="sticky top-0 left-0 w-full z-[101] bg-[#8B3A3A] text-white text-center py-2.5 px-5 text-[13px] font-semibold tracking-wide">
         {language === 'en' ? '✨ Free Worldwide Shipping on Orders Over $100 ✨' : '✨ 满 $100 全球免运费 ✨'}
       </div>
 
       {/* Header wrapper */}
-      <header className={`fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <header className={`sticky top-0 left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         {/* Top bar */}
         <div className="relative z-[50] flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
           {/* Left spacer — keeps logo centered */}
