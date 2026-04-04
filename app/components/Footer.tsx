@@ -5,7 +5,7 @@ import { useApp } from '@/app/context/AppContext';
 const translations = {
   en: {
     shop: 'Shop',
-    allBracelets: 'All Bracelets',
+    allBracelets: 'All Jewelry',
     newArrivalsLink: 'New Arrivals',
     bestSellersLink: 'Best Sellers',
     sale: 'Sale',
@@ -30,7 +30,7 @@ const translations = {
   },
   zh: {
     shop: '购物',
-    allBracelets: '所有手链',
+    allBracelets: '所有饰品',
     newArrivalsLink: '新品上市',
     bestSellersLink: '热销商品',
     sale: '促销',
@@ -66,30 +66,37 @@ export default function Footer() {
           <div className="footer-section">
             <h3>{t.shop}</h3>
             <ul>
-              <li><a href="#">{t.allBracelets}</a></li>
-              <li><a href="#">{t.newArrivalsLink}</a></li>
-              <li><a href="#">{t.bestSellersLink}</a></li>
-              <li><a href="#">{t.sale}</a></li>
+              <li><a href="/shop">{t.allBracelets}</a></li>
+              <li><a href="/shop">{t.newArrivalsLink}</a></li>
+              <li><a href="/shop">{t.bestSellersLink}</a></li>
+              <li><a href="/shop">{t.sale}</a></li>
             </ul>
           </div>
 
           <div className="footer-section">
             <h3>{t.customerCare}</h3>
             <ul>
-              <li><a href="#">{t.contactUs}</a></li>
-              <li><a href="#">{t.shippingInfo}</a></li>
-              <li><a href="#">{t.returnsExchanges}</a></li>
-              <li><a href="#">{t.faq}</a></li>
+              <li><a href="/shipping">{t.shippingInfo}</a></li>
+              <li><a href="/returns">{t.returnsExchanges}</a></li>
+              <li><a href="/faq">{t.faq}</a></li>
             </ul>
           </div>
 
           <div className="footer-section">
             <h3>{t.about}</h3>
             <ul>
-              <li><a href="#">{t.ourStory}</a></li>
-              <li><a href="#">{t.craftsmanship}</a></li>
-              <li><a href="#">{t.energyWork}</a></li>
-              <li><a href="#">{t.blog}</a></li>
+              <li><a href="/about/story">{t.ourStory}</a></li>
+              <li><a href="/about/craftsmanship">{t.craftsmanship}</a></li>
+              <li><a href="/about/energy">{t.energyWork}</a></li>
+              <li><a href="/blog">{t.blog}</a></li>
+            </ul>
+          </div>
+
+          <div className="footer-section">
+            <h3>{t.contactUs}</h3>
+            <ul>
+              <li><a href="tel:+85288888888" style={{ fontSize: '13px', color: '#999' }}>+852 88888888</a></li>
+              <li><a href="mailto:thewulab@gmail.com" style={{ fontSize: '13px', color: '#999' }}>thewulab@gmail.com</a></li>
             </ul>
           </div>
 
