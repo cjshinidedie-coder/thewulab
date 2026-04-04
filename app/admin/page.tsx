@@ -4,6 +4,59 @@ import { useState } from 'react';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const ADMIN_PASSWORD = 'wulab2026';
+
+  const handleLogin = () => {
+    if (password === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+      setError('');
+    } else {
+      setError('密钥无效，请联系首席执行官');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center px-4">
+        <div className="max-w-md w-full">
+          <div className="text-center mb-8">
+            <h1 className="font-serif text-3xl font-light tracking-wider text-stone-800 mb-2">the Wu lab</h1>
+            <p className="text-sm text-gray-500">Admin Dashboard</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+            <h2 className="text-xl font-medium text-gray-900 mb-6 text-center">请输入管理员密钥</h2>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Admin Key"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400 focus:border-transparent mb-4 text-gray-900"
+            />
+            {error && (
+              <p className="text-sm text-red-600 mb-4 text-center">{error}</p>
+            )}
+            <button
+              onClick={handleLogin}
+              className="w-full bg-stone-800 text-white py-3 rounded-lg font-medium hover:bg-stone-900 transition-colors"
+            >
+              进入
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const stats = [
     { label: 'Total Revenue', value: '$12,450.00', change: '+12.5%', positive: true },
