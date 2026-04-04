@@ -136,7 +136,7 @@ export default function Navbar() {
           {/* Right icons */}
           <div className="flex items-center gap-5 md:gap-6 shrink-0">
             {/* Search */}
-            <div className="relative">
+            <div className="relative flex items-center">
               <button onClick={() => setSearchOpen(!searchOpen)} className="text-stone-700 hover:text-[#C41E3A] transition-colors text-lg" title="Search">
                 🔍
               </button>
@@ -171,7 +171,7 @@ export default function Navbar() {
             </div>
 
             {/* Globe language switcher */}
-            <div className="relative" ref={langMenuRef}>
+            <div className="relative flex items-center" ref={langMenuRef}>
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
                 className="text-stone-700 hover:text-[#C41E3A] transition-colors"
@@ -180,7 +180,7 @@ export default function Navbar() {
                 <Globe className="w-5 h-5" />
               </button>
               {langMenuOpen && (
-                <div className="absolute right-0 mt-4 w-24 bg-white shadow-xl z-[9999] rounded-sm border border-stone-100">
+                <div className="absolute right-0 mt-4 w-24 bg-white shadow-xl z-[100] rounded-sm border border-stone-100">
                   <button
                     onClick={() => handleLangSelect('en')}
                     className={`block w-full text-left px-4 py-2.5 text-[13px] font-sans transition-colors ${language === 'en' ? 'text-[#C41E3A] font-semibold' : 'text-stone-600 hover:text-[#C41E3A] hover:bg-stone-50'}`}
