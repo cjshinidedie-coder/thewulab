@@ -16,6 +16,8 @@ export default function Navbar() {
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [favoritesDrawerOpen, setFavoritesDrawerOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
 
@@ -113,6 +115,26 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [langMenuOpen]);
 
+  // Smart scroll header
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        setIsVisible(false);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   return (
     <>
       {/* Announcement bar */}
@@ -121,18 +143,18 @@ export default function Navbar() {
       </div>
 
       {/* Header wrapper */}
-      <header className="fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <header className={`fixed top-[37px] left-0 w-full z-[100] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         {/* Top bar */}
         <div className="relative z-[50] flex items-center justify-between h-16 md:h-20 px-5 md:px-10 max-w-[1400px] mx-auto">
           {/* Left spacer — keeps logo centered */}
           <div className="w-28 md:w-40 shrink-0" />
 
-          {/* Centered logo — lowercase, elegant serif, no bold, no uppercase */}
+          {/* Centered logo */}
           <Link
             href="/"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-[0.15em] text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-2xl md:text-3xl font-light tracking-widest text-stone-800 hover:text-[#C41E3A] transition-colors duration-300 whitespace-nowrap"
           >
-            the wu lab
+            THE WU LAB
           </Link>
 
           {/* Right icons */}

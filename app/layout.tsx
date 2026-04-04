@@ -41,7 +41,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Discover handcrafted energy jewelry and BaZi analysis at the wu lab" />
       </head>
-      <body className={`${cormorant.variable} ${montserrat.variable} font-sans`}>
+      <body className={`${cormorant.variable} ${montserrat.variable} font-sans pt-28`}>
         <AppProvider>
           <Navbar />
           {children}
