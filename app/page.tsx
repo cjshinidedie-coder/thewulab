@@ -203,6 +203,8 @@ export default function Home() {
           text-align: center;
           position: relative;
           overflow: hidden;
+          margin-top: 0 !important;
+          padding-top: 0 !important;
         }
 
         .hero-video {

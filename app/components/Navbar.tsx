@@ -288,9 +288,6 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Spacer to push page content below fixed header + announcement bar */}
-      <div className="h-[101px] md:h-[117px]" />
-
       <CartDrawer isOpen={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />
       <FavoritesDrawer isOpen={favoritesDrawerOpen} onClose={() => setFavoritesDrawerOpen(false)} />
     </>
