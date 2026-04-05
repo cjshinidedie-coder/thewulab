@@ -127,14 +127,12 @@ export default function AdminDashboard() {
           >
             📦 Orders
           </button>
-          <button
-            onClick={() => setActiveTab('products')}
-            className={`w-full text-left px-4 py-3 rounded-lg mb-2 text-sm font-medium transition-colors ${
-              activeTab === 'products' ? 'bg-stone-100 text-stone-900' : 'text-gray-600 hover:bg-gray-50'
-            }`}
+          <a
+            href="/admin/products"
+            className="block w-full text-left px-4 py-3 rounded-lg mb-2 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50"
           >
             💎 Products
-          </button>
+          </a>
           <button
             onClick={() => setActiveTab('customers')}
             className={`w-full text-left px-4 py-3 rounded-lg mb-2 text-sm font-medium transition-colors ${
