@@ -64,7 +64,7 @@ export default function AdminProducts() {
       // Step 1: Upload image to Supabase Storage
       if (imageFile) {
         const fileName = `${Date.now()}-${imageFile.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('product-images')
           .upload(fileName, imageFile);
 
