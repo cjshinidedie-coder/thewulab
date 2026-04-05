@@ -27,10 +27,11 @@ export default function AdminProducts() {
     price: '',
     stock: '',
     category: 'Bracelets',
-    image_url: '',
     is_active: true
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   useEffect(() => {
     fetchProducts();
@@ -55,8 +56,31 @@ export default function AdminProducts() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setUploadStatus('正在上传图片...');
 
     try {
+      let imageUrl = '';
+
+      // Step 1: Upload image to Supabase Storage
+      if (imageFile) {
+        const fileName = `${Date.now()}-${imageFile.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, imageFile);
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: urlData } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(fileName);
+
+        imageUrl = urlData.publicUrl;
+      }
+
+      setUploadStatus('正在保存商品信息...');
+
+      // Step 2: Insert product data with image URL
       const { error } = await supabase.from('products').insert([
         {
           name: formData.name,
@@ -65,28 +89,33 @@ export default function AdminProducts() {
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock),
           category: formData.category,
-          image_url: formData.image_url,
+          image_url: imageUrl,
           is_active: formData.is_active
         }
       ]);
 
       if (error) throw error;
 
-      setFormData({
-        name: '',
-        description: '',
-        element: 'Metal',
-        price: '',
-        stock: '',
-        category: 'Bracelets',
-        image_url: '',
-        is_active: true
-      });
-      setShowForm(false);
-      fetchProducts();
+      setUploadStatus('商品上架成功！');
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          description: '',
+          element: 'Metal',
+          price: '',
+          stock: '',
+          category: 'Bracelets',
+          is_active: true
+        });
+        setImageFile(null);
+        setShowForm(false);
+        setUploadStatus('');
+        fetchProducts();
+      }, 1500);
     } catch (error) {
       console.error('Error creating product:', error);
-      alert('Failed to create product');
+      setUploadStatus('上传失败，请重试');
+      setTimeout(() => setUploadStatus(''), 3000);
     } finally {
       setSubmitting(false);
     }
@@ -243,15 +272,17 @@ export default function AdminProducts() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
                 <input
-                  type="url"
+                  type="file"
+                  accept="image/*"
                   required
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400"
-                  placeholder="https://..."
                 />
+                {imageFile && (
+                  <p className="text-xs text-gray-500 mt-1">Selected: {imageFile.name}</p>
+                )}
               </div>
 
               <div className="flex items-center">
@@ -263,6 +294,16 @@ export default function AdminProducts() {
                 />
                 <label className="ml-2 text-sm text-gray-700">Active (visible to customers)</label>
               </div>
+
+              {uploadStatus && (
+                <div className={`p-3 rounded-lg text-sm font-medium ${
+                  uploadStatus.includes('成功') ? 'bg-green-100 text-green-800' :
+                  uploadStatus.includes('失败') ? 'bg-red-100 text-red-800' :
+                  'bg-blue-100 text-blue-800'
+                }`}>
+                  {uploadStatus}
+                </div>
+              )}
 
               <div className="flex gap-3 pt-4">
                 <button
