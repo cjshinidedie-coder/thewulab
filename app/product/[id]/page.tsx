@@ -4,6 +4,19 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  element: string;
+  price: number;
+  image_url: string;
+  stock: number;
+  category: string;
+}
 
 export default function ProductDetail() {
   const params = useParams();
@@ -11,10 +24,37 @@ export default function ProductDetail() {
   const productId = params.id as string;
   const { language, addToCart, toggleFavorite, favorites } = useApp();
   const isFavorited = favorites.includes(productId);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [productId]);
+
+  const fetchProduct = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .eq('is_active', true)
+        .single();
+
+      if (error) throw error;
+      setProduct(data);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      setProduct(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBuyNow = () => {
-    addToCart({ id: product.id, name: product.name, price: product.price, image: product.image });
-    router.push('/checkout');
+    if (product) {
+      addToCart({ id: product.id, name: product.name, price: product.price, image: product.image_url });
+      router.push('/checkout');
+    }
   };
 
   // 多语言翻译
@@ -191,7 +231,13 @@ Root yourself in strength and embrace your power with this magnificent piece.`
     }
   };
 
-  const product = products[productId];
+  if (loading) {
+    return (
+      <div style={{ padding: '60px 40px', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <p style={{ fontSize: '16px', color: '#666666' }}>Loading...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -707,20 +753,20 @@ Root yourself in strength and embrace your power with this magnificent piece.`
           {/* LEFT SIDE - IMAGE GALLERY */}
           <div className="image-gallery">
             <div className="main-image-wrapper">
-              <img src={product.image} alt={product.name} className="main-image" />
+              <img src={product.image_url} alt={product.name} className="main-image" />
             </div>
             <div className="detail-images-grid">
               <div className="detail-image-wrapper">
-                <img src={product.image} alt={t.detailImage1} className="detail-image" />
+                <img src={product.image_url} alt={t.detailImage1} className="detail-image" />
               </div>
               <div className="detail-image-wrapper">
-                <img src={product.image} alt={t.detailImage2} className="detail-image" />
+                <img src={product.image_url} alt={t.detailImage2} className="detail-image" />
               </div>
               <div className="detail-image-wrapper">
-                <img src={product.image} alt={t.modelWear1} className="detail-image" />
+                <img src={product.image_url} alt={t.modelWear1} className="detail-image" />
               </div>
               <div className="detail-image-wrapper">
-                <img src={product.image} alt={t.modelWear2} className="detail-image" />
+                <img src={product.image_url} alt={t.modelWear2} className="detail-image" />
               </div>
             </div>
           </div>
@@ -737,9 +783,6 @@ Root yourself in strength and embrace your power with this magnificent piece.`
 
             <div className="price-section">
               <span className="price">${product.price.toFixed(2)}</span>
-              {product.originalPrice > product.price && (
-                <span className="original-price">${product.originalPrice.toFixed(2)}</span>
-              )}
             </div>
 
             <div className="shipping-badge">{t.freeShipping}</div>
@@ -748,7 +791,7 @@ Root yourself in strength and embrace your power with this magnificent piece.`
 
             <div className="action-buttons">
               <button className="btn-buy-now" onClick={handleBuyNow}>{t.buyNow}</button>
-              <button className="btn-add-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}>{t.addToCart}</button>
+              <button className="btn-add-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image_url })}>{t.addToCart}</button>
               <button
                 className={`btn-favorite ${isFavorited ? 'active' : ''}`}
                 onClick={() => toggleFavorite(productId)}
@@ -760,20 +803,16 @@ Root yourself in strength and embrace your power with this magnificent piece.`
 
             <div className="specs-table">
               <div className="spec-row">
-                <span className="spec-label">{t.material}</span>
-                <span className="spec-value">{product.material}</span>
-              </div>
-              <div className="spec-row">
-                <span className="spec-label">{t.size}</span>
-                <span className="spec-value">{product.size}</span>
-              </div>
-              <div className="spec-row">
                 <span className="spec-label">{t.element}</span>
                 <span className="spec-value">{product.element}</span>
               </div>
               <div className="spec-row">
-                <span className="spec-label">{t.care}</span>
-                <span className="spec-value">{product.care}</span>
+                <span className="spec-label">Category</span>
+                <span className="spec-value">{product.category}</span>
+              </div>
+              <div className="spec-row">
+                <span className="spec-label">Stock</span>
+                <span className="spec-value">{product.stock} available</span>
               </div>
             </div>
           </div>
