@@ -5,8 +5,6 @@ import { useApp } from '@/app/context/AppContext';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
-export const revalidate = 0;
-
 interface Product {
   id: string;
   name: string;
