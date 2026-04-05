@@ -3,7 +3,19 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
-import { productsData } from '@/lib/productsData';
+import { supabase } from '@/lib/supabase';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  element: string;
+  price: number;
+  image_url: string;
+  stock: number;
+  category: string;
+  is_active: boolean;
+}
 
 export default function ShopPage() {
   const { addToCart } = useApp();
@@ -12,8 +24,29 @@ export default function ShopPage() {
   const [sortBy, setSortBy] = useState('featured');
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const allProducts = productsData;
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setAllProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = ['Bracelets', 'Accessories', 'Earrings', 'Necklaces'];
   const elements = ['Metal', 'Wood', 'Water', 'Fire', 'Earth'];
@@ -56,17 +89,13 @@ export default function ShopPage() {
           return a.price - b.price;
         case 'price-high':
           return b.price - a.price;
-        case 'bestseller':
-          if (a.isBestSeller && !b.isBestSeller) return -1;
-          if (!a.isBestSeller && b.isBestSeller) return 1;
-          return 0;
         default:
           return 0;
       }
     });
 
     return sorted;
-  }, [selectedCategory, selectedElement, sortBy]);
+  }, [allProducts, selectedCategory, selectedElement, sortBy]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -161,57 +190,58 @@ export default function ShopPage() {
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredAndSortedProducts.map((product) => (
-                <div key={product.id} className="group">
-                  <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4 hover:shadow-lg transition-shadow">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {product.isBestSeller && (
-                      <div className="absolute top-3 left-3 bg-gray-900 text-white px-2 py-1 text-xs font-semibold rounded">
-                        BEST SELLER
+            {loading ? (
+              <div className="text-center py-16 text-gray-500">Loading products...</div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredAndSortedProducts.map((product) => (
+                    <div key={product.id} className="group">
+                      <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4 hover:shadow-lg transition-shadow">
+                        <img
+                          src={product.image_url}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
                       </div>
-                    )}
-                  </div>
-                  <div className="space-y-3">
-                    <p className="text-xs text-gray-500 uppercase tracking-wider">{product.element} • {product.category}</p>
-                    <h3 className="text-sm font-serif text-gray-900">{product.name}</h3>
-                    <p className="text-lg font-semibold text-gray-900 mb-4">{product.priceDisplay}</p>
+                      <div className="space-y-3">
+                        <p className="text-xs text-gray-500 uppercase tracking-wider">{product.element} • {product.category}</p>
+                        <h3 className="text-sm font-serif text-gray-900">{product.name}</h3>
+                        <p className="text-lg font-semibold text-gray-900 mb-4">${product.price.toFixed(2)}</p>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Link
-                        href={`/product/${product.id}`}
-                        className="flex-1 bg-red-700 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-red-800 transition-colors text-center"
-                      >
-                        Buy Now
-                      </Link>
-                      <button
-                        onClick={() => addToCart({
-                          id: product.id.toString(),
-                          name: product.name,
-                          price: product.price,
-                          image: product.image
-                        })}
-                        className="flex-1 bg-red-700 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-red-800 transition-colors"
-                      >
-                        Add to Cart
-                      </button>
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <Link
+                            href={`/product/${product.id}`}
+                            className="flex-1 bg-red-700 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-red-800 transition-colors text-center"
+                          >
+                            Buy Now
+                          </Link>
+                          <button
+                            onClick={() => addToCart({
+                              id: product.id.toString(),
+                              name: product.name,
+                              price: product.price,
+                              image: product.image_url
+                            })}
+                            className="flex-1 bg-red-700 text-white py-2 px-3 rounded text-xs font-semibold uppercase tracking-wider hover:bg-red-800 transition-colors"
+                          >
+                            Add to Cart
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* No Results */}
-            {filteredAndSortedProducts.length === 0 && (
-              <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">No products found</p>
-                <p className="text-gray-400 text-sm mt-2">Try adjusting your filters</p>
-              </div>
+                {/* No Results */}
+                {filteredAndSortedProducts.length === 0 && (
+                  <div className="text-center py-16">
+                    <p className="text-gray-500 text-lg">No products found</p>
+                    <p className="text-gray-400 text-sm mt-2">Try adjusting your filters</p>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
