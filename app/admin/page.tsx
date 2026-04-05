@@ -1,14 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [dbConnected, setDbConnected] = useState(false);
 
   const ADMIN_PASSWORD = 'wulab2026';
+
+  useEffect(() => {
+    const testConnection = async () => {
+      try {
+        const { error } = await supabase.from('products').select('count').limit(1);
+        setDbConnected(!error || error.code === 'PGRST116');
+      } catch {
+        setDbConnected(false);
+      }
+    };
+    if (isAuthenticated) {
+      testConnection();
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = () => {
     if (password === ADMIN_PASSWORD) {
@@ -147,6 +163,12 @@ export default function AdminDashboard() {
             <p className="text-sm text-gray-500 mt-1">Welcome back, Admin</p>
           </div>
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-200">
+              <span className="text-xs font-medium text-gray-600">Database:</span>
+              <span className={`text-xs font-semibold ${dbConnected ? 'text-green-600' : 'text-red-600'}`}>
+                {dbConnected ? 'Connected 🟢' : 'Disconnected 🔴'}
+              </span>
+            </div>
             <button className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors">
               🔔
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
