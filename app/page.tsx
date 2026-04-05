@@ -2,9 +2,43 @@
 
 import Link from 'next/link';
 import { useApp } from '@/app/context/AppContext';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+
+interface Product {
+  id: string;
+  name: string;
+  element: string;
+  price: number;
+  image_url: string;
+}
 
 export default function Home() {
   const { language, addToCart, toggleFavorite, favorites } = useApp();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('id, name, element, price, image_url')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 多语言文案
   const translations = {
@@ -105,65 +139,6 @@ export default function Home() {
   };
 
   const t = translations[language];
-
-  const products = [
-    {
-      id: '1',
-      name: 'Cosmic Turquoise Bracelet',
-      element: 'Water Element',
-      price: '$226.00',
-      image: '/product-1.png'
-    },
-    {
-      id: '2',
-      name: 'Imperial Jasper Bracelet',
-      element: 'Metal Element',
-      price: '$183.00',
-      image: '/product-2.png'
-    },
-    {
-      id: '3',
-      name: 'Santa Maria Aquamarine',
-      element: 'Water Element',
-      price: '$2,524.00',
-      image: '/product-3.png'
-    },
-    {
-      id: '4',
-      name: 'Labradorite Bracelet',
-      element: 'Wood Element',
-      price: '$310.00',
-      image: '/product-4.png'
-    },
-    {
-      id: '5',
-      name: 'Blue Aventurine Bracelet',
-      element: 'Water Element',
-      price: '$310.00',
-      image: '/product-5.png'
-    },
-    {
-      id: '6',
-      name: 'Tiger Eye - Hematite Pair',
-      element: 'Fire Element',
-      price: '$60.00',
-      image: '/product-6.png'
-    },
-    {
-      id: '7',
-      name: 'Lava Bracelet',
-      element: 'Fire Element',
-      price: '$310.00',
-      image: '/product-7.png'
-    },
-    {
-      id: '8',
-      name: 'Dragon Blood Jasper',
-      element: 'Earth Element',
-      price: '$297.00',
-      image: '/product-8.png'
-    }
-  ];
 
   return (
     <div>
@@ -1037,36 +1012,42 @@ export default function Home() {
       {/* BEST SELLERS SECTION - WITH SWIPER HORIZONTAL SCROLL */}
       <section className="section" >
         <h2 className="section-title font-serif tracking-widest font-normal">{t.bestSellers}</h2>
-        <div className="swiper mySwiper">
-          <div className="swiper-wrapper">
-            {products.map((product) => (
-              <div key={product.id} className="swiper-slide">
-                <div className="product-card">
-                  <div className="product-image-wrapper">
-                    <Link href={`/product/${product.id}`}>
-                      <img src={product.image} alt={product.name} className="product-image" />
-                    </Link>
-                    <button
-                      className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
-                      onClick={() => toggleFavorite(product.id)}
-                    >
-                      ♡
-                    </button>
-                  </div>
-                  <div className="product-name">{product.name}</div>
-                  <div className="product-element">{product.element}</div>
-                  <div className="product-price">{product.price}</div>
-                  <div className="product-buttons">
-                    <Link href={`/product/${product.id}`} className="buy-now">
-                      {t.buyNow}
-                    </Link>
-                    <button className="add-to-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: parseFloat(product.price.replace('$', '')), image: product.image })}>{t.addToCart}</button>
+        {loading ? (
+          <div className="text-center py-12 text-gray-500">Loading products...</div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">商品正在精心打造中...</div>
+        ) : (
+          <div className="swiper mySwiper">
+            <div className="swiper-wrapper">
+              {products.map((product) => (
+                <div key={product.id} className="swiper-slide">
+                  <div className="product-card">
+                    <div className="product-image-wrapper">
+                      <Link href={`/product/${product.id}`}>
+                        <img src={product.image_url} alt={product.name} className="product-image" />
+                      </Link>
+                      <button
+                        className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
+                        onClick={() => toggleFavorite(product.id)}
+                      >
+                        ♡
+                      </button>
+                    </div>
+                    <div className="product-name">{product.name}</div>
+                    <div className="product-element">{product.element}</div>
+                    <div className="product-price">${product.price.toFixed(2)}</div>
+                    <div className="product-buttons">
+                      <Link href={`/product/${product.id}`} className="buy-now">
+                        {t.buyNow}
+                      </Link>
+                      <button className="add-to-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image_url })}>{t.addToCart}</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* DISCOVER ELEMENT BANNER SECTION */}
